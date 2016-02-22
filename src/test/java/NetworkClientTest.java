@@ -24,8 +24,8 @@ public class NetworkClientTest extends NetworkClient {
   @Override
   protected void handleConnection(Socket client)
       throws IOException {
-    PrintWriter out = SocketUtils.getWriter(client);
-    BufferedReader in = SocketUtils.getReader(client);
+    PrintWriter out = new PrintWriter(client.getOutputStream(), true);
+    BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
     out.println("Generic Network Client");
     System.out.printf
       ("Generic Network Client:%n" +

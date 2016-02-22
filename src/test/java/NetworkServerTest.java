@@ -23,8 +23,8 @@ public class NetworkServerTest extends NetworkServer {
   @Override
   protected void handleConnection(Socket socket)
       throws IOException{
-    PrintWriter out = SocketUtils.getWriter(socket);
-    BufferedReader in = SocketUtils.getReader(socket);
+    PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     System.out.printf
       ("Generic Server: got connection from %s%n" +
        "with first line '%s'.%n",
