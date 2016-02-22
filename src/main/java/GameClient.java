@@ -14,11 +14,19 @@ public class GameClient extends NetworkClient {
      super("localhost",12345);
   }
 
+
   public void handleConnection(Socket client) throws IOException{
     try{
-      OutputStream cout = client.getOutputStream();
-      String message = "Hello\n";
-      cout.write(message.getBytes());
+      PrintWriter cout = new PrintWriter(client.getOutputStream(), true);
+      BufferedReader cin = new BufferedReader(new InputStreamReader(client.getInputStream()));
+
+      String message = "Hello";
+      cout.println(message);
+
+      String receive = cin.readLine();
+
+      System.out.println(receive);
+
       client.close();
     }
     catch(IOException e){
