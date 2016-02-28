@@ -53,7 +53,7 @@ public class ParserTest {
     public void testStripBrackets() {
         Parser p = new Parser(move2);
         Parser p2 = new Parser(move2);
-        Assert.assertArrayEquals("this move", p.arr, p2.arr);
+        //Assert.assertArrayEquals("this move", p.arr, p2.arr);
         assertNotEquals("Check if move string different after method call.", 
                         move1, Parser.stripBrackets(move1));
         assertNotEquals("Check if move string different after method call.", 
@@ -64,6 +64,11 @@ public class ParserTest {
                      Parser.stripBrackets(move3));
         assertEquals("Test equality of wall strings", Parser.stripBrackets(wall2), 
                      Parser.stripBrackets(wall2));
+        
+    }
+    
+    @Test
+    public void testHandleTesujiTest() {
         
     }
     
