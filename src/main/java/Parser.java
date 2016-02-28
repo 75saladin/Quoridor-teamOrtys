@@ -64,9 +64,11 @@ public class Parser {
             return "Invalid move";
         } 
         // Check if move is valid
+        int column = 0;
+        int row = 0;
         try {
-            int column = Integer.parseInt(arr[1]);
-            int row = Integer.parseInt(arr[2]);
+            column = Integer.parseInt(arr[1]);
+            row = Integer.parseInt(arr[2]);
         } catch (Exception e){
             System.out.println("Integer parsing error" + e);
             e.printStackTrace();
@@ -86,6 +88,7 @@ public class Parser {
                 return "Invalid move";
             }
         }
+        return input;
     }
 
     public void handleAtari() {
