@@ -87,8 +87,8 @@ public class ParserTest {
         assertEquals("Testing try catch", "Invalid move TESUJI c r", p.handle());
         p = new Parser("TESUJI (10, 0)");
         assertEquals("Testing move out of range", "Invalid move", p.handle());
-        //p = new Parser("TESUJI " + invalidWall1);
-        //assertEquals("Testing invalid wall", "Invalid move", p.handle());
+        p = new Parser("TESUJI " + invalidWall1);
+        assertEquals("Testing invalid wall", "Invalid move", p.handle());
         p = new Parser("TESUJI " + invalidWall4);
         assertEquals("Testing invalid wall out of range", "Invalid move", p.handle());
         
