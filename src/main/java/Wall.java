@@ -10,34 +10,43 @@
  */
 public class Wall {
 
-    private final int x;
-    private final int y;
+    private final int c;
+    private final int r;
     private final String direction; //h or v
+    private final String properties;
 
     /**
      * 
-     * @param x - X position on board
-     * @param y - Y position on board
+     * @param c - X position on board
+     * @param r - R position on board
      * @param direction - direction of wall being placed
      */
-    public Wall(int x, int y, String direction) {
-        this.x = x;
-        this.y = y;
+    public Wall(int c, int r, String direction) {
+        this.c = c;
+        this.r = r;
         this.direction = direction;
+	this.properties = "" + this.c + " " + this.r + " " + this.direction;
     }
     
     /*
      * @return X position of this wall
     */
-    public int getXPos(){
-        return this.x;
+    public int getCPos(){
+        return this.c;
+    }
+    
+    public String getOppositeDirection() {
+	if (this.direction.toLowerCase.equals("h"))
+	    return "v";
+	else
+	    return "h";
     }
     
     /**
      * @return Y position of this wall
      */
-    public int getYPos(){
-        return this.y;
+    public int getRPos(){
+        return this.r;
     }
    
     public String getDirection(){
@@ -45,9 +54,9 @@ public class Wall {
     }
     
     public int[4] getBlocked() {
-	if (this.direction.toLowerCase.equals("h")
-	    int[] temp = new int[this.x, this.y, this.x+1, this.y];
+	if (this.direction.toLowerCase.equals("h"))
+	    int[] temp = new int[this.c, this.r, this.c+1, this.r];
 	else 
-	    int[] temp = new int[this.x, this.y, this.x, this.y+1];
+	    int[] temp = new int[this.c, this.r, this.c, this.r+1];
 	return temp;
 }
