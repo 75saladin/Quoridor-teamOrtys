@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Parser {
 
-    private String input;
+    public String input;
     private String[] arr;
 
     public Parser(String s) {
@@ -14,7 +14,9 @@ public class Parser {
 
     public String handle() {
         // First argument determines what the case is 
+       
         String arg1 = arr[0];
+        
         switch(arg1) {
             case "HELLO":
      //          handleHello();
@@ -78,7 +80,8 @@ public class Parser {
         if (!((arr.length == 3) || (arr.length == 4))) {
             return "Invalid move";
         } 
-        // Check if move is valid
+
+        // Check if column and row numbers are valid and properly placed in array
         int column = 0;
         int row = 0;
         try {
@@ -89,15 +92,15 @@ public class Parser {
             e.printStackTrace();
             return ("Invalid move" + input);
         }
-            
         if (!(0 <= column && 9 > column)) {
             return "Invalid move";
-        }
-        
+        } 
         if (!(0 <= row && 9 > row)) {
             return "Invalid move";
         }
-        if (arr.length == 4) {  // if wall placement
+       
+        // Check if direction is correct for wall placements
+        if (arr.length == 4) {  
             String direction = arr[3];
             if (!(direction.equals("h") || direction.equals("v"))) {
                 return "Invalid move";
