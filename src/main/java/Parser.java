@@ -68,11 +68,11 @@ public class Parser {
             // invalid move
         }
         // Check if move is valid
-        int column = arr[1].parseInt();
+        int column = Integer.parseInt(arr[1]);
         if (!(0 <= column && 9 > column)) {
             // invalid move
         }
-        int row = arr[2].parseInt();
+        int row = Integer.parseInt(arr[2]);
         if (!(0 <= row && 9 > row)) {
             // invalid move
         }
