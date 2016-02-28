@@ -11,9 +11,9 @@
 public class Player {
 
     
-    public String id;
-    public int player;
-    public String name = "Player" + player;
+    public String id;	//Three-char tag
+    public int player;	//Player number (1-4)
+    public String name = "Player" + player;	//Name of particular player
 
     
    
@@ -27,31 +27,6 @@ public class Player {
         this.id = id;
         this.name = name;
         this.player = player;
-    }
-    
-    /**getName()
-     * 
-     * @return name of this player
-     */
-    public String getName(){
-        return this.name;
-    }
-    
-    
-    /**getPlayer()
-     * 
-     * @return Player number of this player
-     */
-    public int getPlayer(){
-        return this.player;
-    }
-    
-    /**
-     * 
-     * @return id of this player
-     */
-    public String getID(){
-        return this.id;
     }
     
 }
