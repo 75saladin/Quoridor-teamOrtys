@@ -98,19 +98,21 @@ public class Parser {
         if (!(0 <= row && 9 > row)) {
             return "Invalid move";
         }
-<<<<<<< HEAD
+
         if (arr.length == 4) {  // if wall placement
             String direction = arr[3].toLowerCase();
-=======
-       
-        // Check if direction is correct for wall placements
-        if (arr.length == 4) {  
-            String direction = arr[3];
->>>>>>> f188238d9359d677c3cb843fbaab6e0ffff475e7
             if (!(direction.equals("h") || direction.equals("v"))) {
                 return "Invalid move";
             }
+            if ((direction.equals("h") && row == 8) || (direction.equals("v") && column == 8)) {
+                return "Invalid move";
+            }     
         }
+       
+        // Check if direction is correct for wall placements
+
+            
+
         return input;
     }
 
