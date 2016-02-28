@@ -6,12 +6,15 @@ public class Parser {
     private String[] arr;
 
     public Parser(String s) {
+        // Strips brackets and commas from String s and sets stripped String as field input
         input = stripBrackets(s);
+        // Creates a new array using input string, where each argument is in its own space in array
         arr = input.split(" ");
         handle(input);
     }
 
-    public String handle(String s) { 
+    public String handle(String s) {
+        // First argument determines what the case is 
         String arg1 = arr[0];
         switch(arg1) {
             case "HELLO":
@@ -35,6 +38,9 @@ public class Parser {
         }
     }
 
+    // Strips brackets and commas from move-string.
+    // Ex. Pawn movement (0, 3) --> 0 3
+    //     Wall placement [(0, 3), h] --> 0 3 h
     public static String stripBrackets(String s) {
         s = s.replaceAll("[\\[()\\],]+", "");
 	return s;
@@ -48,15 +54,23 @@ public class Parser {
         // Server: send preferred display name to client. Name cannot contain whitespace.
     }
 
-    public void handleGame() {
+    public String handleGame() {
         // Client: Game is ready to start. First argument is player number
         // for the server receiving the message. 
+        if (!((arr.length == 4) || (arr.length == 6))) {
+            return "Invalid message";
+        }   
+        return input;
     }
 
     public void handleMyoushu() {
         // Client: Requests a move. Server should be expecting this.
     }
 
+
+    // Currently determines if move is valid, without considering previous moves
+    // In future, will consider previous moves
+    // Currently returns input, this will be changed as protocol is implemented
     public String handleTesuji() {
         // Server: Response to Myoushu, includes move made by player. 
         // Move is either target location for player's pawn or location to place a wall
