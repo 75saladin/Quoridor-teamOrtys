@@ -12,7 +12,7 @@ public class Wall {
 
     private final int x;
     private final int y;
-    private final String direction;
+    private final String direction; //h or v
 
     /**
      * 
@@ -43,4 +43,11 @@ public class Wall {
     public String getDirection(){
         return direction;
     }
+    
+    public int[4] getBlocked() {
+	if (this.direction.toLowerCase.equals("h")
+	    int[] temp = new int[this.x, this.y, this.x+1, this.y];
+	else 
+	    int[] temp = new int[this.x, this.y, this.x, this.y+1];
+	return temp;
 }
