@@ -20,7 +20,6 @@ public class ServerNetwork implements Runnable{
 
     //The following finals are all for testing. Please do not
     //change them!
-    private static final boolean TEST_MODE = false;
     public static final int TEST_SEND_MSG_QUEUE = 0;
     public static final int TEST_RECIEVE_MSG_QUEUE = 1;
 
@@ -117,6 +116,7 @@ public class ServerNetwork implements Runnable{
 	    while(running){
 		if(hasToSend()){
 		    writer.println(toSend.remove());
+		    writer.flush();
 		}
 		if(reader.hasNextLine()){
 		    recieved.add(reader.nextLine());
@@ -130,8 +130,7 @@ public class ServerNetwork implements Runnable{
 
     /**
      * Tester class for JUnit functionality. Should only ever be 
-     * called by JUnit testing. NOTE: if the class is not in 
-     * test mode, this method will always return null.
+     * called by JUnit testing.
      *
      * @param  testType the type of test to be specified by the int
      * @return specific information back to the tester, depending
@@ -139,16 +138,15 @@ public class ServerNetwork implements Runnable{
      */
     public String test(int testType){
 	String toReturn = null;
-	if(TEST_MODE){
-	    switch(testType){
-	    case TEST_SEND_MSG_QUEUE:
-		toReturn = (String)toSend.remove();
-	    case TEST_RECIEVE_MSG_QUEUE:
-		for(int i = 0 ; i < 1000000000 && toReturn == null ; i++){
-		    toReturn = (String)recieved.poll();
-		}
+	switch(testType){
+	case TEST_SEND_MSG_QUEUE:
+	    toReturn = (String)toSend.remove();
+	case TEST_RECIEVE_MSG_QUEUE:
+	    for(int i = 0 ; i < 1000000000 && toReturn == null ; i++){
+		toReturn = (String)recieved.poll();
+		System.out.println("Ignore me");
 	    }
-	}
+	}	
 	return toReturn;
     }
 }
