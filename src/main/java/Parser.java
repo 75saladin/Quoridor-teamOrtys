@@ -1,4 +1,4 @@
-
+import java.util.*;
 
 public class Parser {
 
@@ -36,8 +36,8 @@ public class Parser {
     }
 
     public static String stripBrackets(String s) {
-        input = s.replaceAll("[\\[()\\],]+", "");
-	return input;
+        s = s.replaceAll("[\\[()\\],]+", "");
+	return s;
     }
 
     public void handleHello() {
