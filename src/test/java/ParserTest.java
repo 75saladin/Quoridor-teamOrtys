@@ -36,6 +36,7 @@ public class ParserTest {
     private final String invalidWall1 = "[(8, 0), V]";
     private final String invalidWall2 = "[(2, 8), H]";
     private final String invalidWall3 = "[(8, 8), H]";
+    private final String invalidWall4 = "[(9, 8), H]";
             
     //test constructor
     @Test
@@ -68,7 +69,29 @@ public class ParserTest {
     }
     
     @Test
-    public void testHandleTesujiTest() {
+    public void testHandle() {
+        Parser p = new Parser(move1);
+        String s = "Testing handle with ";
+        
+        assertEquals(s + move1, p.handle(), "Error");
+        
+        
+        String actualMove = "TESUJI " + move1;
+        p = new Parser(actualMove);
+        assertEquals(s + actualMove, "TESUJI 0 0", p.handle());
+        p = new Parser("0, 0");
+        assertEquals(s + actualMove, "Error", p.handle());
+        p = new Parser("TESUJI (0)");
+        assertEquals("Testing wrong length of string", "Invalid move", p.handle());
+        p = new Parser("TESUJI (c, r)");
+        assertEquals("Testing try catch", "Invalid move TESUJI c r", p.handle());
+        p = new Parser("TESUJI (10, 0)");
+        assertEquals("Testing move out of range", "Invalid move", p.handle());
+        //p = new Parser("TESUJI " + invalidWall1);
+        //assertEquals("Testing invalid wall", "Invalid move", p.handle());
+        p = new Parser("TESUJI " + invalidWall4);
+        assertEquals("Testing invalid wall out of range", "Invalid move", p.handle());
+        
         
     }
     
