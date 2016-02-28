@@ -60,7 +60,10 @@ public class ParserTest {
                         move2, Parser.stripBrackets(move2));
         assertNotEquals("Check if move string different after method call.", 
                         wall1, Parser.stripBrackets(wall2));
-        //assertEquals("Test", this);
+        assertEquals("Test equality of move strings", Parser.stripBrackets(move3), 
+                     Parser.stripBrackets(move3));
+        assertEquals("Test equality of wall strings", Parser.stripBrackets(wall2), 
+                     Parser.stripBrackets(wall2));
         
     }
     
