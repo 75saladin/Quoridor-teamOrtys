@@ -10,10 +10,9 @@ public class Parser {
         input = stripBrackets(s);
         // Creates a new array using input string, where each argument is in its own space in array
         arr = input.split(" ");
-        handle(input);
     }
 
-    public String handle(String s) {
+    public String handle() {
         // First argument determines what the case is 
         String arg1 = arr[0];
         switch(arg1) {
@@ -74,6 +73,8 @@ public class Parser {
     public String handleTesuji() {
         // Server: Response to Myoushu, includes move made by player. 
         // Move is either target location for player's pawn or location to place a wall
+
+        // Check if array length is correct for this category of message
         if (!((arr.length == 3) || (arr.length == 4))) {
             return "Invalid move";
         } 
