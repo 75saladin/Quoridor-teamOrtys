@@ -1,4 +1,4 @@
-
+import java.util.*;
 
 public class Parser {
 
@@ -11,27 +11,27 @@ public class Parser {
         handle(input);
     }
 
-    public void handle(String s) { 
+    public String handle(String s) { 
         String arg1 = arr[0];
         switch(arg1) {
             case "HELLO":
-               handleHello();
+     //          handleHello();
             case "IAM":
-               handleIam();
+     //          handleIam();
             case "GAME":
-               handleGame();
+     //          handleGame();
             case "MYOUSHU":
-               handleMyoushu();
+     //          handleMyoushu();
             case "TESUJI":
                handleTesuji();
             case "ATARI":
-               handleAtari();
+     //          handleAtari();
             case "GOTE":
-               handleGote();
+     //          handleGote();
             case "KIKASHI":
-               handleKikashi();
+     //          handleKikashi();
 	    default:
-               System.out.println("Error");
+               return ("Error");
         }
     }
 
@@ -57,29 +57,33 @@ public class Parser {
         // Client: Requests a move. Server should be expecting this.
     }
 
-    public void handleTesuji() {
+    public String handleTesuji() {
         // Server: Response to Myoushu, includes move made by player. 
         // Move is either target location for player's pawn or location to place a wall
-        if (arr.length == 3) {
-            // Pawn movement   
-        } else if (arr.length == 4) {
-            // Wall placement
-        } else {
-            // invalid move
-        }
+        if (!((arr.length == 3) || (arr.length == 4))) {
+            return "Invalid move";
+        } 
         // Check if move is valid
-        int column = Integer.parseInt(arr[1]);
-        if (!(0 <= column && 9 > column)) {
-            // invalid move
+        try {
+            int column = Integer.parseInt(arr[1]);
+            int row = Integer.parseInt(arr[2]);
+        } catch (Exception e){
+            System.out.println("Integer parsing error" + e);
+            e.printStackTrace();
+            return ("Invalid move" + input);
         }
-        int row = Integer.parseInt(arr[2]);
+            
+        if (!(0 <= column && 9 > column)) {
+            return "Invalid move";
+        }
+        
         if (!(0 <= row && 9 > row)) {
-            // invalid move
+            return "Invalid move";
         }
         if (arr.length == 4) {  // if wall placement
             String direction = arr[3];
             if (!(direction.equals("h") || direction.equals("v"))) {
-                // invalid move
+                return "Invalid move";
             }
         }
     }
