@@ -7,6 +7,7 @@
 
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -42,6 +43,25 @@ public class ParserTest {
         Parser parser = new Parser(move1);
         String s = "[(0, 8), H]";
         assertNotNull(parser);  
+        
+    }
+    
+    /**
+     *
+     */
+    @Test
+    public void testStripBrackets() {
+        Parser p = new Parser(move2);
+        Parser p2 = new Parser(move2);
+        Assert.assertArrayEquals("this move", p.arr, p2.arr);
+        assertNotEquals("Check if move string different after method call.", 
+                        move1, Parser.stripBrackets(move1));
+        assertNotEquals("Check if move string different after method call.", 
+                        move2, Parser.stripBrackets(move2));
+        assertNotEquals("Check if move string different after method call.", 
+                        wall1, Parser.stripBrackets(wall2));
+        //assertEquals("Test", this);
+        
     }
     
 }
