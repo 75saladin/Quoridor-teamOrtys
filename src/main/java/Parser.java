@@ -1,12 +1,13 @@
 
 
-public Parser {
+public class Parser {
 
     String input;
+    String arr[];
 
     public Parser (String s) {
         input = stripBrackets(s);
-        String[] arr = input.split(" ");
+        arr = input.split(" ");
         handle();
     }
 
@@ -21,28 +22,33 @@ public Parser {
             case "GAME":
                handleGame();
             case "MYOUSHU":
-               handleMyoushu();
+       //        handleMyoushu();
             case "TESUJI":
-               handleTesuji();
+         //      handleTesuji();
             case "ATARI":
-               handleAtari();
+           //    handleAtari();
             case "GOTE":
-               handleGote();
+             //  handleGote();
         }
     }
 
-    public String stripBrackets(String s) {
+    public static String stripBrackets(String s) {
         s=s.replaceAll("[\\[()\\],]+", "");
 	String[] temp = s.split(" ");
 	return s;
     }
 
     public void handleHello() {
-        // Send "IAM" to server
+        // Client: Send "IAM" to server
     }
 
-    public void handleIam()
+    public void handleIam() {
+        // Server: send preferred display name to client. Name cannot contain whitespace.
+    }
 
+    public void handleGame() {
+    
+    }
 
 }
         
