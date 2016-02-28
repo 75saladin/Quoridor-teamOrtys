@@ -11,27 +11,27 @@ public class Parser {
         handle(input);
     }
 
-    public void handle(String s) { 
+    public String handle(String s) { 
         String arg1 = arr[0];
         switch(arg1) {
             case "HELLO":
-               handleHello();
+     //          handleHello();
             case "IAM":
-               handleIam();
+     //          handleIam();
             case "GAME":
-               handleGame();
+     //          handleGame();
             case "MYOUSHU":
-               handleMyoushu();
+     //          handleMyoushu();
             case "TESUJI":
                handleTesuji();
             case "ATARI":
-               handleAtari();
+     //          handleAtari();
             case "GOTE":
-               handleGote();
+     //          handleGote();
             case "KIKASHI":
-               handleKikashi();
+     //          handleKikashi();
 	    default:
-               System.out.println("Error");
+               return ("Error");
         }
     }
 
