@@ -4,9 +4,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.lang.Runnable;
 import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.util.Scanner;
 import java.io.PrintStream;
 import java.io.IOException;
+import java.io.BufferedReader;
 
 public class ServerNetwork implements Runnable{
 
@@ -16,7 +18,7 @@ public class ServerNetwork implements Runnable{
     private volatile Queue<String> recieved = new LinkedList();
     private volatile Socket client;
     private volatile boolean running = true;
-    private static final int DEFAULT_PORT = 2222;
+    public static final int DEFAULT_PORT = 2222;
 
     //The following finals are all for testing. Please do not
     //change them!
@@ -76,6 +78,7 @@ public class ServerNetwork implements Runnable{
      *               added to the queue successfully.
      */
     public boolean sendMessage(String msg){
+	System.out.println("Added: " + msg);
 	return toSend.add(msg);
     }
 
@@ -105,21 +108,45 @@ public class ServerNetwork implements Runnable{
     }
 
     private boolean hasToSend(){
-	return toSend.peek() != null;	
+	return !toSend.isEmpty();	
+    }
+
+    /**
+     * Cleanly closes this server, and shuts down the thread.
+     */
+    public void close(){
+	try{
+	    socket.close();
+	}catch(Exception e){
+	    e.printStackTrace();
+	}
+	running = false;
+	server = null;
     }
 
     public void run(){
        	try{
-	    client = socket.accept();
+	    try{
+		client = socket.accept();
+	    }catch (Exception e){
+		System.out.println("Server socket has been closed");
+	    }
 	    PrintStream writer = new PrintStream(client.getOutputStream());
-	    Scanner reader = new Scanner(client.getInputStream());   
+	    //Scanner scan = new Scanner(client.getInputStream());
+	    BufferedReader buffRead = new BufferedReader(new InputStreamReader(client.getInputStream()));
+	    if(buffRead.readLine().equals("HELLO")){
+		writer.println("IAM ORT");
+	    }
+	    //input = new GetInput(scan);
 	    while(running){
 		if(hasToSend()){
-		    writer.println(toSend.remove());
+		    String send = toSend.remove();
+		    System.out.println("Sending: " + send);
+		    writer.println(send);
 		    writer.flush();
 		}
-		if(reader.hasNextLine()){
-		    recieved.add(reader.nextLine());
+		if(buffRead.ready()){
+		    recieved.add(buffRead.readLine());
 		}
 	}
 	}catch(IOException e){
@@ -129,7 +156,7 @@ public class ServerNetwork implements Runnable{
 
 
     /**
-     * Tester class for JUnit functionality. Should only ever be 
+     * Tester method for JUnit functionality. Should only ever be 
      * called by JUnit testing.
      *
      * @param  testType the type of test to be specified by the int
@@ -149,4 +176,5 @@ public class ServerNetwork implements Runnable{
 	}	
 	return toReturn;
     }
+    
 }
