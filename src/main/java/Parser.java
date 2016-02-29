@@ -27,7 +27,7 @@ public class Parser {
             case "MYOUSHU":
      //          handleMyoushu();
             case "TESUJI":
-               handleTesuji();
+               return handleTesuji();
             case "ATARI":
      //          handleAtari();
             case "GOTE":
@@ -90,7 +90,7 @@ public class Parser {
         } catch (Exception e){
             System.out.println("Integer parsing error" + e);
             e.printStackTrace();
-            return ("Invalid move" + input);
+            return ("Invalid move " + input);
         }
         if (!(0 <= column && 9 > column)) {
             return "Invalid move";
@@ -98,14 +98,21 @@ public class Parser {
         if (!(0 <= row && 9 > row)) {
             return "Invalid move";
         }
-       
-        // Check if direction is correct for wall placements
-        if (arr.length == 4) {  
-            String direction = arr[3];
+
+        if (arr.length == 4) {  // if wall placement
+            String direction = arr[3].toLowerCase();
             if (!(direction.equals("h") || direction.equals("v"))) {
                 return "Invalid move";
             }
+            if ((direction.equals("h") && row == 8) || (direction.equals("v") && column == 8)) {
+                return "Invalid move";
+            }     
         }
+       
+        // Check if direction is correct for wall placements
+
+            
+
         return input;
     }
 
