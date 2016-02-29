@@ -1,15 +1,19 @@
 import javafx.application.Application;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -39,23 +43,22 @@ public class Layout extends Application {
                     gridPane.add(new Rectangle(50, 50, Color.BROWN), i, j);
             }
         }
-        Rectangle rect = new Rectangle(120, 20, Color.BROWN);
-        gridPane.add(rect, 0, 1);
-        GridPane.setColumnSpan(rect, 2);
+        //Rectangle rect = new Rectangle(120, 20, Color.BROWN);
+        //gridPane.add(rect, 0, 1);
+        //GridPane.setColumnSpan(rect, 2);
         
 
         
-//        Line line = new Line(0, 20, 10, 20);
-//        line.setStrokeWidth(3.0);
-//        gridPane.add(line, 1, 1, 2, 1);
-//        Button down = new Button("Move the Circle Down");
-//        
+        Line line = new Line(0, 20, 10, 20);
+        line.setStrokeWidth(3.0);
+        gridPane.add(line, 1, 1, 2, 1);
+        Button down = new Button("Move the Circle Down");
+        
 //        gridPane.add(down, 10, 5);
 //        gridPane.add(circle, 0, 0);
 //        down.setOnAction(new EventHandler() {
 //            int down1 = 0; 
 //            int down2 = 1; 
-//            @Override
 //            public void handle(Event event) {
 //                if(down2 < 9) {
 //                    Line line = new Line();
@@ -126,7 +129,7 @@ public class Layout extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
     
 }

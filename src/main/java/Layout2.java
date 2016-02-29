@@ -56,11 +56,11 @@ public class Layout2 extends Application {
                     
             }
         }
-        Rectangle rect = new Rectangle(120, 20, Color.BLACK);
+        //Rectangle rect = new Rectangle(120, 20, Color.BLACK);
         
-        GridPane.setColumnSpan(rect, 2);
-        gridPane.add(rect, 0, 1);
-        gridPane.getChildren().addAll(rect);
+        //GridPane.setColumnSpan(rect, 2);
+       // gridPane.add(rect, 0, 1);
+       // gridPane.getChildren().addAll(rect);
         
         //gridPane.getColumnConstraints().add(new ColumnConstraints(10));
         //gridPane.getColumnConstraints().add(new ColumnConstraints(10));

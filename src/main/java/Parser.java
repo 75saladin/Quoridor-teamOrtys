@@ -132,6 +132,21 @@ public class Parser {
         // Informs all servers that game is over and <p> won.
         // This is last message sent to any server.
     }
+    
+    public static void main(String[] args) {
+        String move1 = "(0, 0)";
+        String invalidMove1 = "(-1, 1)";
+        String wall1 = "[(0, 0), H]";
+        String invalidWall1 = "[(8, 0), V]";
+        Parser p = new Parser("TESUJI " + move1);
+        System.out.println(p.handle());
+        p = new Parser("TESUJI " + invalidMove1);
+        System.out.println(p.handle());
+        p = new Parser("TESUJI " + wall1);
+        System.out.println(p.handle());
+        p = new Parser("TESUJI " + invalidWall1);
+        System.out.println(p.handle());
+    }
 
 }
         
