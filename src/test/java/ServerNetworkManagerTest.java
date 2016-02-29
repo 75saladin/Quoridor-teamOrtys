@@ -1,8 +1,8 @@
 import org.junit.Test;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertEquals;
-import static  org.junit.Assert.*;
+//import static org.junit.Assert.assertNotNull;
+//import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import java.net.Socket;
 import java.io.PrintWriter;
 import java.util.Scanner;
