@@ -36,7 +36,7 @@ public class Wall {
     }
     
     public String getOppositeDirection() {
-	if (this.direction.toLowerCase.equals("h"))
+	if (this.direction.toLowerCase().equals("h"))
 	    return "v";
 	else
 	    return "h";
@@ -52,11 +52,22 @@ public class Wall {
     public String getDirection(){
         return direction;
     }
+
+    public String getProperties(){
+	return properties;
+    }
     
-    public int[4] getBlocked() {
-	if (this.direction.toLowerCase.equals("h"))
-	    int[] temp = new int[this.c, this.r, this.c+1, this.r];
-	else 
-	    int[] temp = new int[this.c, this.r, this.c, this.r+1];
+    public int[] getBlocked() {
+	int[] temp;
+	if (this.direction.toLowerCase().equals("h")){
+	    temp = new int[] {this.c, this.r, this.c+1, this.r};
+	}else{
+	    temp = new int[] {this.c, this.r, this.c, this.r+1};
+	}
 	return temp;
+    }
+
+    public String toString(){
+	return properties;
+    }
 }

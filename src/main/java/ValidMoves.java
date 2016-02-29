@@ -1,11 +1,12 @@
-import Player;
-import Wall;
+//import Player; // Not necessary - The file is in the same folder.
+//import Wall; // Not necessary - the file is in the same folder.
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ValidMoves {
     
-    public Map<String, ArrayList<int[2]>> validM; //map of players; list of possible moves
+    public Map<String, ArrayList<int[]>> validM; //map of players; list of possible moves
     public ArrayList<String> walls; //list of user-placed walls.
     public ArrayList<String> validW; //list of placable walls.
     
@@ -13,7 +14,7 @@ public class ValidMoves {
      * Constructs the database. (2-player)
      */
     public ValidMoves() {
-	validM = new HashMap<String, int[2]>();
+	validM = new HashMap<String, ArrayList<int[]>>();
 	walls = new ArrayList<String>();
 	validW = new ArrayList<String>();
 	buildValidWalls();
@@ -33,12 +34,11 @@ public class ValidMoves {
     public boolean validateMove(String move) {
 	int c = move.charAt(0);
 	int r = move.charAt(2);
-	
-	
+	return false; //PLACEHOLDER RETURN - REPLACE AT SOME POINT!	
     }
     
     public boolean validateWall(String wall) {
-	
+	return false; //PLACEHOLDER RETURN - REPLACE AT SOME POINT!
     }
     
     /**
@@ -46,15 +46,23 @@ public class ValidMoves {
      * @param	wall	The new wall as a Wall.
      */
     public void update(Wall wall) {
-	walls.add(wall.properties); //adds new wall to list of user-placed walls.
-	walls.remove("" + wall.c + " " + wall.r + " " + wall.direction);
-	walls.remove("" + wall.c + " " + wall.r + " " + wall.getOppositeDirection());
-	if (wall.direction.equals("h")) {
-	    walls.remove("" + wall.c-1 + " " + wall.r + " " + wall.direction);
-	    walls.remove("" + wall.c+1 + " " + wall.r + " " + wall.direction);
+	walls.add(wall.getProperties()); //adds new wall to list of user-placed walls.
+	walls.remove("" + wall.getCPos() + " " + wall.getRPos() + " " + wall.getDirection());
+	walls.remove("" + wall.getCPos() + " " + wall.getRPos() + " " + wall.getOppositeDirection());
+	if (wall.getDirection().equals("h")) {
+	    walls.remove("" + (wall.getCPos()-1) +
+			 " " + wall.getRPos() + 
+			 " " + wall.getDirection());
+	    walls.remove("" + (wall.getCPos()+1) +
+			 " " + wall.getRPos() +
+			 " " + wall.getDirection());
 	} else {
-	    walls.remove("" + wall.c + " " + wall.r-1 + " " + wall.direction);
-	    walls.remove("" + wall.c + " " + wall.r+1 + " " + wall.direction);
+	    walls.remove("" + wall.getCPos() + 
+			 " " + (wall.getRPos()-1) + 
+			 " " + wall.getDirection());
+	    walls.remove("" + wall.getCPos() + 
+			 " " + (wall.getRPos()+1) + 
+			 " " + wall.getDirection());
 	}
 	
     }
@@ -66,14 +74,18 @@ public class ValidMoves {
     public void buildValidWalls() {
 	for (int x=0; x<8; x++) {
 	    for (int y=0; y<8; y++) {
-		validW.add(new Wall(x, y, "h"));
-		validW.add(new Wall(x, y, "v"));
+		// I didn't know why you wanted a String in validW, but
+		// I didn't change it, I just added a toString call here
+		// so that it could build. 
+		validW.add(new Wall(x, y, "h").toString()); 
+		validW.add(new Wall(x, y, "v").toString());
 	    }
 	}
     }
     
     //Starting position's valid moves (for 2 player)
     //Need another version for 4-player
+    //Why not just have a boolean flag in the method for 2 or 4 players?
     public void buildValidMoves() {
 	
     }
