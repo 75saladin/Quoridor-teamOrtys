@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ValidMoves {
+public final class ValidMoves {
     
     public Map<String, ArrayList<int[]>> validM; //map of players; list of possible moves
     public ArrayList<String> walls; //list of user-placed walls.
@@ -14,9 +14,9 @@ public class ValidMoves {
      * Constructs the database. (2-player)
      */
     public ValidMoves() {
-	validM = new HashMap<String, ArrayList<int[]>>();
-	walls = new ArrayList<String>();
-	validW = new ArrayList<String>();
+	validM = new HashMap<>();
+	walls = new ArrayList<>();
+	validW = new ArrayList<>();
 	buildValidWalls();
 	buildValidMoves();
     }

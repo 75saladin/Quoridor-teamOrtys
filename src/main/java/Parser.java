@@ -137,8 +137,11 @@ public class Parser {
         String move1 = "(0, 0)";
         String invalidMove1 = "(-1, 1)";
         String wall1 = "[(0, 0), H]";
+        System.out.println(Parser.stripBrackets(wall1));
+
         String invalidWall1 = "[(8, 0), V]";
         Parser p = new Parser("TESUJI " + move1);
+        System.out.println(p.stripBrackets(invalidMove1));
         System.out.println(p.handle());
         p = new Parser("TESUJI " + invalidMove1);
         System.out.println(p.handle());

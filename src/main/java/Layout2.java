@@ -37,7 +37,7 @@ public class Layout2 extends Application {
         GridPane gridPane = new GridPane();
         gridPane.setHgap(10);
         gridPane.setVgap(10);
-        //gridPane.setGridLinesVisible(true);
+        gridPane.setGridLinesVisible(true);
         
         GridPane gp = new GridPane();
         gp.setHgap(10);
