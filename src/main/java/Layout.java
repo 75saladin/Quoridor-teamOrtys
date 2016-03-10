@@ -1,20 +1,29 @@
 import javafx.application.Application;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseDragEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import static jdk.nashorn.internal.objects.NativeRegExp.source;
 
 /* The layout class is the GUI for the game. The board is drawn and the features
  * for the game are implemented.
@@ -30,30 +39,35 @@ public class Layout extends Application {
         
         // create a border pane to utilize the top, left, middle, and right parts
         // of the layout
-        BorderPane root = new BorderPane();
+        //BorderPane root = new BorderPane();
         
         
         // draw the board 
         gridPane = drawBoard(gridPane);
-      
+        
         // place the board in the center
         // the controls on the right, description left, and label top
-        root.setCenter(gridPane);
-        root.setRight(drawRegion("Controls Here", Color.DARKSLATEGREY));
-        root.setLeft(drawRegion("Description Here", Color.CHARTREUSE));
-        root.setTop(drawRegion("QUORIDOR", Color.BLUEVIOLET));
-        root.autosize();
+//        root.setCenter(gridPane);
+//        root.setRight(drawRegion("Controls Here", Color.DARKSLATEGREY));
+//        root.setLeft(drawRegion("Description Here", Color.CHARTREUSE));
+//        root.setTop(drawRegion("QUORIDOR", Color.BLUEVIOLET));
+//        root.autosize();
+        final Circle circle = new Circle(10.0);
+        gridPane.add(circle, 4, 8);
+        circle.setOnDragDetected(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                
+                /* drag was detected, start a drag-and-drop gesture*/
+                /* allow any transfer mode */
+                Dragboard db = circle.startDragAndDrop(TransferMode.ANY);
+                event.consume();
         
-        //center each node
-//        gridPane.getChildren().stream().forEach((Node node) -> {
-//            GridPane.setHalignment((Node) node, HPos.LEFT);
-//            GridPane.setValignment((Node) node, VPos.TOP);
-//        });
+            }
+        });
         
-     
         // create a scene and add the gridPane node to it and set the backgorund
         // color to blue
-        Scene scene = new Scene(root, 1000, 1000, Color.BLUE);
+        Scene scene = new Scene(gridPane, 1000, 1000, Color.BLUE);
         stage.setTitle("QUORIDOR");
         stage.setScene(scene);
         stage.show();
@@ -104,6 +118,22 @@ public class Layout extends Application {
     // also the pawn can only be moved if there isn't a 
     // wall in front of you and there is an available 
     // path
+    
+    public void movePawn() {
+        
+//        final Circle circle = new Circle(10.0);
+//        gridPane.add(circle, 4, 8);
+//        circle.setOnMouseDragEntered(new EventHandler<MouseDragEvent>() {
+//            public void handle(MouseDragEvent event) {
+//                
+//                /* drag was detected, start a drag-and-drop gesture*/
+//                /* allow any transfer mode */
+//                Dragboard db = circle.startDragAndDrop(TransferMode.ANY);
+//                event.consume();
+//        
+//            }
+//        });
+    }
     
     
     // used to set on mouseClick for game
