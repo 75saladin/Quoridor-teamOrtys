@@ -35,7 +35,7 @@ public class MyBorderPane extends Application {
         text.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         
         StackPane stackPane = new StackPane();
-        stackPane.setPadding(new Insets(20, 20, 20, 20));
+        stackPane.setPadding(new Insets(40, 40, 40, 40));
         stackPane.setStyle("-fx-background-color: " +  bgColor);
         stackPane.setAlignment(Pos.CENTER);
         stackPane.getChildren().add(text);
