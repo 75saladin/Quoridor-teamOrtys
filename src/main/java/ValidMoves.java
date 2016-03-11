@@ -4,47 +4,73 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/* Notes:
+   - On updating a player: When one player's valid moves are updated, do all 
+     player's moves need to be recalculated? Consider the situation of moving
+     to or away from a spot adjacent to another player; because of the 
+     possibility of jumping, the other player's valid moves are no longer 
+     reliable. Recalculating all player's moves is an easy but costly solution.
+     Another solution could be to check whether they moved into another player's
+     valid move OR away from another player's valid move. However, that would 
+     require knowing the old location, and update() doesn't care about that the
+     way it is right now. Also, 4-player compounds the problem when you consider
+     double-jumping.
+   - I changed the fields. Everything refers to player number instead of an
+     instance of the Player class. However, that means, in its current state,
+     we can't access the current location of a player. We could add another
+     field to associate player number with Player. Or something.
+*/
+       
 public final class ValidMoves {
     
-    public Map<String, ArrayList<int[]>> validM; //map of players; list of possible moves
+    public ArrayList<ArrayList<int[]>> validM; //List of lists of valid moves. index is player number
     public ArrayList<String> walls; //list of user-placed walls.
     public ArrayList<String> validW; //list of placable walls.
     
     /**
-     * Constructs the database. (2-player)
+     * Constructs the database.
+     * @param fourP	Whether or not this is a 4-player game.
      */
-    public ValidMoves() {
-	validM = new HashMap<>();
+    public ValidMoves(boolean fourP) {
+	validM = new ArrayList<>();
 	walls = new ArrayList<>();
 	validW = new ArrayList<>();
 	buildValidWalls();
-	buildValidMoves();
-    }
-    
-    //Valid for all versions (2-4 players) - updates current player's valid moves    
-    public void update(Player player) {
-	/** REWORK AFTER BUILDING VALIDATE MOVE
-	validP.put(player.name, [player.x+1, player.y]); //right
-	validP.put(player.name, [player.x-1, player.y]); //left
-	validP.put(player.name, [player.x, player.y+1]); //up
-	validP.put(player.name, [player.x, player.y-1]); //down
-	*/
-    }
-    
-    public boolean validateMove(String move) {
-	int c = move.charAt(0);
-	int r = move.charAt(2);
-	return false; //PLACEHOLDER RETURN - REPLACE AT SOME POINT!	
-    }
-    
-    public boolean validateWall(String wall) {
-	return false; //PLACEHOLDER RETURN - REPLACE AT SOME POINT!
+	buildValidMoves(fourP);
     }
     
     /**
-     * Adds a wall and removes from validW walls that conflict with the new wall.
-     * @param	wall	The new wall as a Wall.
+     * Recalculates the valid moves for the player number given.
      */
+    public void update(int player) {
+	ArrayList<int[]> newMoves = new ArrayList<>();
+	int c = 0; //PLACEHOLDER: NEED TO GET THE PLAYER'S LOCATION
+	int r = 0; //PLACEHOLDER: NEED TO GET THE PLAYER'S LOCATION
+	
+	//add the move above them if there isn't a blocking wall
+	if (!walls.contains("" + (c-1) + " " + (r-1) + " " + "h")&&
+	    !walls.contains("" + c + " " + (r-1) + " " + "h")) 
+	    newMoves.add(new int[]{c, r-1});
+	//add the move below them if there isn't a blocking wall
+	if (!walls.contains("" + (c-1) + " " + r + " " + "h")&&
+	    !walls.contains("" + c + " " + r + " " + "h")) 
+	    newMoves.add(new int[]{c, r+1});
+	//add the move left of them if there isn't a blocking wall
+	if (!walls.contains("" + (c-1) + " " + r + " " + "v")&&
+	    !walls.contains("" + (c-1) + " " + (r-1) + " " + "v")) 
+	    newMoves.add(new int[]{c-1, r});
+	//add the move right of them if there isn't a blocking wall
+	if (!walls.contains("" + c + " " + r + " " + "h")&&
+	    !walls.contains("" + c + " " + (r-1) + " " + "h")) 
+	    newMoves.add(new int[]{c+1, r});
+	
+	//ADD VALID MOVES OF JUMPABLE PAWNS
+    }
+    
+    /**
+    * Adds a wall and removes from validW walls that conflict with the new wall.
+    * @param	wall	The new wall as a Wall.
+    */
     public void update(Wall wall) {
 	walls.add(wall.getProperties()); //adds new wall to list of user-placed walls.
 	walls.remove("" + wall.getCPos() + " " + wall.getRPos() + " " + wall.getDirection());
@@ -68,6 +94,34 @@ public final class ValidMoves {
     }
     
     /**
+     * Checks whether or not a given move destination is a valid one for the 
+     * given player. ie, checks whether validM's ArrayList at index <player>
+     * contains the given move in the form int[]{c, r}.
+     * @param player	The player number to be considered
+     * @param move	The move to be considered. In the form that the parser 
+     *                  creates: a String of col + " " + row.
+     */
+    public boolean validateMove(int player, String move) {
+	int c = move.charAt(0);
+	int r = move.charAt(2);
+	if (validM.get(player).contains(new int[]{c,r}))
+	    return true;
+	return false;
+    }
+    
+    /**
+     * Checks whether or not a given wall is a valid one for this board. ie,
+     * checks if that wall exists in validW.
+     * @param wall	The wall to be considered. In the form that the parser
+     *			creates: A String of col + " " + row + " " + direction
+     */
+    public boolean validateWall(String wall) {
+	if (validW.contains(wall))
+	    return true;
+	return false;
+    }
+       
+    /**
      * Populates validW with every possible wall. To be called once in the 
      *   constructor.
      */
@@ -83,10 +137,35 @@ public final class ValidMoves {
 	}
     }
     
-    //Starting position's valid moves (for 2 player)
-    //Need another version for 4-player
-    //Why not just have a boolean flag in the method for 2 or 4 players?
-    public void buildValidMoves() {
+    /** Populates validM with initial possible moves. To be called once in the
+     *  constructor.
+     * @param fourP	Whether or not this game is 4-player
+     */
+    public void buildValidMoves(boolean fourP) {
+	ArrayList<int[]> p1 = new ArrayList<>();
+	ArrayList<int[]> p2 = new ArrayList<>();
+	p1.add(new int[]{3, 0});
+	p1.add(new int[]{4, 1});
+	p1.add(new int[]{5, 0});
+	p2.add(new int[]{3, 8});
+	p2.add(new int[]{4, 7});
+	p2.add(new int[]{5, 8});
 	
+	validM.add(p1);
+	validM.add(p2);
+	
+	if(fourP) {
+	    ArrayList<int[]> p3 = new ArrayList<>();
+	    ArrayList<int[]> p4 = new ArrayList<>();
+	    p3.add(new int[]{0, 3});
+	    p3.add(new int[]{1, 4});
+	    p3.add(new int[]{0, 5});
+	    p4.add(new int[]{8, 3});
+	    p4.add(new int[]{7, 4});
+	    p4.add(new int[]{6, 5});
+	    
+	    validM.add(p3);
+	    validM.add(p4);
+	}
     }
 }

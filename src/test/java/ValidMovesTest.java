@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 public class ValidMovesTest {
     
     public ValidMovesTest() {
-        ValidMoves test = new ValidMoves();
+        ValidMoves test = new ValidMoves(false);
     }
     
     @BeforeClass
