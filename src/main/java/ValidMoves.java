@@ -19,6 +19,10 @@ import java.util.Map;
      instance of the Player class. However, that means, in its current state,
      we can't access the current location of a player. We could add another
      field to associate player number with Player. Or something.
+   - Should walls be strings or Walls? Doesn't seem like they need more info
+     beyond the "<c> <r> <d>" that the parser creates, and removing, from an 
+     ArrayList, a matching string is much easier than removing a matching 
+     instance of a Wall object.
 */
        
 public final class ValidMoves {
