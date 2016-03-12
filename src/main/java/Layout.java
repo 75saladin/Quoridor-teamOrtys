@@ -53,9 +53,9 @@ public class Layout extends Application {
 //        root.setTop(drawRegion("QUORIDOR", Color.BLUEVIOLET));
 //        root.autosize();
         final Circle circle = new Circle(10.0);
-        gridPane.add(circle, 4, 8);
-        circle.setOnDragDetected(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent event) {
+        
+        circle.setOnMouseDragEntered(new EventHandler<MouseDragEvent>() {
+            public void handle(MouseDragEvent event) {
                 
                 /* drag was detected, start a drag-and-drop gesture*/
                 /* allow any transfer mode */
@@ -64,6 +64,7 @@ public class Layout extends Application {
         
             }
         });
+        gridPane.add(circle, 4, 8);
         
         // create a scene and add the gridPane node to it and set the backgorund
         // color to blue

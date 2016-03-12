@@ -1,0 +1,13 @@
+possibilities for gui
+
+- remove the vertical and horizontal gaps
+- make a directional pad for the player
+- add dropShadow effect for the nodes
+- need a check turn and check move for validity
+- use methods to create events for cleaner code
+- click the square to create a wall
+
+Currently the GUI is a 17 x 17 gridPane. The rectangles are nodes. 
+The gridpane is on top of a pane. 
+
+
