@@ -17,29 +17,25 @@ import static org.junit.Assert.*;
  */
 public class ValidMovesTest {
     
-    public ValidMovesTest() {
-        ValidMoves test = new ValidMoves(false);
-    }
+    //creates the class
     
-    @BeforeClass
-    public static void setUpClass() {
-    }
+    //populates with correct number of players
     
-    @AfterClass
-    public static void tearDownClass() {
-    }
+    //same, but 4-player
     
-    @Before
-    public void setUp() {
-    }
+    //populates with correct moves
     
-    @After
-    public void tearDown() {
-    }
-
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
+    //same, but 4-player
+    
+    //validateWall correctly says "valid"
+    
+    //validateWall carrectly says "invalid"
+    
+    //validateMove correctly says "valid"
+    
+    //validateMove correctly says "invalid"
+    
+    //update(Wall) puts the wall in
+    
+    //update(Wall) removes from validW
 }
