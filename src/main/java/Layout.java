@@ -2,20 +2,15 @@ import java.util.List;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -26,16 +21,15 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javax.swing.ButtonGroup;
 
 /* The layout class is the GUI for the game. The board is drawn and the features
  * for the game are implemented.
  */
 public class Layout extends Application {
-    private final Circle player1 = new Circle(25.0); // temporary circle for player
-    private final Circle player2 = new Circle(25.0); 
-    private final Circle player3 = new Circle(25.0);
-    private final Circle player4 = new Circle(25.0);
+    private Circle player1 = new Circle(25.0); // temporary circle for player
+    private Circle player2 = new Circle(25.0); 
+    private Circle player3 = new Circle(25.0);
+    private Circle player4 = new Circle(25.0);
     
     // create a gridpane and draw the rectangular board
     private GridPane gridPane = drawBoard(2); 
@@ -49,7 +43,7 @@ public class Layout extends Application {
     // The start method is required from the application class to start the GUI.
     @Override
     public void start(Stage stage) {
-        
+        // add the Layout file from the css. 
         gridPane.getStylesheets().addAll(this.getClass().getResource("Layout.css").toExternalForm());
         
         //BorderPane root = setBorderPane(gridPane);
@@ -69,12 +63,13 @@ public class Layout extends Application {
     // returns: the fully constructred board with rectangles. 
     public GridPane drawBoard(int numOfPlayers) {
         GridPane gp = new GridPane();
-        gp.setAlignment(Pos.CENTER);
-        gp.setHgap(2.0);
-        gp.setVgap(2.0);
-        gp.setPadding(new Insets(5, 5, 5, 5));
-        gp.setId("board");
+        gp.setAlignment(Pos.CENTER); 
+        //gp.setHgap(2.0); // set the horizontal gap of the space between nodes
+        //gp.setVgap(2.0); // set the vertical gap
+        //gp.setPadding(new Insets(5, 5, 5, 5));
+        gp.setId("board"); // set the css id of the gridpane
         
+        // loop through and add rectangles to create the board
         for(int i = 0; i < 17; i++) {
             for(int j = 0; j < 17; j++) {
                 if(i % 2 == 0 && j%2==0) {
@@ -101,20 +96,27 @@ public class Layout extends Application {
         return gp;
     }
     
+    // pre: none
+    // post: sets a wall in the area clicked. It will cover two rows or two columns
+    // depending on where you click. As of right now the click is between the squares
     private void setWallEvent() {
         List <Node> childrens = gridPane.getChildren();
+        
+        // still need valid wall placement check
+        
+        // loop through and add the event to each node
         childrens.stream().forEach((node) -> {
             node.setOnMousePressed((MouseEvent event) -> {
                 int row = GridPane.getRowIndex(node);
                 int column = GridPane.getColumnIndex(node);
-                if(row % 2 == 0 && column % 2 != 0) { // vertical wall
-                    gridPane.add(new Rectangle(5.0, 50.0, Color.GOLD), column, row);
+                if(row % 2 == 0 && column % 2 != 0 && row != 16) { // vertical wall
+                    gridPane.add(new Rectangle(5.0, 50.0, Color.LAWNGREEN), column, row);
                     row+=2;
-                    gridPane.add(new Rectangle(5.0, 50.0, Color.GOLD), column, row);
-                } else if (row % 2 != 0 && column % 2 == 0) {
-                    gridPane.add(new Rectangle(50, 5.0, Color.GOLD), column, row);
+                    gridPane.add(new Rectangle(5.0, 50.0, Color.LAWNGREEN), column, row);
+                } else if (row % 2 != 0 && column % 2 == 0 && column != 16) { // horizontal wall
+                    gridPane.add(new Rectangle(50, 5.0, Color.LAWNGREEN), column, row);
                     column += 2;
-                    gridPane.add(new Rectangle(50, 5.0, Color.GOLD), column, row);
+                    gridPane.add(new Rectangle(50, 5.0, Color.LAWNGREEN), column, row);
                 }
             });
         });
@@ -152,6 +154,7 @@ public class Layout extends Application {
     }
     
     
+    // pre: none
     // returns the title region
     private Region setTitle() {
         Text text = new Text("QUORIDOR");
@@ -170,7 +173,9 @@ public class Layout extends Application {
         return stackPane;
     }
     
-        private Region setBottom() {
+    // pre: none
+    // post: sets the bottom text
+    private Region setBottom() {
         Text text = new Text("Team Morty's");
         text.setFont(Font.font("Arial", FontWeight.BOLD, 40));
         
