@@ -50,8 +50,7 @@ public class Layout extends Application {
     @Override
     public void start(Stage stage) {
         
-        //GridPane gridPane = drawBoard(2);
-        
+        gridPane.getStylesheets().addAll(this.getClass().getResource("Layout.css").toExternalForm());
         
         //BorderPane root = setBorderPane(gridPane);
         setOnClicked();
@@ -60,6 +59,7 @@ public class Layout extends Application {
         // color to blue
         Scene scene = new Scene(root, 1000, 1000, Color.BLUE);
         stage.setTitle("QUORIDOR");
+        
         stage.setScene(scene);
         stage.show();
     }
@@ -72,15 +72,23 @@ public class Layout extends Application {
         gp.setAlignment(Pos.CENTER);
         gp.setHgap(2.0);
         gp.setVgap(2.0);
+        gp.setPadding(new Insets(5, 5, 5, 5));
+        gp.setId("board");
         
         for(int i = 0; i < 17; i++) {
             for(int j = 0; j < 17; j++) {
                 if(i % 2 == 0 && j%2==0) {
                     gp.add(new Rectangle(50, 50, Color.BROWN), i , j);
                     gp.add(new Text("(" + i + ", " + j + ")"), i, j);
-                }
+                } else if(i % 2 != 0 && j % 2 == 0) { // vertical rectangles
+                    gp.add(new Rectangle(5.0, 50, Color.WHITE), i, j);
+                }else if(i % 2 == 0 && j % 2 != 0) { // horizontal rectangles
+                    gp.add(new Rectangle(50, 5.0, Color.WHITE), i, j);
+                }         
             }
         } 
+        
+        // default is 2 players, add the other two if there are more
         if(numOfPlayers == 2) {
             gp.add(player1, 8, 0);
             gp.add(player2, 8, 16);
@@ -89,7 +97,7 @@ public class Layout extends Application {
             gp.add(player4, 16, 8);
         }
 
-        gp.setPadding(new Insets(5, 5, 5, 5));
+        
         return gp;
     }
     
@@ -99,10 +107,15 @@ public class Layout extends Application {
             node.setOnMousePressed((MouseEvent event) -> {
                 int row = GridPane.getRowIndex(node);
                 int column = GridPane.getColumnIndex(node);
-                row++;
-                gridPane.add(new Rectangle(50, 5.0, Color.GOLD), column, row);
-                column++;
-                gridPane.add(new Rectangle(50, 5.0, Color.GOLD), column, row);
+                if(row % 2 == 0 && column % 2 != 0) { // vertical wall
+                    gridPane.add(new Rectangle(5.0, 50.0, Color.GOLD), column, row);
+                    row+=2;
+                    gridPane.add(new Rectangle(5.0, 50.0, Color.GOLD), column, row);
+                } else if (row % 2 != 0 && column % 2 == 0) {
+                    gridPane.add(new Rectangle(50, 5.0, Color.GOLD), column, row);
+                    column += 2;
+                    gridPane.add(new Rectangle(50, 5.0, Color.GOLD), column, row);
+                }
             });
         });
     }
@@ -141,8 +154,9 @@ public class Layout extends Application {
     
     // returns the title region
     private Region setTitle() {
-        Text text = new Text("Quoridor");
-        text.setFont(Font.font("Arial", FontWeight.BOLD, 40));
+        Text text = new Text("QUORIDOR");
+        text.setStyle("-fx-background-color: gray");
+        text.setFont(Font.font("Arial", FontWeight.BOLD, 50));
         
         StackPane stackPane = new StackPane();
         Insets inset = new Insets(20, 20, 20, 20);
