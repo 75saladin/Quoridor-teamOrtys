@@ -1,18 +1,24 @@
+import java.util.List;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseDragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -26,11 +32,16 @@ import javax.swing.ButtonGroup;
  * for the game are implemented.
  */
 public class Layout extends Application {
-    private final Circle player1 = new Circle(20.0); // temporary circle for player
-    private final Circle player2 = new Circle(20.0); 
-    private final Circle player3 = new Circle(20.0);
-    private final Circle player4 = new Circle(20.0);
-    private GridPane gridPane = drawBoard(2);
+    private final Circle player1 = new Circle(25.0); // temporary circle for player
+    private final Circle player2 = new Circle(25.0); 
+    private final Circle player3 = new Circle(25.0);
+    private final Circle player4 = new Circle(25.0);
+    
+    // create a gridpane and draw the rectangular board
+    private GridPane gridPane = drawBoard(2); 
+    
+    // create a border pane to utilize the top, left, middle, and right parts
+    // of the layout
     private BorderPane root = setBorderPane(gridPane);
     
     
@@ -38,14 +49,13 @@ public class Layout extends Application {
     // The start method is required from the application class to start the GUI.
     @Override
     public void start(Stage stage) {
-        // create a gridpane and draw the rectangular board
+        
         //GridPane gridPane = drawBoard(2);
         
-        // create a border pane to utilize the top, left, middle, and right parts
-        // of the layout
+        
         //BorderPane root = setBorderPane(gridPane);
         setOnClicked();
-        
+        setWallEvent();
         // create a scene and add the gridPane node to it and set the backgorund
         // color to blue
         Scene scene = new Scene(root, 1000, 1000, Color.BLUE);
@@ -60,24 +70,41 @@ public class Layout extends Application {
     public GridPane drawBoard(int numOfPlayers) {
         GridPane gp = new GridPane();
         gp.setAlignment(Pos.CENTER);
-        gp.setGridLinesVisible(true);
         gp.setHgap(2.0);
         gp.setVgap(2.0);
         
         for(int i = 0; i < 17; i++) {
             for(int j = 0; j < 17; j++) {
-                if(i % 2 == 0 && j%2==0)
-                    gp.add(new Rectangle(50, 50, Color.BROWN), i, j);
-                    
+                if(i % 2 == 0 && j%2==0) {
+                    gp.add(new Rectangle(50, 50, Color.BROWN), i , j);
+                    gp.add(new Text("(" + i + ", " + j + ")"), i, j);
+                }
             }
         } 
-        gp.add(player1, 8, 0);
-        gp.add(player2, 8, 16);
-        gp.add(player3, 0, 8);
-        gp.add(player4, 16, 8);
+        if(numOfPlayers == 2) {
+            gp.add(player1, 8, 0);
+            gp.add(player2, 8, 16);
+        } else {
+            gp.add(player3, 0, 8);
+            gp.add(player4, 16, 8);
+        }
 
         gp.setPadding(new Insets(5, 5, 5, 5));
         return gp;
+    }
+    
+    private void setWallEvent() {
+        List <Node> childrens = gridPane.getChildren();
+        childrens.stream().forEach((node) -> {
+            node.setOnMousePressed((MouseEvent event) -> {
+                int row = GridPane.getRowIndex(node);
+                int column = GridPane.getColumnIndex(node);
+                row++;
+                gridPane.add(new Rectangle(50, 5.0, Color.GOLD), column, row);
+                column++;
+                gridPane.add(new Rectangle(50, 5.0, Color.GOLD), column, row);
+            });
+        });
     }
     
     // @param gridPane: The board for the game of Quoridor
@@ -90,54 +117,82 @@ public class Layout extends Application {
         // the controls on the right, description left, and label top
         BorderPane bp = new BorderPane();
         bp.setCenter(gridPane);
-        bp.setRight(drawRegion("Controls Here", Color.DARKSLATEGREY));
-        bp.setLeft(drawRegion("Description Here", Color.CHARTREUSE));
-        bp.setTop(drawRegion("QUORIDOR", Color.BLUEVIOLET));
-        bp.autosize();
+        bp.setLeft(setDescription());
+        bp.setTop(setTitle());
+        bp.setBottom(setBottom());
         
         return bp;
     }
     
-        // returns a node to put in the borderpane
-    private Region drawRegion(String myText, Color bgColor) {
-        Text text = new Text(myText);
-        text.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+    // pre: none
+    // returns the left region of the borderpane
+    private Region setDescription() {
+        VBox vb = new VBox();
+        vb.setPadding(new Insets(20,20,20,20));
+        vb.setAlignment(Pos.CENTER);
+        Label label = new Label("    Description     ");
+        label.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        label.setAlignment(Pos.CENTER);
+        vb.setStyle("-fx-background-color: #008000ff");
+        vb.getChildren().add(label);
+        return vb;
+    }
+    
+    
+    // returns the title region
+    private Region setTitle() {
+        Text text = new Text("Quoridor");
+        text.setFont(Font.font("Arial", FontWeight.BOLD, 40));
         
         StackPane stackPane = new StackPane();
-        if(myText.contains("Description")) {
-            stackPane.setPadding(new Insets(10, 10, 10, 5));
-        } else if(myText.contains("QUORIDOR")){
-            stackPane.setPadding(new Insets(10, 5, 5, 5));
-            text.setFont(Font.font("Arial", FontWeight.BOLD, 40));
-        } else if(myText.contains("Controls Here")) {
-            stackPane.setPadding(new Insets(10, 5, 10, 5));
-        }
+        Insets inset = new Insets(20, 20, 20, 20);
+        stackPane.setPadding(inset);
+        
         stackPane.setAlignment(Pos.CENTER);
+        stackPane.setStyle("-fx-background-color: #008000ff");
         stackPane.getChildren().add(text);
         // set the max width 
-        stackPane.setMaxWidth(50);
+        stackPane.setMinHeight(100);
         return stackPane;
     }
     
+        private Region setBottom() {
+        Text text = new Text("Team Morty's");
+        text.setFont(Font.font("Arial", FontWeight.BOLD, 40));
+        
+        StackPane stackPane = new StackPane();
+        Insets inset = new Insets(20, 20, 20, 20);
+        stackPane.setPadding(inset);
+        
+        stackPane.setAlignment(Pos.CENTER);
+        stackPane.setStyle("-fx-background-color: #008000ff");
+        stackPane.getChildren().add(text);
+        // set the max width 
+        stackPane.setMinHeight(200);
+        return stackPane;
+    }
+        
     // used to set on mouseClick for game
     // note the board can only be clicked if it is your turn
     // and there isn't a wall there
     protected void setOnClicked() {
-        Button up = new Button("UP");
-        Button down = new Button("DOWN");
+        Button up = new Button("UP");       
+        Button down = new Button("DOWN");      
         Button left = new Button("LEFT");
         Button right = new Button("RIGHT");
         
+        // set the minimum width of the buttons
+        up.setMinWidth(100.0);
+        down.setMinWidth(100.0);
+        left.setMinWidth(100.0);
+        right.setMinWidth(100.0);
+        
         // up moves the player node up two rows
-        up.setOnAction(new EventHandler<ActionEvent>() {
-            @Override 
-            public void handle(ActionEvent e) {
-                
-                int row = GridPane.getRowIndex(player2)-2;
-                int column = GridPane.getColumnIndex(player2);
-                gridPane.getChildren().remove(player2);
-                gridPane.add(player2, column, row);
-            }
+        up.setOnAction((ActionEvent e) -> {
+            int row = GridPane.getRowIndex(player2)-2;
+            int column = GridPane.getColumnIndex(player2);
+            gridPane.getChildren().remove(player2);
+            gridPane.add(player2, column, row);
         });
         
         // down moves the player node down two rows
@@ -176,8 +231,14 @@ public class Layout extends Application {
             }
         });
         
-        HBox buttons = new HBox(40, up, down, left, right);
+        // create a label for the controls called controls
+        Label label = new Label("      Controls       ");
+        label.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        VBox buttons = new VBox(10, label, up, down, left, right);
+        buttons.setAlignment(Pos.CENTER);
+        buttons.setStyle("-fx-background-color: #008000ff");
         root.setRight(buttons);
+        
     }
 
     /**
