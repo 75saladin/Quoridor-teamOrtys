@@ -4,3 +4,11 @@
     -fx-background-position: center center;
     -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
 }
+
+#description {
+    -fx-background-color: blue;
+    -fx-background-image: url("http://en.aobo-shop.com/img/p/733-1671-thickbox.jpg");
+    
+    -fx-effect: dropshadow(three-pass-box, blue, 20, 0.5, 0.5, 0);
+    
+}

@@ -48,7 +48,7 @@ public class Layout extends Application {
         
         //BorderPane root = setBorderPane(gridPane);
         setOnClicked();
-        setWallEvent();
+        TRUMPwall();
         // create a scene and add the gridPane node to it and set the backgorund
         // color to blue
         Scene scene = new Scene(root, 1000, 1000, Color.BLUE);
@@ -99,7 +99,7 @@ public class Layout extends Application {
     // pre: none
     // post: sets a wall in the area clicked. It will cover two rows or two columns
     // depending on where you click. As of right now the click is between the squares
-    private void setWallEvent() {
+    private void TRUMPwall() {
         List <Node> childrens = gridPane.getChildren();
         
         // still need valid wall placement check
@@ -135,7 +135,8 @@ public class Layout extends Application {
         bp.setLeft(setDescription());
         bp.setTop(setTitle());
         bp.setBottom(setBottom());
-        
+        //bp.setId("description");
+        //bp.getStylesheets().addAll(this.getClass().getResource("Layout.css").toExternalForm());
         return bp;
     }
     
@@ -143,13 +144,16 @@ public class Layout extends Application {
     // returns the left region of the borderpane
     private Region setDescription() {
         VBox vb = new VBox();
+        vb.setId("description");
         vb.setPadding(new Insets(20,20,20,20));
         vb.setAlignment(Pos.CENTER);
         Label label = new Label("    Description     ");
         label.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         label.setAlignment(Pos.CENTER);
-        vb.setStyle("-fx-background-color: #008000ff");
+        //vb.setStyle("-fx-background-color: #008000ff");
         vb.getChildren().add(label);
+        vb.getStylesheets().addAll(this.getClass().getResource("Layout.css").toExternalForm());
+        
         return vb;
     }
     
