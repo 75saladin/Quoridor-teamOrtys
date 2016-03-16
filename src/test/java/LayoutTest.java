@@ -25,7 +25,7 @@ public class LayoutTest {
     public void testStart() {
         System.out.println("start");
         Stage stage = null;
-        Layout instance = new Layout();
+        //Layout instance = new Layout();
         //instance.start(stage);
         // TODO review the generated test code and remove the default call to fail.
         //fail("The test case is a prototype.");
