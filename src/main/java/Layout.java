@@ -73,8 +73,8 @@ public class Layout extends Application {
         for(int i = 0; i < 17; i++) {
             for(int j = 0; j < 17; j++) {
                 if(i % 2 == 0 && j%2==0) {
-                    gp.add(new Rectangle(50, 50, Color.BROWN), i , j);
-                    gp.add(new Text("(" + i + ", " + j + ")"), i, j);
+                    //gp.add(new Rectangle(50, 50, Color.BROWN), i , j);
+                    //gp.add(new Text("(" + i + ", " + j + ")"), i, j);
                 } else if(i % 2 != 0 && j % 2 == 0) { // vertical rectangles
                     gp.add(new Rectangle(5.0, 50, Color.WHITE), i, j);
                 }else if(i % 2 == 0 && j % 2 != 0) { // horizontal rectangles
@@ -264,7 +264,7 @@ public class Layout extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        launch(args);
+        Application.launch(args);
     }
     
 }
