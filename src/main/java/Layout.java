@@ -25,7 +25,7 @@ import javafx.stage.Stage;
 /* The layout class is the GUI for the game. The board is drawn and the features
  * for the game are implemented.
  */
-public class Layout extends Application {
+public class Layout extends Application implements LayoutInterface {
     private Circle player1 = new Circle(25.0); // temporary circle for player
     private Circle player2 = new Circle(25.0); 
     private Circle player3 = new Circle(25.0);
@@ -61,6 +61,7 @@ public class Layout extends Application {
     
     // @param gridPane: The gridPane used to draw the board. 
     // returns: the fully constructred board with rectangles. 
+    @Override
     public GridPane drawBoard(int numOfPlayers) {
         GridPane gp = new GridPane();
         gp.setAlignment(Pos.CENTER); 
