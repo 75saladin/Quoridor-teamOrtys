@@ -2,37 +2,25 @@
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
 
 public class GameClientTest{
 
-  // testing default GameClient constructor
+  // testing GameClient parameter processing
   @Test
-  public void GameClientDefaultConstructorTest() throws Exception{
-    
-    GameClient testClient = new GameClient();
+  public void GameClientParameterProcessingTest() throws Exception{
+  
+    String[] testArgs = {"localhost:5555","localhost:5554"};
 
-    assertNotNull("Client created",testClient);
+    String[] testProcess = GameClient.processParams(testArgs);
+
+    String[] expectedArray = {"localhost","5555","localhost","5554"};
+
+    assertNotNull("Array should contain values",testProcess);
+  
+    assertArrayEquals("Failure - arrays do not match",expectedArray,testProcess);
 
   }
-
-  // testing machine/port pair GameClientConstructor
-  @Test
-  public void GameClientMachinePortPairConstructor() throws Exception{
-    
-    GameClient testClient = new GameClient("localhost",5555);
-
-    assertNotNull("Client created",testClient);
-  
-  }
-
-  // testing GameClient connection
-  @Test
-  public void GameClientConnectionTest() throws Exception{
-  
-    GameClient testClient = new GameClient();
-    testClient.connect();
-    
-
-  } 
 
 }

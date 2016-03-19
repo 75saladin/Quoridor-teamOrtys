@@ -3,37 +3,17 @@ import java.io.*;
 import java.util.Arrays;
 
 /**
-  * GameClient class extends the NetworkClient abstract class
-  * The brain of the game. 
-  * Controls game logic, tells the gui and board to update.
+  * GameClient class controls game logic,
+  * sets up server connections and sends updates to board.
   * Currently 
   *
   * @author Nicholas Marasco
   */
-public class GameClient extends NetworkClient {
+public class GameClient{
 
   private static final String usage = "usage: GameClient <machine1>:<port number1> "
                                     + "<machine2>:<port number2> \\\n[<machine3>:<port number3> "
                                     + "<machine4>:<port number4>]";
-
-  /**
-    * Default constructor
-    * Sets machince name and port to default values of localhost and 5555
-    */
-  public GameClient(){
-    super("localhost",5555);
-  }
-
-  /**
-    * Constructor for machine name/port number pairs.
-    * Calls super constructor with given parameters.
-    *
-    * @param machine the name of the machine to connect to
-    * @param port the port number to connect to
-    */
-  public GameClient(String machine, int port){
-    super(machine,port);
-  }
 
   /**
     * Start a 2 player game.
@@ -42,8 +22,8 @@ public class GameClient extends NetworkClient {
     * @param pairs String array of machine names and port numbers
     */
   // Currently not implemented
-  private static void run2Player(String[] pairs){
-  
+  public static void start2Player(String[] pairs){
+
   }
 
   /**
@@ -53,8 +33,20 @@ public class GameClient extends NetworkClient {
     * @param pairs String array of machine names and port numbers
     */
   // Currently not implemented
-  private static void run4Player(String[] pairs){
+  public static void start4Player(String[] pairs){
   
+  }
+
+  public void connect(String host, int port) {
+    try(Socket client = new Socket(host, port)) {
+      handleConnection(client);
+    } catch(UnknownHostException uhe) {
+      System.out.println("Unknown host: " + host);
+      uhe.printStackTrace();
+    } catch(IOException ioe) {
+      System.out.println("IOException: " + ioe);
+      ioe.printStackTrace();
+    }
   }
 
   public void handleConnection(Socket client) throws IOException{
@@ -84,7 +76,7 @@ public class GameClient extends NetworkClient {
     * @param args String array of arguments to process
     * @return String array of separated machine names and port numbers
     */
-  private static String[] processParams(String[] args){
+  public static String[] processParams(String[] args){
     if(args.length != 2 && args.length != 4){
       System.out.println(usage);
       System.out.println("Error: Invalid number of players");
@@ -105,8 +97,8 @@ public class GameClient extends NetworkClient {
   public static void main(String[] args){
     String[] pairs = processParams(args);
     if(pairs.length == 4)
-     run2Player(pairs);
+     start2Player(pairs);
     else
-     run4Player(pairs); 
+     start4Player(pairs); 
   }
 }
