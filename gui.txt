@@ -7,7 +7,17 @@ possibilities for gui
 - use methods to create events for cleaner code
 - click the square to create a wall
 
-Currently the GUI is a 17 x 17 gridPane. The rectangles are nodes. 
-The gridpane is on top of a pane. 
-
-
+The rectangles are nodes. Node Layout Structure: The scene is the root and below 
+that is a boarder pane with a left, right, bottom, top, and center section for nodes. 
+The center contains the actual game represented by a gridpane node. Which consists
+of rectangles for the board and the walls. The grid is 16 x 16  
+	
+	Node Structure
+	  
+	Scene
+	  |
+	BorderPane   -	Center		-	Right	     -		Left(Description) - Bottom(TeamLabel) - Top(Gamelabel
+	  		  |			  |
+			Gridpane(Actual Board)	VBOX(Move Buttons)  
+			  |
+			Rectangle Nodes (Board and Wall)

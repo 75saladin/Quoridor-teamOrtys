@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 
+/*
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -13,10 +14,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+*/
+
 /**
  *
  * @author jed_lechner
  */
+/*
 public class ParserTest {
     private final String move1 = "(0, 0)";
     private final String move2 = "(0, 1)";
@@ -37,8 +41,9 @@ public class ParserTest {
     private final String invalidWall2 = "[(2, 8), H]";
     private final String invalidWall3 = "[(8, 8), H]";
     private final String invalidWall4 = "[(9, 8), H]";
-            
+*/            
     //test constructor
+/*
     @Test
     public void testConstructor() {
         Parser parser = new Parser(move1);
@@ -46,10 +51,8 @@ public class ParserTest {
         assertNotNull(parser);  
         
     }
-    
-    /**
-     *
-     */
+*/
+/*
     @Test
     public void testStripBrackets() {
         Parser p = new Parser(move2);
@@ -67,7 +70,8 @@ public class ParserTest {
                      Parser.stripBrackets(wall2));
         
     }
-    
+*/
+/*    
     @Test
     public void testHandle() {
         Parser p = new Parser(move1);
@@ -96,3 +100,5 @@ public class ParserTest {
     }
     
 }
+
+*/
