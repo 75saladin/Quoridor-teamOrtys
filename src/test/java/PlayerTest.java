@@ -54,13 +54,43 @@ public class PlayerTest {
         assertNotNull(player2);
     }
     
+    /* expected exception file */
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
+    /**
+     * test if the constructor throws an indexoutofboundsexception
+     */
     @Test
     public void testConstructorIndexOutOfBoundsException() {
         
         exception.expect(IndexOutOfBoundsException.class);
         Player player = new Player(3);
+    }
+    
+    /**
+     * Test get player count
+     */
+   @Test 
+    public void testGetPlayerCount() {
+        int two = 2;
+        int four = 4;
+        assertEquals("Testing two player: ", player1.getPlayerCount(), two);
+        assertEquals("Testing four players: ", player2.getPlayerCount(), four);
+    }
+    
+    /**
+     * Test set player turn and get player turn
+     */
+    @Test
+    public void testSetPlayerTurn_getPlayerTurn() {
+        int one = 1;
+        int two = 2;
+        int three = 3; 
+        int four = 4;
+        
+        assertEquals("Test player turn: ", player1.getPlayerTurn(), one);
+        player1.setPlayerTurn();
+        assertEquals("Test player turn: ", player1.getPlayerTurn(), two);
     }
 }
