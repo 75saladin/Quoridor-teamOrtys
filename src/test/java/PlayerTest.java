@@ -92,5 +92,21 @@ public class PlayerTest {
         assertEquals("Test player turn: ", player1.getPlayerTurn(), one);
         player1.setPlayerTurn();
         assertEquals("Test player turn: ", player1.getPlayerTurn(), two);
+        player1.setPlayerTurn();
+        assertEquals("Test player turn: ", player1.getPlayerTurn(), one);
+        player1.setPlayerTurn();
+        assertEquals("Test player turn: ", player1.getPlayerTurn(), two);
+        
+        assertEquals("Test player turn: ", player2.getPlayerTurn(), one);
+        player2.setPlayerTurn();
+        assertEquals("Test player turn: ", player2.getPlayerTurn(), two);
+        player2.setPlayerTurn();
+        assertEquals("Test player turn: ", player2.getPlayerTurn(), three);
+        player2.setPlayerTurn();
+        assertEquals("Test player turn: ", player2.getPlayerTurn(), four);
+        player2.setPlayerTurn();
+        assertEquals("Test player turn: ", player2.getPlayerTurn(), one);
+        player2.setPlayerTurn();
+        
     }
 }
