@@ -4,8 +4,7 @@ import java.util.Arrays;
 
 /**
   * GameClient class controls game logic,
-  * sets up server connections and sends updates to board.
-  * Currently 
+  * sets up server connections and sends updates to board. 
   *
   * @author Nicholas Marasco
   */
@@ -16,13 +15,44 @@ public class GameClient{
                                     + "<machine4>:<port number4>]";
 
   /**
+    * Start the game logic.
+    * Goes through the initial contact, then executes turn order game.
+    *
+    * @param mod number of players and number to mod turn counter by to get player
+    * @param players array of <code>Socket</code> open to servers 
+    */
+  public static void runGame(int mod, Socket[] players){
+    // TODO: Initial contact with servers and play game
+  }
+
+  /**
     * Start a 2 player game.
     * Sets up connections for two move servers and executes game function.
     *
     * @param pairs String array of machine names and port numbers
     */
-  // Currently not implemented
-  public static void start2Player(String[] pairs){
+  public static void setup2Player(String[] pairs){
+    String machine1 = pairs[0];
+    String machine2 = pairs[2];
+    int port1 = 0;
+    int port2 = 0;
+    try{
+      port1 = Integer.parseInt(pairs[1]);
+      port2 = Integer.parseInt(pairs[3]);
+    }
+    catch(NumberFormatException nfe){
+      System.out.println("Error: Invalid port number found.\nCroaking...");
+      System.exit(1);
+    }
+
+    Socket[] players = new Socket[2];
+
+    players[0] = socketSetup(machine1,port1);
+    players[1] = socketSetup(machine2,port2);
+
+    runGame(2,players);
+
+    closeConnections(players);
 
   }
 
@@ -33,13 +63,22 @@ public class GameClient{
     * @param pairs String array of machine names and port numbers
     */
   // Currently not implemented
-  public static void start4Player(String[] pairs){
+  public static void setup4Player(String[] pairs){
   
   }
 
-  public void connect(String host, int port) {
+  /**
+    * Handle creation of socket.
+    * Creates socket from machine name and port.
+    *
+    * @param host machine name to connect to
+    * @param port port number to connect to
+    *
+    * @return Socket open to the machine/port pair given or dies
+    */
+  public static Socket socketSetup(String host, int port) {
     try(Socket client = new Socket(host, port)) {
-      handleConnection(client);
+      return client;
     } catch(UnknownHostException uhe) {
       System.out.println("Unknown host: " + host);
       uhe.printStackTrace();
@@ -47,24 +86,18 @@ public class GameClient{
       System.out.println("IOException: " + ioe);
       ioe.printStackTrace();
     }
+    return null;
   }
 
-  public void handleConnection(Socket client) throws IOException{
-    try{
-      PrintWriter cout = new PrintWriter(client.getOutputStream(), true);
-      BufferedReader cin = new BufferedReader(new InputStreamReader(client.getInputStream()));
-
-      String message = "Hello";
-      cout.println(message);
-
-      String receive = cin.readLine();
-
-      System.out.println(receive);
-
-      client.close();
-    }
-    catch(IOException e){
-      e.printStackTrace();
+  public static void closeConnections(Socket[] players){
+    for(Socket p : players){
+      try{
+        p.close();
+      }
+      catch(IOException ioe){
+        System.out.println("IOException: " + ioe);
+        ioe.printStackTrace();
+      }
     }
   }
 
@@ -97,8 +130,8 @@ public class GameClient{
   public static void main(String[] args){
     String[] pairs = processParams(args);
     if(pairs.length == 4)
-     start2Player(pairs);
+     setup2Player(pairs);
     else
-     start4Player(pairs); 
+     setup4Player(pairs); 
   }
 }
