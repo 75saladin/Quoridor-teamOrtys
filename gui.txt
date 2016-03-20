@@ -1,11 +1,5 @@
-possibilities for gui
+Layout.java
 
-- remove the vertical and horizontal gaps
-- make a directional pad for the player
-- add dropShadow effect for the nodes
-- need a check turn and check move for validity
-- use methods to create events for cleaner code
-- click the square to create a wall
 
 The rectangles are nodes. Node Layout Structure: The scene is the root and below 
 that is a boarder pane with a left, right, bottom, top, and center section for nodes. 
@@ -21,3 +15,12 @@ of rectangles for the board and the walls. The grid is 16 x 16
 			Gridpane(Actual Board)	VBOX(Move Buttons)  
 			  |
 			Rectangle Nodes (Board and Wall)
+
+
+Still Needs:
+- make a directional pad for the player
+- add dropShadow effect for the nodes
+- need a check turn and check move for validity
+- use methods to create events for cleaner code
+- click the square to create a wall
+
