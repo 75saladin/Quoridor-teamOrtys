@@ -67,6 +67,7 @@ public class Wall {
 	return temp;
     }
 
+    
     public String toString(){
 	return properties;
     }
