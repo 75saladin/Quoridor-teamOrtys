@@ -28,3 +28,7 @@ boolean hasAMove() - returns true if the server has recieved a new move. False o
 String getNextMove() - returns the most recent move that has been recieved.
 
 void close() - Closes this connection
+
+
+I added The Jgrapht library to our directory.  I dont know where its supposed to
+go!
