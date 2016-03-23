@@ -1,4 +1,4 @@
-package GUI;
+
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -14,10 +14,11 @@ public class Layout extends Application /*implements LayoutInterface*/ {
     // The start method is required from the application class to start the GUI.
     @Override
     public void start(Stage stage) {
-        GUI gui = new GUI();
+        Controller p = new Controller(4);
+        GUI gui = new GUI(p);
         Region root = new Region();
-        gui.setUp(new Controller(4));
         root = gui.getRootRegion();
+        System.out.println(gui.getPlayerPosition(4));
         
         Scene scene = new Scene(root, 1000, 1000, Color.BLUE);
         stage.setTitle("QUORIDOR");

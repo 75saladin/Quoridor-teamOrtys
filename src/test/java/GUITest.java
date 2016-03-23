@@ -3,18 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package GUITest;
 
-import GUI.Controller;
-import GUI.GUI;
-import javafx.scene.layout.BorderPane;
+
 import javafx.scene.layout.Region;
 import org.junit.After;
-import org.junit.AfterClass;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -29,12 +25,12 @@ public class GUITest {
     private Controller player2;
     
     @Before
-    public void setUp() {
-        gui = new GUI();
-        gui2 = new GUI();
-        region = new Region();
-        player1 = new Controller(2);
-        player2 = new Controller(4);
+    public void setUpTest() {
+//        player1 = new Controller(2);
+//        player2 = new Controller(4);
+//        gui = new GUI(player1);
+//        gui2 = new GUI(player2);
+//        region = new Region();
     }
     
     @After
@@ -45,15 +41,15 @@ public class GUITest {
         player1 = null;
         player2 = null;
     }
-//
-//    @Test
-//    public void testGUISetUp() {
-//        gui.setUp(player1);
-//        assertNotNull(gui);
-//        region = gui.getRootRegion();
-//        assertNotNull("Grab the gui borderpane ", region);
-//        assertNull(gui2);
-//        gui2.setUp(player2);
+
+    @Test
+    public void testGUISetUp() {
 //        
-//    }
+//        assertNotNull(gui);
+//        assertNotNull(gui2);
+//        assertNotNull("Grab the gui borderpane ", gui.getRootRegion());
+//        assertNotNull("Grab the gui borderpane ", gui2.getRootRegion());
+        
+        
+    }
 }

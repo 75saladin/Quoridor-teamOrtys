@@ -1,4 +1,6 @@
-package GUI;
+
+
+import javafx.application.Application;
 
 /*
  * This is how you launch the application. 
@@ -10,6 +12,6 @@ package GUI;
  */
 public class launchGui {
     public static void main(String[] args) {
-        Layout.launch(Layout.class);
+        Application.launch(Layout.class);
     }
 }

@@ -1,4 +1,4 @@
-package GUI;
+
 
 
 import java.util.List;
@@ -36,18 +36,16 @@ public class GUI implements GUIInterface {
     /* Players in the Game. Right now they are represented by circles */
     private Controller player; 
     
-    public GUI () {
-        root = null;
-        grid = null;
-        player = null;
+    public GUI(Controller p) {
+        this.setUp(p); 
     }
+    
     
     /**
      * @param player: The Player object. See Player.java
      *  Sets up the border pane layout and grid pane layout.
      */
-    @Override
-    public void setUp(Controller player) {
+    private void setUp(Controller player) {
         this.player = player;
         // place the board in the center
         // the controls on the right, description left, and label top
@@ -65,6 +63,13 @@ public class GUI implements GUIInterface {
         root.setBottom(setBottomRegion()); 
         TRUMPwall();
         
+    }
+    
+    @Override
+    public String getPlayerPosition(int num) {
+        int row = grid.getRowIndex(player.getPlayerNode(num));
+        int column = grid.getColumnIndex(player.getPlayerNode(num));
+        return "Player:" + num + " c:" + column/2 + " r:" + row/2;
     }
     
     @Override
