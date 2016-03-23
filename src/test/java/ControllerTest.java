@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 
+import GUI.Controller;
 import javafx.scene.shape.Circle;
 import org.junit.After;
 import org.junit.Before;
