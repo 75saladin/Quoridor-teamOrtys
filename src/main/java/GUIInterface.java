@@ -1,4 +1,4 @@
-package GUI;
+
 
 
 import javafx.scene.layout.Region;
@@ -15,7 +15,8 @@ import javafx.scene.layout.Region;
  */
 public interface GUIInterface {
     
-    public abstract void setUp(Controller player); // set up the board
+    
+    public abstract String getPlayerPosition(int num); //return the current players position
     
     public abstract Region getRootRegion();
     
