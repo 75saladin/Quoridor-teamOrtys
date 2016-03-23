@@ -19,7 +19,7 @@ import org.junit.runners.BlockJUnit4ClassRunner;
  * @author jed_lechner
  */
 @RunWith(value=BlockJUnit4ClassRunner.class)
-public class PlayerTest {
+public class ControllerTest {
     
     private Controller controller1;
     private Controller controller2;
