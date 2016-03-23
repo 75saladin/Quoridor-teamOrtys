@@ -1,49 +1,101 @@
-/* This object handles the number of players in the game
- * 
- */
+
 
 /**
  *
- * @author jed_lechner
+ * @author craig
  */
-public class Player {
+public class Player{
     
-    private int playerCount; // the number of players competing
-    private int playerTurn; // which player turn it is
-    
-    // constructor
-    public Player (int numOfPlayers) {
-        if(numOfPlayers == 2 || numOfPlayers == 4) {
-            this.playerCount = numOfPlayers;
-            this.playerTurn = 1;
-        } else {
-            throw new IndexOutOfBoundsException();
-        }
-        
+    private int playerNum;
+    private int port = 0;
+    private String machine = "";
+    private String ID = "";
+    private int c;
+    private int r;
+
+    /**
+     * Player Constructor
+     * @param ID
+     * @param machineName
+     * @param port
+     * @param playerNum
+     */
+    public Player(String ID, String machineName, int port, int playerNum){
+        this.port = port;
+        this.playerNum = playerNum;
+        this.machine = machineName;
+        this.ID = ID;     
     }
     
-    // pre: none
-    // returns: the player count
-    public int getPlayerCount() {
-        return playerCount;
+    /**
+     *
+     * @return
+     */
+    public String getName(){
+        return ID;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public int getPlayerNum() {
+         return playerNum;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public int getPort() {
+        return port;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getMachine() {
+        return machine;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getID() {
+        return ID;
+    }
+  
+    /**
+     *
+     * @return
+     */
+    public int getC() {
+        return c;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public int getR() {
+        return r;
     }
     
-    // pre: none
-    // returns: which players turn it is based on 
-    public int getPlayerTurn(){
-        return playerTurn;   
+    /**
+     *
+     * @param c
+     */
+    public void setC(int c) {
+        this.c = c;
     }
-    
-    // pre: none
-    // post: sets the player turn based off of the number of players. 
-    public void setPlayerTurn(){
-        if(playerTurn == playerCount) {
-            playerTurn = 1;
-        }else {
-            playerTurn++;
-        }
+
+    /**
+     *
+     * @param r
+     */
+    public void setR(int r) {
+        this.r = r;
     }
-    
-    
-    
 }

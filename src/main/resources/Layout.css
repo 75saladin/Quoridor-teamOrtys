@@ -12,3 +12,9 @@
     -fx-effect: dropshadow(three-pass-box, blue, 20, 0.5, 0.5, 0);
     
 }
+
+#circles {
+    -fx-background-color: #E0FFFF;
+    -fx-border-color:  #545454;
+    -fx-border-style: solid;
+}
