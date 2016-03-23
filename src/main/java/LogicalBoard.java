@@ -53,17 +53,10 @@ public class LogicalBoard{
     /*
      * getVertexByCoord - gets the Vertex object at that coordinate on the board
      * 
-     * Parameters - int c - Column of vertex
-     *              int r - Row of Vertex
+     * @param c - Column of vertex
+     * @param r - Row of Vertex
      *
-     * Returns - Vertex object at that location on the board
-     */             
-
-    /**
-     *
-     * @param c
-     * @param r
-     * @return
+     * @return - Vertex object at that location on the board
      */
              
     public Vertex getVertexByCoord(int c,int r){
@@ -74,32 +67,11 @@ public class LogicalBoard{
     }
         
     
-    /*
-    *   placePlayer - puts player on board when initializing
-    *
-    *   Parameter - Player that is being initialized
-    */
 
-    /**
-     * Can probably Call jeds gui stuff from here
-     * might be the best way
-     * @param player
-     */
-
-    public void initPLayer(Player player) {
-        if(player.getPlayerNum() == 1)
-            getVertexByCoord(0,4).placePlayer(player);
-        if(player.getPlayerNum()==2)
-            getVertexByCoord(8,4).placePlayer(player);
-        if(player.getPlayerNum()==3)
-            getVertexByCoord(4,8).placePlayer(player);
-        if(player.getPlayerNum()==4)
-            getVertexByCoord(0,4).placePlayer(player);        
-    }
     
     
     /*
-     * @method validMove - Determines if provided destination is valid
+     * validMove - Determines if provided destination is valid
      *
      * @param player
      * @param move
@@ -117,13 +89,8 @@ public class LogicalBoard{
             if(!Destination.equals(Source))
                 // if there is not a player in this location
                 if(!Destination.isPlayerHere())
-                    if(board.containsEdge(Source, Destination)){
-                        player.setC(c);
-                        player.setR(r);
-                        Source.removePlayer();
-                        Destination.placePlayer(player);
+                    if(board.containsEdge(Source, Destination))
                         return true;
-                }
         // if there is no edge or Destination or there is a player 
         // on the destination or the source and destination are the same
         // the player cannot be a move here and needs to be kicked from the game

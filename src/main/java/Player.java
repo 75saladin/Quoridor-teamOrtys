@@ -7,24 +7,56 @@
 public class Player{
     
     private int playerNum;
-    private int port = 0;
-    private String machine = "";
-    private String ID = "";
     private int c;
     private int r;
 
     /**
      * Player Constructor
-     * @param ID
-     * @param machineName
-     * @param port
-     * @param playerNum
+	 * player number will determin starting position
+	 * board will be placing it on the board logically
      */
-    public Player(String ID, String machineName, int port, int playerNum){
-        this.port = port;
-        this.playerNum = playerNum;
-        this.machine = machineName;
-        this.ID = ID;     
+    public Player(int playerNum,LogicalBoard board){
+		this.playerNum=playerNum;
+		initPlayer(this,board);
+    }
+    
+    /*
+    *   placePlayer - puts player on board when initializing
+    *
+    *   Parameter - Player that is being initialized
+    */
+
+    /**
+     * Can probably Call jeds gui stuff from here
+     * might be the best way
+     * @param player
+     */
+
+    public void initPLayer(Player player,LogicalBoard board) {
+		// Top player
+        if(player.getPlayerNum() == 1){
+            board.getVertexByCoord(0,4).placePlayer(player);
+        	player.setC(0);
+        	player.setR(4);
+        }
+        // bottom player
+        if(player.getPlayerNum()==2){
+            board.getVertexByCoord(4,8).placePlayer(player);
+        	player.setC(8);
+        	player.setR(4);
+        }
+        // left player
+        if(player.getPlayerNum()==3){
+            board.getVertexByCoord(0,4).placePlayer(player);
+        	player.setC(0);
+        	player.setR(4);
+    	}
+    	// right player
+        if(player.getPlayerNum()==4){
+            board.getVertexByCoord(8,4).placePlayer(player);
+        	player.setC(0);
+        	player.setR(4);        
+    	}
     }
     
     /**
