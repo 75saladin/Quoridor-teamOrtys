@@ -65,17 +65,12 @@ public class LogicalBoard{
                 return v;
         return null;
     }
-        
     
-
-    
-    
-    /*
-     * validMove - Determines if provided destination is valid
-     *
-     * @param player
-     * @param move
-     * @return
+    /**
+     * Checks if a given move destination is valid for the given player.
+     * 
+     * @param Player The player in question
+     * @param move The hypothetical destination to be checked
      */
     public boolean validMove(Player player, String move){
         Scanner sc = new Scanner(move);
@@ -97,14 +92,47 @@ public class LogicalBoard{
         return false;
     }
     
-    /*
-    * validWall - determines if wall is valed then places it
-    *
-    * parameters - cB - Column position of placed wall vertex
-    *              rB - Row position of placed wall vertex
-    *              Direction - direction of wall being placed
-    */
-    private boolean validWall(int sourceC,int sourceR, String Direction){
+    /**
+     * Puts a player in a given destination. This will make the move, always;
+     * the given player and mave combo should be passed into validMove() just 
+     * before makeMove().
+     * 
+     * @param player The player to move
+     * @param move The desination to move the player to
+     */
+    public void makeMove(Player player, String move) {
+	Scanner sc = new Scanner(move);
+        int c = Integer.parseInt(sc.next());
+        int r = Integer.parseInt(sc.next());
+        Vertex destination = getVertexByCoord(c, r);
+	
+	player.setC(c);
+	player.setR(r);
+    }
+    
+    /**
+     * Checks if a given wall is valid. The given location does not have to 
+     * be a legal board position, and the direction does not have to be a legal
+     * direction; in either of those cases, validWall() will simply return 
+     * false.
+     * 
+     * @param sourceC column of wall position
+     * @param sourceR row of wall position
+     * @param direction the direction of the wall
+     */
+    private boolean validWall(int sourceC,int sourceR, String direction){
+	
+	if (sourceC>7 || sourceR>7 || sourceC<0 || sourceR<0)
+	    return false; //wall must be on board and not in the 8th row or col
+	
+	/* Craig,
+	 * Some of these aren't right; eg, subtracting 1 from the row gives you
+	 * the row ABOVE, not below. See the board in Dr. Ladd's protocol:
+	 * http://cs.potsdam.edu/Classes/405/assignments/project/protocol.txt
+	 * Either way, I was able to factor out this logic. You can remove
+	 * everything in the block if you want.
+	 * - Lucas 3/24
+
         // below source VERTEX
         int belowC = sourceC; // Column of Vertex
         int belowR = sourceR - 1; // Row of Vertex
@@ -116,17 +144,20 @@ public class LogicalBoard{
         // below to the right of source
         int belowRC = sourceC + 1; // Column of vertex
         int belowRR = sourceR - 1; // row of vertex
-        
+        */        
+	
         // getting positions of the vertexes for this wall
         Vertex sourceV = getVertexByCoord(sourceC, sourceR);
-        Vertex belowV = getVertexByCoord(belowC,belowR);
-        Vertex rightV = getVertexByCoord(rightC,rightR);
-        Vertex belowRV = getVertexByCoord(belowRC, belowRR);
+        Vertex belowV = getVertexByCoord(sourceC, sourceR+1);
+        Vertex rightV = getVertexByCoord(sourceC+1, sourceR);
+        Vertex belowRV = getVertexByCoord(sourceC+1, sourceR+1);
         
-        // If any of these vertices are null wall cannot be placed;
-        if(sourceV==null||belowV==null||rightV==null||belowRV==null)
-            return false;
-        
+	/* Craig,
+	 * Not sure if you planned to use these somehow in the future, but 
+	 * I was able to factor them out. Feel free to remove them if you won't
+	 * need them.  
+	 *     -Lucas 3/24
+	
         //Edge sets of each vertex
         Set<Edge> sourceES = board.edgesOf(sourceV);
         Set<Edge> rightES = board.edgesOf(rightV);
@@ -135,50 +166,57 @@ public class LogicalBoard{
         
         //Edge set of entire board;
         Set<Edge> edgeSet = board.edgeSet();
+        */
             
-        if(Direction.toUpperCase()=="V"){
-            Edge sourceE = board.getEdge(sourceV, rightV);
-            Edge rightE = board.getEdge(rightV, sourceV);
-            Edge belowE = board.getEdge(belowV,belowRV);
-            Edge belowRE = board.getEdge(belowRV, belowV);
-            if( edgeSet.contains(sourceE) && edgeSet.contains(rightE) &&
-                edgeSet.contains(belowE)  && edgeSet.contains(belowRE)){
-                    
-                sourceES.remove(sourceE);
-                rightES.remove(rightE);
-                belowES.remove(belowE);
-                belowRES.remove(belowRE);
+        if(direction.toUpperCase()=="V"){
+            if( board.containsEdge(sourceV, rightV) && 
+	        board.containsEdge(belowV, belowRV))
                 return true;
-            }
-        }else{
-            Edge sourceE = board.getEdge(sourceV, belowV);
-            Edge rightE  = board.getEdge(rightV, belowRV);
-            Edge belowE  = board.getEdge(belowV,sourceV);
-            Edge belowRE = board.getEdge(belowV, rightV);
-            if( edgeSet.contains(sourceE) && edgeSet.contains(rightE) &&
-                edgeSet.contains(belowE)  && edgeSet.contains(belowRE)){
-                
-                sourceES.remove(sourceE);
-                rightES.remove(rightE);
-                belowES.remove(belowE);
-                belowRES.remove(belowRE);
-                return true;
-            }
-        }
+        } else if (direction.toUpperCase()=="H") {
+            if( board.containsEdge(sourceV, belowV) &&
+	        board.containsEdge(rightV, belowRV))
+		return true;
+        } else { //ie, direction was not h or v and thus invalid
+	    return false;
+	}
+	
+	/* Still necessary: for each player in the game, check if this wall 
+	 * results in blocking that player's path to winning.
+	 * (Is it okay to block off some of the winning squares, or must all
+	 * 8 of them be available?)
+	 * - Lucas, 3/24
+	 */
+	
         return false;
     }
     
     
     /**
+     * Places a wall. This wall must be validated by validWall() BEFORE being 
+     * placed. 
      *
-     * @param wall
+     * @param wall The previously validated wall to be placed, as a string in
+     *             the protocol form.
      * @return
      */
-    public boolean placeWall(String wall){
+    public void placeWall(String wall){
         Scanner sc = new Scanner(wall);
         int cB = Integer.parseInt(sc.next()); // Column of beginning Vertex
         int rB = Integer.parseInt(sc.next()); // Row of beginning Vertex
-        String Direction = sc.next();
-        return validWall(cB, rB, Direction);
+        String direction = sc.next();
+	
+	// getting positions of the vertexes for this wall
+        Vertex sourceV = getVertexByCoord(cB, rB);
+        Vertex belowV = getVertexByCoord(cB, rB+1);
+        Vertex rightV = getVertexByCoord(cB+1, rB);
+        Vertex belowRV = getVertexByCoord(cB+1, rB+1);
+	
+	if (direction.toUpperCase()=="V") {
+	    board.removeEdge(sourceV, rightV);
+	    board.removeEdge(belowV, belowRV);
+	} else {
+	    board.removeEdge(sourceV, belowV);
+	    board.removeEdge(rightV, belowRV);
+	}
     }      
 }
