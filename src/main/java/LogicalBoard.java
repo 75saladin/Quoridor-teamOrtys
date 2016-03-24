@@ -23,7 +23,7 @@ public class LogicalBoard{
      *
      * @param playerCount
      */
-    public LogicalBoard(int playerCount){
+    public LogicalBoard(){
             // Gotta populate the board
             board = new SimpleGraph<Vertex, Edge>(Edge.class);
 

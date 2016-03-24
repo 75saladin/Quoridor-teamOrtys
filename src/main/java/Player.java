@@ -12,7 +12,7 @@ public class Player{
 
     /**
      * Player Constructor
-	 * player number will determin starting position
+	 * player number will determine starting position
 	 * board will be placing it on the board logically
      */
     public Player(int playerNum,LogicalBoard board){
@@ -32,7 +32,7 @@ public class Player{
      * @param player
      */
 
-    public void initPLayer(Player player,LogicalBoard board) {
+    public void initPlayer(Player player,LogicalBoard board) {
 		// Top player
         if(player.getPlayerNum() == 1){
             board.getVertexByCoord(0,4).placePlayer(player);
@@ -59,13 +59,6 @@ public class Player{
     	}
     }
     
-    /**
-     *
-     * @return
-     */
-    public String getName(){
-        return ID;
-    }
 
     /**
      *
@@ -75,30 +68,7 @@ public class Player{
          return playerNum;
     }
 
-    /**
-     *
-     * @return
-     */
-    public int getPort() {
-        return port;
-    }
 
-    /**
-     *
-     * @return
-     */
-    public String getMachine() {
-        return machine;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public String getID() {
-        return ID;
-    }
-  
     /**
      *
      * @return
