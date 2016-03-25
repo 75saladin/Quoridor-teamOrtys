@@ -104,7 +104,7 @@ public class LogicalBoard{
     *                Must be done for each player playing.  
     *               Player will be initialized with that player's coordinates
     *
-    *@parm player - player being initialized
+    *@param player - player being initialized
     */
     public void initPlayer(Player player){
         Vertex vertex = getVertexByCoord(player.getC(), player.getR());

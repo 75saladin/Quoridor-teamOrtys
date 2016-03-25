@@ -58,7 +58,7 @@ public class LogicalBoardTest {
         assertEquals("Center vertex should have 4 edges", board.board.edgesOf(center).size(), 4);
     }
     
-    public void getVertexByCoordShouldReturnCorrectVertex() {
+    public void getVertexByCoordShouldReturnCorrectVertex() throws Exception {
         Random r = new Random();
         int randC;
         int randR;
@@ -69,5 +69,43 @@ public class LogicalBoardTest {
             assertEquals("Vertex ["+v.c+" "+v.r+"] should have been ["+randC+" "+randR+"]: col mismatch", v.c, randC);
             assertEquals("Vertex ["+v.c+" "+v.r+"] should have been ["+randC+" "+randR+"]: row mismatch", v.r, randR);
         }
+    }
+    
+    public void placeHorizontalWallShouldRemoveCorrectEdges() throws Exception {
+        Vertex src = board.getVertexByCoord(1,1);
+        Vertex below = board.getVertexByCoord(1,2);
+        Vertex right = board.getVertexByCoord(2,1);
+        Vertex belowRight = board.getVertexByCoord(2,2);
+        
+        assertTrue(board.board.containsEdge(src, right));
+        assertTrue(board.board.containsEdge(right, belowRight));
+        assertTrue(board.board.containsEdge(belowRight, below));
+        assertTrue(board.board.containsEdge(below, src));
+        
+        board.placeWall("1 1 h");
+        
+        assertTrue(board.board.containsEdge(src, right));
+        assertFalse(board.board.containsEdge(right, belowRight));
+        assertTrue(board.board.containsEdge(belowRight, below));
+        assertFalse(board.board.containsEdge(below, src));
+    }
+    
+    public void placeVerticalWallShouldRemoveCorrectEdges() throws Exception {
+        Vertex src = board.getVertexByCoord(1,1);
+        Vertex below = board.getVertexByCoord(1,2);
+        Vertex right = board.getVertexByCoord(2,1);
+        Vertex belowRight = board.getVertexByCoord(2,2);
+        
+        assertTrue(board.board.containsEdge(src, right));
+        assertTrue(board.board.containsEdge(right, belowRight));
+        assertTrue(board.board.containsEdge(belowRight, below));
+        assertTrue(board.board.containsEdge(below, src));
+        
+        board.placeWall("1 1 v");
+        
+        assertFalse(board.board.containsEdge(src, right));
+        assertTrue(board.board.containsEdge(right, belowRight));
+        assertFalse(board.board.containsEdge(belowRight, below));
+        assertTrue(board.board.containsEdge(below, src));
     }
 }
