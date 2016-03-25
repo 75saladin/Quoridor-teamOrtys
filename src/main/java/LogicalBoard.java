@@ -1,10 +1,8 @@
 import com.sun.javafx.geom.Edge;
 import java.util.HashSet;
-import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.Map;
-import static jdk.nashorn.internal.objects.NativeRegExp.source;
+import org.jgrapht.Graphs;
 
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.UndirectedGraph;
@@ -71,7 +69,22 @@ public class LogicalBoard{
         return board.vertexSet();
     }
     
+
     
+    /*
+     * getVertexByCoord - returns Vertex object at that coordinate on the board
+     * 
+     * @param c - Column of vertex
+     * @param r - Row of Vertex
+     * @param board - board to get edgset from not just the default board
+     * @return - Vertex object at that location on the board
+     */
+    public Vertex getVertexByCoord(int c,int r, UndirectedGraph<Vertex,Edge> board){
+        for(Vertex v : board.vertexSet())
+            if(v.c == c && v.r == r)
+                return v;
+        return null;
+    }    
     
     /*
      * getVertexByCoord - returns Vertex object at that coordinate on the board
@@ -220,54 +233,50 @@ public class LogicalBoard{
         Vertex destination;
         Set<Edge> boardEdgeSet = getEdgeSet();
         
+        UndirectedGraph<Vertex,Edge> boardCopy = new SimpleGraph<Vertex,Edge>(Edge.class);
+        Graphs.addGraph(boardCopy, this.board);
         // Removing Edges to place wall temporarily to check if winning path is 
         //  blocked will replace at the end before returning
-        Map<Vertex, Vertex> edgeSetVertexPairs = new HashMap<Vertex, Vertex>();
-        for(Edge e : edgeSet) {
-            edgeSetVertexPairs.put(e.getSource(), e.getTarget());
-            board.removeEdge(e);
+        
+        for(Edge e : boardEdgeSet) {
+                boardCopy.removeEdge(e);
         }
 
         switch(playerNum){
         
             case 1:
                 for(int i = 0; i<9; i++){
-                    destination = getVertexByCoord(i, 8); // bottom wall of nodes
-                    Dijkstra = new DijkstraShortestPath<Vertex,Edge>(board,source,destination);
+                    destination = getVertexByCoord(i, 8, boardCopy); // bottom wall of nodes
+                    Dijkstra = new DijkstraShortestPath<Vertex,Edge>(boardCopy,source,destination);
                     if(Dijkstra.getPath() != null) // .getPath() returns null if there is no path
                         blocked = false;
                 }
             
             case 2:
                 for(int i = 0; i<9; i++){
-                    destination = getVertexByCoord(i, 0);  // top wall of nodes
-                    Dijkstra = new DijkstraShortestPath<Vertex,Edge>(board,source,destination);
+                    destination = getVertexByCoord(i, 0,boardCopy);  // top wall of nodes
+                    Dijkstra = new DijkstraShortestPath<Vertex,Edge>(boardCopy,source,destination);
                     if(Dijkstra.getPath() != null)
                         blocked = false;
                 }    
             
             case 3:
                 for(int i = 0; i<9; i++){
-                    destination = getVertexByCoord(8, i); // right wall of nodes
-                    Dijkstra = new DijkstraShortestPath<Vertex,Edge>(board,source,destination);
+                    destination = getVertexByCoord(8, i,boardCopy); // right wall of nodes
+                    Dijkstra = new DijkstraShortestPath<Vertex,Edge>(boardCopy,source,destination);
                     if(Dijkstra.getPath() != null)
                         blocked = false;
                 }    
             
             case 4:
                 for(int i = 0; i<9; i++){
-                    destination = getVertexByCoord(0, i); // left wall of nodes
-                    Dijkstra = new DijkstraShortestPath<Vertex,Edge>(board,source,destination);
+                    destination = getVertexByCoord(0, i,boardCopy); // left wall of nodes
+                    Dijkstra = new DijkstraShortestPath<Vertex,Edge>(boardCopy,source,destination);
                     if(Dijkstra.getPath() != null)
                         blocked = false;
                 }
         }
-        
-        // putting the removed edges back where they belong
-        for(Vertex v : edgeSetVertexPairs.keySet()) {
-            board.addEdge(v, edgeSetVertexPairs.get(v));
-        }
-        
+
         // returning verdict of whether or not path is blocked
         return blocked;
     }
@@ -316,5 +325,6 @@ public class LogicalBoard{
                 players.add(v.player);
         return players;
     }
+
     
 }
