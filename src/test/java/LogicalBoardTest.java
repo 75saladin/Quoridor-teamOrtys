@@ -1,5 +1,6 @@
 import org.junit.*;
 import java.util.Random;
+import java.util.Set;
 import static org.junit.Assert.*;
 
 public class LogicalBoardTest {
@@ -107,5 +108,41 @@ public class LogicalBoardTest {
         assertTrue(board.board.containsEdge(right, belowRight));
         assertFalse(board.board.containsEdge(belowRight, below));
         assertTrue(board.board.containsEdge(below, src));
+    }
+    
+    public void getEdgesToRemoveForHorizontalWallShouldReturnTwoCorrectEdges() throws Exception {
+        Vertex src = board.getVertexByCoord(1,1);
+        Vertex below = board.getVertexByCoord(1,2);
+        Vertex right = board.getVertexByCoord(2,1);
+        Vertex belowRight = board.getVertexByCoord(2,2);
+        
+        Edge srcRight = board.board.getEdge(src, right);
+        Edge rightBelowRight = board.board.getEdge(right, belowRight);
+        Edge belowRightBelow = board.board.getEdge(belowRight, below);
+        Edge belowSrc = board.board.getEdge(below, src);
+        
+        Set<Edge> remove = board.getEdgesToRemove("1 1 h");
+        assertEquals("There should always be two edges to remove.", remove.size(), 2);
+        for (Edge e : remove) {
+            assertTrue(e==belowSrc||e==rightBelowRight);
+        }
+    }
+    
+    public void getEdgesToRemoveForVerticalWallShouldReturnTwoCorrectEdges() throws Exception {
+        Vertex src = board.getVertexByCoord(1,1);
+        Vertex below = board.getVertexByCoord(1,2);
+        Vertex right = board.getVertexByCoord(2,1);
+        Vertex belowRight = board.getVertexByCoord(2,2);
+        
+        Edge srcRight = board.board.getEdge(src, right);
+        Edge rightBelowRight = board.board.getEdge(right, belowRight);
+        Edge belowRightBelow = board.board.getEdge(belowRight, below);
+        Edge belowSrc = board.board.getEdge(below, src);
+        
+        Set<Edge> remove = board.getEdgesToRemove("1 1 v");
+        assertEquals("There should always be two edges to remove.", remove.size(), 2);
+        for (Edge e : remove) {
+            assertTrue(e==srcRight||e==belowRightBelow);
+        }
     }
 }
