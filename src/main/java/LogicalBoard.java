@@ -1,7 +1,9 @@
 import com.sun.javafx.geom.Edge;
 import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.Map;
 import static jdk.nashorn.internal.objects.NativeRegExp.source;
 
 import org.jgrapht.alg.DijkstraShortestPath;
@@ -99,7 +101,6 @@ public class LogicalBoard{
     
     /**
      * Puts a player in a given destination. This will make the move, always;
-
      * the given player and mave combo should be passed into validMove() just 
      * before makeMove().
      * 
@@ -221,8 +222,11 @@ public class LogicalBoard{
         
         // Removing Edges to place wall temporarily to check if winning path is 
         //  blocked will replace at the end before returning
-        for(Edge e : edgeSet)
-            boardEdgeSet.remove(e);
+        Map<Vertex, Vertex> edgeSetVertexPairs = new HashMap<Vertex, Vertex>();
+        for(Edge e : edgeSet) {
+            edgeSetVertexPairs.put(e.getSource(), e.getTarget());
+            board.removeEdge(e);
+        }
 
         switch(playerNum){
         
@@ -260,8 +264,9 @@ public class LogicalBoard{
         }
         
         // putting the removed edges back where they belong
-        for(Edge e : edgeSet)
-            boardEdgeSet.add(e);
+        for(Vertex v : edgeSetVertexPairs.keySet()) {
+            board.addEdge(v, edgeSetVertexPairs.get(v));
+        }
         
         // returning verdict of whether or not path is blocked
         return blocked;
@@ -301,15 +306,7 @@ public class LogicalBoard{
         return remove;
     }
 
-        
-        
-        /* Still necessary: for each player in the game, check if this wall
-        * results in blocking that player's path to winning.
-        * (Is it okay to block off some of the winning squares, or must all
-        * 8 of them be available?)
-        * - Lucas, 3/24
-        */
-    
+
     // helper method to get set of all players on the board
     public Set<Player> getPlayers(){
         Set<Player> players = new HashSet<Player>();
