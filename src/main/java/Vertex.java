@@ -41,8 +41,10 @@ public class Vertex {
 
     @Override
     public String toString() {
-        return "Vertex{" + "C=" + this.c + ", C=" + this.r + '}';
+        return "Vertex{" + "player=" + player + ", c=" + c + ", r=" + r + '}';
     }
+
+
     
     /**
      *

@@ -58,6 +58,11 @@ public class Player{
         	player.setR(4);        
     	}
     }
+
+    @Override
+    public String toString() {
+        return "Player{" + "playerNum=" + playerNum + ", c=" + c + ", r=" + r + '}';
+    }
     
 
     /**
