@@ -145,4 +145,39 @@ public class LogicalBoardTest {
             assertTrue(e==srcRight||e==belowRightBelow);
         }
     }
+    
+    public void validWallAcceptsValidWalls() throws Exception {
+        Random r = new Random();
+        String direction;
+        String wallString;
+        for (int i=0; i<20; i++) {
+            if (r.nextInt(2)==0)
+                direction = "h";
+            else
+                direction = "v";  
+            wallString = ""+r.nextInt(9)+" "+r.nextInt(9)+" "+direction;
+            assertTrue("Wall "+wallString+" was judged invalid", board.validWall(wallString));
+        }
+    }
+    
+    public void validWallRejectsInvalidWalls() throws Exception {
+        //Wall out of bounds: <col/row> >7 or <0
+        assertFalse(board.validWall("-1 4 v"));
+        assertFalse(board.validWall("4 -1 h"));
+        assertFalse(board.validWall("8 4 v"));
+        assertFalse(board.validWall("4 8 h"));
+        
+        //Wall intersects another wall
+        board.placeWall("1 1 h");
+        board.placeWall("7 7 v");
+        assertFalse(board.validWall("1 1 v"));
+        assertFalse(board.validWall("7 7 h"));
+        
+        //Wall blocks some player's only path to victory
+        
+    }
+    
+    //test makeMove
+    
+    //test validMove
 }

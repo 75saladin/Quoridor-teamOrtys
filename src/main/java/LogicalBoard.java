@@ -177,7 +177,7 @@ public class LogicalBoard{
         return false;
     }
 
-    private boolean validWall(String wall){
+    public boolean validWall(String wall){
         // cannot leave if one thing is true, must check all
         // but if one thing is false we return
         boolean valid = false;
