@@ -1,6 +1,12 @@
 #!/bin/bash
 
-# Launch servers when it has a main -- using netcat for now
-nc -l 5555 & nc -l 5556 &
+# Give 2 port number on command line to run
+if [ "$#" -ne 2 ]; then
+  echo "usage: run2 <port1> <port2>"
+  exit 1
+fi
 
-java -cp build/libs/Quoridor.jar GameClient localhost:5555 localhost:5556
+# Launch servers when it has a main -- using netcat for now
+nc -l $1 & nc -l $2 &
+
+java -cp build/libs/Quoridor.jar GameClient localhost:$1 localhost:$2
