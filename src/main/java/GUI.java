@@ -1,6 +1,3 @@
-
-
-
 import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -9,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -35,6 +33,8 @@ public class GUI implements GUIInterface {
         
     /* Players in the Game. Right now they are represented by circles */
     private Controller player; 
+    
+    private TextArea output = null;
     
     public GUI(Controller p) {
         this.setUp(p); 
@@ -67,8 +67,8 @@ public class GUI implements GUIInterface {
     
     @Override
     public String getPlayerPosition(int num) {
-        int row = grid.getRowIndex(player.getPlayerNode(num));
-        int column = grid.getColumnIndex(player.getPlayerNode(num));
+        int row = convert(grid.getRowIndex(player.getPlayerNode(num)));
+        int column = convert(grid.getColumnIndex(player.getPlayerNode(num)));
         return "Player:" + num + " c:" + column/2 + " r:" + row/2;
     }
     
@@ -78,19 +78,49 @@ public class GUI implements GUIInterface {
     }
 
     @Override
-    public void buildWall(String move) {
-        
+    public void buildWall(int column, int row) {
+        column = revert(column); row = revert(row);
+        grid.add(new Rectangle(5.0, 50.0, Color.LAWNGREEN), column, row);
+        row+=2;
+        grid.add(new Rectangle(5.0, 50.0, Color.LAWNGREEN), column, row);
+        player.setPlayerTurn();
     }
 
     @Override
-    public void movePlayer(String move) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void movePlayer(int column, int row) {
+        grid.getChildren().remove(player.getPlayerNode(player.getPlayerTurn()));
+        column = revert(column); row = revert(row);
+        System.out.println("Moving player");
+        grid.add(player.getPlayerNode(player.getPlayerTurn()), column, row);
+        player.setPlayerTurn();
     }
 
     @Override
     public void launch() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    private int revert(int n) {
+        if(n % 2 == 0) {
+            return n * 2;
+        } else {
+            return n * 2 + 1;
+        }
+    }
+    
+    /**
+     * 
+     * @param column: the column number to convert
+     * @return the converted column based on the 8x8 board
+     */
+    private int convert(int n) {
+        if(n % 2 == 0) {
+            return n / 2;
+        } else {
+            return n / 2 + 1;
+        }
+    }
+    
     
     /**
      * 
@@ -119,8 +149,8 @@ public class GUI implements GUIInterface {
         } 
         
         // default is 2 players, add the other two if there are more
-        gp.add(player.getPlayerNode(1), 8, 16);
-        gp.add(player.getPlayerNode(2), 8, 0);
+        gp.add(player.getPlayerNode(1), 8, 0);
+        gp.add(player.getPlayerNode(2), 8, 16);
         if(numOfPlayers == 4) {
             gp.add(player.getPlayerNode(3), 0, 8);
             gp.add(player.getPlayerNode(4), 16, 8);
@@ -161,11 +191,14 @@ public class GUI implements GUIInterface {
         vb.setPadding(new Insets(20,20,20,20));
         vb.setAlignment(Pos.CENTER);
         
-        Label label = new Label("    Description     ");
+        Label label = new Label("    Move     ");
         label.setAlignment(Pos.CENTER);
+        output = new TextArea();
+        output.setWrapText(true);
+        output.setPrefWidth(200);
+        output.setPrefHeight(100);
         
-        
-        vb.getChildren().add(label);
+        vb.getChildren().addAll(label, output);
         vb.getStylesheets().addAll(this.getClass().getResource("Layout.css").toExternalForm());
         vb.setId("description");
         
@@ -211,19 +244,23 @@ public class GUI implements GUIInterface {
             int column = GridPane.getColumnIndex(player.getPlayerNode(player.getPlayerTurn()));
             grid.getChildren().remove(player.getPlayerNode(player.getPlayerTurn()));
             grid.add(player.getPlayerNode(player.getPlayerTurn()), column, row);
+            output.clear();
+            output.appendText("Player " + player.getPlayerTurn() + " moved to " +
+                              "Column " + convert(column) + " Row " + convert(row) + "\n\n");
             player.setPlayerTurn();
+            
         });
         
         // down moves the player node down two rows
-        down.setOnAction(new EventHandler<ActionEvent>() {
-            @Override 
-            public void handle(ActionEvent e) {
-                int row = GridPane.getRowIndex(player.getPlayerNode(player.getPlayerTurn())) + 2;
-                int column = GridPane.getColumnIndex(player.getPlayerNode(player.getPlayerTurn()));
-                grid.getChildren().remove(player.getPlayerNode(player.getPlayerTurn()));
-                grid.add(player.getPlayerNode(player.getPlayerTurn()), column, row);
-                player.setPlayerTurn();
-            }
+        down.setOnAction((ActionEvent e) -> {
+            int row = GridPane.getRowIndex(player.getPlayerNode(player.getPlayerTurn())) + 2;
+            int column = GridPane.getColumnIndex(player.getPlayerNode(player.getPlayerTurn()));
+            grid.getChildren().remove(player.getPlayerNode(player.getPlayerTurn()));
+            grid.add(player.getPlayerNode(player.getPlayerTurn()), column, row);
+            output.clear();
+            output.appendText("Player " + player.getPlayerTurn() + " moved to " +
+                              "Column " + convert(column) + " Row " + convert(row) + "\n\n");
+            player.setPlayerTurn();
         });
         
         // left moves the player node left two columns
@@ -232,6 +269,9 @@ public class GUI implements GUIInterface {
             int column = GridPane.getColumnIndex(player.getPlayerNode(player.getPlayerTurn())) - 2;
             grid.getChildren().remove(player.getPlayerNode(player.getPlayerTurn()));
             grid.add(player.getPlayerNode(player.getPlayerTurn()), column, row);
+            output.clear();
+            output.appendText("Player " + player.getPlayerTurn() + " moved to " +
+                              "Column " + convert(column) + " Row " + convert(row) + "\n\n");
             player.setPlayerTurn();
         });
         
@@ -241,6 +281,9 @@ public class GUI implements GUIInterface {
             int column = GridPane.getColumnIndex(player.getPlayerNode(player.getPlayerTurn())) + 2;
             grid.getChildren().remove(player.getPlayerNode(player.getPlayerTurn()));
             grid.add(player.getPlayerNode(player.getPlayerTurn()), column, row);
+            output.clear();
+            output.appendText("Player " + player.getPlayerTurn() + " moved to " +
+                              "Column " + convert(column) + " Row " + convert(row) + "\n\n");
             player.setPlayerTurn();
         });
 
@@ -299,5 +342,4 @@ public class GUI implements GUIInterface {
     }
     
 }
-
    
