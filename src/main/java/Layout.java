@@ -12,7 +12,7 @@ import javafx.stage.Stage;
  */
 public class Layout extends Application /*implements LayoutInterface*/ { 
     static Controller p = null;
-    static GUI gui = null;
+    GUI gui = null;
     // @param stage: The stage to draw the GUI on. 
     // The start method is required from the application class to start the GUI.
     @Override
@@ -28,10 +28,6 @@ public class Layout extends Application /*implements LayoutInterface*/ {
         
         stage.setScene(scene);
         stage.show();
-    }
-    
-    public static void main(String[] args) {
-        Application.launch(Layout.class);
         String inp = "";
         Scanner sc = new Scanner(System.in);
         while(inp.equals("exit")) {
@@ -41,6 +37,11 @@ public class Layout extends Application /*implements LayoutInterface*/ {
             gui.movePlayer(column, row);
             
         }
+    }
+    
+    public static void main(String[] args) {
+        Application.launch(Layout.class);
+        
     }
 
 

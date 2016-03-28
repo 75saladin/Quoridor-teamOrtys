@@ -1,9 +1,11 @@
+
 import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -18,6 +20,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 
 /* This class is the GUI for the game. Implements GUIInterface and extends Application */
@@ -35,6 +38,7 @@ public class GUI implements GUIInterface {
     private Controller player; 
     
     private TextArea output = null;
+    
     
     public GUI(Controller p) {
         this.setUp(p); 
@@ -96,8 +100,7 @@ public class GUI implements GUIInterface {
     }
 
     @Override
-    public void launch() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void launchApplication() {
     }
     
     private int revert(int n) {
@@ -339,7 +342,6 @@ public class GUI implements GUIInterface {
         sp.getChildren().addAll(player.getPlayerNode(player.getPlayerTurn()));
         sp.setId("cirles");
         sp.getChildren().addAll(player.getPlayerNode(player.getPlayerTurn()));
-    }
-    
+    }    
 }
    
