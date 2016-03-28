@@ -1,3 +1,8 @@
+
+
+
+import javafx.scene.layout.Region;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -10,7 +15,10 @@
  */
 public interface GUIInterface {
     
-    public abstract void setUp(Player player); // set up the board
+    
+    public abstract String getPlayerPosition(int num); //return the current players position
+    
+    public abstract Region getRootRegion();
     
     public abstract void buildWall(String move); // build a wall based on a string passed in
     

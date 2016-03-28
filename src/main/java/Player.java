@@ -1,49 +1,108 @@
-/* This object handles the number of players in the game
- * 
- */
+
 
 /**
  *
- * @author jed_lechner
+ * @author craig
  */
-public class Player {
+public class Player{
     
-    private int playerCount; // the number of players competing
-    private int playerTurn; // which player turn it is
+    private int playerNum;
+    private int c;
+    private int r;
+
+    /**
+     * Player Constructor
+	 * player number will determine starting position
+	 * board will be placing it on the board logically
+     */
+    public Player(int playerNum,LogicalBoard board){
+		this.playerNum=playerNum;
+		initPlayer(this,board);
+    }
     
-    // constructor
-    public Player (int numOfPlayers) {
-        if(numOfPlayers == 2 || numOfPlayers == 4) {
-            this.playerCount = numOfPlayers;
-            this.playerTurn = 1;
-        } else {
-            throw new IndexOutOfBoundsException();
+    /*
+    *   placePlayer - puts player on board when initializing
+    *
+    *   Parameter - Player that is being initialized
+    */
+
+    /**
+     * Can probably Call jeds gui stuff from here
+     * might be the best way
+     * @param player
+     */
+
+    public void initPlayer(Player player,LogicalBoard board) {
+		// Top player
+        if(player.getPlayerNum() == 1){
+            board.getVertexByCoord(0,4).placePlayer(player);
+        	player.setC(0);
+        	player.setR(4);
         }
-        
-    }
-    
-    // pre: none
-    // returns: the player count
-    public int getPlayerCount() {
-        return playerCount;
-    }
-    
-    // pre: none
-    // returns: which players turn it is based on 
-    public int getPlayerTurn(){
-        return playerTurn;   
-    }
-    
-    // pre: none
-    // post: sets the player turn based off of the number of players. 
-    public void setPlayerTurn(){
-        if(playerTurn == playerCount) {
-            playerTurn = 1;
-        }else {
-            playerTurn++;
+        // bottom player
+        if(player.getPlayerNum()==2){
+            board.getVertexByCoord(4,8).placePlayer(player);
+        	player.setC(8);
+        	player.setR(4);
         }
+        // left player
+        if(player.getPlayerNum()==3){
+            board.getVertexByCoord(0,4).placePlayer(player);
+        	player.setC(0);
+        	player.setR(4);
+    	}
+    	// right player
+        if(player.getPlayerNum()==4){
+            board.getVertexByCoord(8,4).placePlayer(player);
+        	player.setC(0);
+        	player.setR(4);        
+    	}
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" + "playerNum=" + playerNum + ", c=" + c + ", r=" + r + '}';
     }
     
+
+    /**
+     *
+     * @return
+     */
+    public int getPlayerNum() {
+         return playerNum;
+    }
+
+
+    /**
+     *
+     * @return
+     */
+    public int getC() {
+        return c;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public int getR() {
+        return r;
+    }
     
-    
+    /**
+     *
+     * @param c
+     */
+    public void setC(int c) {
+        this.c = c;
+    }
+
+    /**
+     *
+     * @param r
+     */
+    public void setR(int r) {
+        this.r = r;
+    }
 }
