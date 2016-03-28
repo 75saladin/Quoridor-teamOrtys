@@ -1,7 +1,8 @@
 import org.junit.Test;
-
+import org.junit.Ignore;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
+
 import java.net.Socket;
 import java.io.PrintWriter;
 import java.io.PrintStream;
@@ -10,7 +11,7 @@ import java.util.Scanner;
 public class ServerMainTest {
 
     private ServerMain main;
-    
+    @Ignore
     @Test
     public void testNetworkStartup(){
 	String[] toPass = new String[2];
