@@ -9,7 +9,7 @@ public class LogicalBoardTest {
 
     @Before
     public void setUp() throws Exception {
-        board = new LogicalBoard(2);
+        this.board = new LogicalBoard(2);
     }
     
     @Test
@@ -83,7 +83,7 @@ public class LogicalBoardTest {
         assertTrue(board.board.containsEdge(belowRight, below));
         assertTrue(board.board.containsEdge(below, src));
         
-        board.placeWall("1 1 h");
+        board.placeWall(new Player(1),"1 1 h");
         
         assertTrue(board.board.containsEdge(src, right));
         assertFalse(board.board.containsEdge(right, belowRight));
@@ -102,7 +102,7 @@ public class LogicalBoardTest {
         assertTrue(board.board.containsEdge(belowRight, below));
         assertTrue(board.board.containsEdge(below, src));
         
-        board.placeWall("1 1 v");
+        board.placeWall(new Player(1),"1 1 v");
         
         assertFalse(board.board.containsEdge(src, right));
         assertTrue(board.board.containsEdge(right, belowRight));
@@ -156,22 +156,22 @@ public class LogicalBoardTest {
             else
                 direction = "v";  
             wallString = ""+r.nextInt(9)+" "+r.nextInt(9)+" "+direction;
-            assertTrue("Wall "+wallString+" was judged invalid", board.validWall(wallString));
+            assertTrue("Wall "+wallString+" was judged invalid", board.validWall(new Player(1),wallString));
         }
     }
     
     public void validWallRejectsInvalidWalls() throws Exception {
         //Wall out of bounds: <col/row> >7 or <0
-        assertFalse(board.validWall("-1 4 v"));
-        assertFalse(board.validWall("4 -1 h"));
-        assertFalse(board.validWall("8 4 v"));
-        assertFalse(board.validWall("4 8 h"));
+        assertFalse(board.validWall(new Player(1),"-1 4 v"));
+        assertFalse(board.validWall(new Player(1),"4 -1 h"));
+        assertFalse(board.validWall(new Player(1),"8 4 v"));
+        assertFalse(board.validWall(new Player(1),"4 8 h"));
         
         //Wall intersects another wall
-        board.placeWall("1 1 h");
-        board.placeWall("7 7 v");
-        assertFalse(board.validWall("1 1 v"));
-        assertFalse(board.validWall("7 7 h"));
+        board.placeWall(new Player(1),"1 1 h");
+        board.placeWall(new Player(1),"7 7 v");
+        assertFalse(board.validWall(new Player(1),"1 1 v"));
+        assertFalse(board.validWall(new Player(1),"7 7 h"));
         
         //Wall blocks some player's only path to victory
         
