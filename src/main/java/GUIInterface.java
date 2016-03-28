@@ -20,9 +20,9 @@ public interface GUIInterface {
     
     public abstract Region getRootRegion();
     
-    public abstract void buildWall(String move); // build a wall based on a string passed in
+    public abstract void buildWall(int column, int row); // build a wall based on a string passed in
     
-    public abstract void movePlayer(String move); // move a player based on a string passed in
+    public abstract void movePlayer(int column, int row); // move a player based on a string passed in
     
     public abstract void launch(); // launch the game
     
