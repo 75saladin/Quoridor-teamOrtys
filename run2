@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Launch servers when it has a main -- using netcat for now
+nc -l 5555 & nc -l 5556 &
+
+java -cp build/libs/Quoridor.jar GameClient localhost:5555 localhost:5556
