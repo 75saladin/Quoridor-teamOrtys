@@ -6,6 +6,19 @@ if [ "$#" -ne 2 ]; then
   exit 1
 fi
 
+# Make sure you actually type in numbers
+re='^[0-9]+$'
+if ! [[ $1 =~ $re ]] || ! [[ $2 =~ $re ]] ; then
+  echo "Error: non-integer value found"
+  exit 1
+fi
+
+# Keep port numbers in proper range
+if [ "$1" -lt 2000 ] || [ "$2" -lt 2000 ] ; then
+  echo "Error: Try to keep port numbers above 2000"
+  exit 1
+fi
+
 # Cannot use same port number for both servers
 if [ "$1" -eq "$2" ]; then
   echo "Error: same port number detected"
