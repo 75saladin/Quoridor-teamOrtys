@@ -6,7 +6,17 @@ if [ "$#" -ne 2 ]; then
   exit 1
 fi
 
+# Cannot use same port number for both servers
+if [ "$1" -eq "$2" ]; then
+  echo "Error: same port number detected"
+  exit 1
+fi
+
 # Launch servers when it has a main -- using netcat for now
 nc -l $1 & nc -l $2 &
 
+# Wait for servers to start. (Thank you hivemind for the idea)
+sleep 1;
+
+# Launch client
 java -cp build/libs/Quoridor.jar GameClient localhost:$1 localhost:$2
