@@ -26,15 +26,22 @@ public class GUITest {
     private Controller player1;
     private Controller player2;
     
-    @Rule 
-    public JavaFXThreadingRule javafxRule = new JavaFXThreadingRule();
     
     @Before
     public void setUpClass() {
         player1 = new Controller(2);
         player2 = new Controller(4);
-        gui = new GUI(player1);
-        gui2 = new GUI(player2);
+        
+        new Thread() {
+            @Override
+            public void run() {
+                javafx.application.Application.launch(GUI.class);
+            }
+        }.start();
+        gui = GUI.waitForGUIStartUpTest();
+        gui2 = GUI.waitForGUIStartUpTest();
+        gui.setPlayer(player1);
+        gui2.setPlayer(player2);
         region = new Region();
     }
     

@@ -24,7 +24,4 @@ public interface GUIInterface {
     
     public abstract void movePlayer(int column, int row); // move a player based on a string passed in
     
-    public abstract void launchApplication(); // launch the game
-    
-    
 }

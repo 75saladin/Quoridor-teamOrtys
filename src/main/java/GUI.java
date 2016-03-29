@@ -1,7 +1,14 @@
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -16,6 +23,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -29,7 +37,7 @@ import javafx.stage.Stage;
  *
  * @author jed_lechner
  */
-public class GUI implements GUIInterface {
+public class GUI extends Application implements GUIInterface {
     
     private BorderPane root; // the root node of the board
     private GridPane grid; // the grid where the game will be implemented
@@ -39,18 +47,62 @@ public class GUI implements GUIInterface {
     
     private TextArea output = null;
     
+    // on off latch
+    public static final CountDownLatch latch = new CountDownLatch(1);
     
-    public GUI(Controller p) {
-        this.setUp(p); 
-    }
-    
+    // instantiation of class
+    public static GUI gui = null;
     
     /**
-     * @param player: The Player object. See Player.java
-     *  Sets up the border pane layout and grid pane layout.
+     * Constructor
      */
-    private void setUp(Controller player) {
-        this.player = player;
+    public GUI() {
+        guiStartUpTest(this);
+        player = new Controller(2); 
+    }
+    
+    // waiting for gui to set up
+    public static GUI waitForGUIStartUpTest()  {
+        try {
+            latch.await();
+        } catch(InterruptedException e) {
+            e.printStackTrace();
+        }
+        return gui;
+
+    }
+    
+    /**
+     * 
+     * @param g: Passing in parameter to initialize gui
+     */
+    public static void guiStartUpTest(GUI g) {
+        gui = g;
+        latch.countDown();
+    }
+    
+
+    /**
+     * tester method
+     */
+    public void printSomething() {
+        System.out.println("you called a method on the application");
+    }
+    
+    /**
+     * 
+     * @param c: The player object to set up with
+     * Used for four player game
+     */
+    public void setPlayer(Controller c) {
+        player = c;
+    }
+    
+    /**
+     * Sets up the initial configurations for the gui
+     */
+    @Override
+    public void init() {
         // place the board in the center
         // the controls on the right, description left, and label top
         root = new BorderPane();
@@ -61,54 +113,96 @@ public class GUI implements GUIInterface {
         
         root.setCenter(grid);
         
+        
         root.setLeft(setDescriptionRegion());
         root.setRight(setRightRegion());
         root.setTop(setTitleRegion());
         root.setBottom(setBottomRegion()); 
         TRUMPwall();
+    }
+    
+    /**
+     * 
+     * @param stage: Main stage to work off
+     * Entry point for javaFX Applications
+     */
+    @Override
+    public void start(Stage stage) {
+
+        Scene scene = new Scene(root, 1000, 1000, Color.BLUE);
+        stage.setTitle("QUORIDOR");
+        
+        stage.setScene(scene);
+        stage.show();
         
     }
     
+    /**
+     * 
+     * @param num: The number of player
+     * @return the player position of the player you asked for
+     */
     @Override
     public String getPlayerPosition(int num) {
+        assert(num < 4);
         int row = convert(grid.getRowIndex(player.getPlayerNode(num)));
         int column = convert(grid.getColumnIndex(player.getPlayerNode(num)));
-        return "Player:" + num + " c:" + column/2 + " r:" + row/2;
+        return "Player:" + num + " c:" + column + " r:" + row;
     }
     
+    /**
+     * 
+     * @return the root region of the gridPane
+     */
     @Override
     public Region getRootRegion() {
         return root;
     }
 
+    /**
+     * 
+     * @param column: the column to move the player
+     * @param row: the column to move the player
+     */
     @Override
     public void buildWall(int column, int row) {
-        column = revert(column); row = revert(row);
-        grid.add(new Rectangle(5.0, 50.0, Color.LAWNGREEN), column, row);
-        row+=2;
-        grid.add(new Rectangle(5.0, 50.0, Color.LAWNGREEN), column, row);
-        player.setPlayerTurn();
+//        column = revert(column); row = revert(row);
+//        grid.add(new Rectangle(5.0, 50.0, Color.LAWNGREEN), column, row);
+//        row+=2;
+//        grid.add(new Rectangle(5.0, 50.0, Color.LAWNGREEN), column, row);
+//        player.setPlayerTurn();
     }
 
+
+    /**
+     * 
+     * @param col: the column to move the player
+     * @param nrow: the row to move the player
+     * moves the player to correct grid
+     */
     @Override
-    public void movePlayer(int column, int row) {
-        grid.getChildren().remove(player.getPlayerNode(player.getPlayerTurn()));
-        column = revert(column); row = revert(row);
-        System.out.println("Moving player");
-        grid.add(player.getPlayerNode(player.getPlayerTurn()), column, row);
-        player.setPlayerTurn();
+    public void movePlayer(int col, int nrow) {
+        final int c = revert(col);
+        final int r = revert(nrow);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                grid.getChildren().remove(player.getPlayerNode(player.getPlayerTurn()));
+                System.out.println("Moving player");
+                grid.add(player.getPlayerNode(player.getPlayerTurn()), c, r);
+                player.setPlayerTurn();
+            }
+        });
+          
     }
 
-    @Override
-    public void launchApplication() {
-    }
-    
+    /**
+     * 
+     * @param n: row or column to revert to 17x17 grid
+     * @return correct row or column
+     */
     private int revert(int n) {
-        if(n % 2 == 0) {
-            return n * 2;
-        } else {
-            return n * 2 + 1;
-        }
+        return n*2;
     }
     
     /**
@@ -304,6 +398,7 @@ public class GUI implements GUIInterface {
         
         return buttons;
     }
+    
 
     // pre: none
     // post: sets a wall in the area clicked. It will cover two rows or two columns
@@ -343,5 +438,10 @@ public class GUI implements GUIInterface {
         sp.setId("cirles");
         sp.getChildren().addAll(player.getPlayerNode(player.getPlayerTurn()));
     }    
+    
+    public static void main(String[] args) {
+        Application.launch(args);
+    }
+    
 }
    
