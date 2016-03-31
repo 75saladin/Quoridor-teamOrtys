@@ -25,8 +25,9 @@ if [ "$1" -eq "$2" ]; then
   exit 1
 fi
 
-# Launch servers when it has a main -- using netcat for now
-nc -l $1 & nc -l $2 &
+# Launch servers when it has a main
+java -cp build/libs/Quoridor.jar ServerMain --port $1 &
+java -cp build/libs/Quoridor.jar ServerMain --port $2 &
 
 # Wait for servers to start. (Thank you hivemind for the idea)
 sleep 1;

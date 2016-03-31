@@ -156,22 +156,22 @@ public class LogicalBoardTest {
             else
                 direction = "v";  
             wallString = ""+r.nextInt(9)+" "+r.nextInt(9)+" "+direction;
-            assertTrue("Wall "+wallString+" was judged invalid", board.validWall(new Player(1),wallString));
+            assertTrue("Wall "+wallString+" was judged invalid", board.validWall(1,wallString));
         }
     }
     
     public void validWallRejectsInvalidWalls() throws Exception {
         //Wall out of bounds: <col/row> >7 or <0
-        assertFalse(board.validWall(new Player(1),"-1 4 v"));
-        assertFalse(board.validWall(new Player(1),"4 -1 h"));
-        assertFalse(board.validWall(new Player(1),"8 4 v"));
-        assertFalse(board.validWall(new Player(1),"4 8 h"));
+        assertFalse(board.validWall(1,"-1 4 v"));
+        assertFalse(board.validWall(1,"4 -1 h"));
+        assertFalse(board.validWall(1,"8 4 v"));
+        assertFalse(board.validWall(1,"4 8 h"));
         
         //Wall intersects another wall
         board.placeWall(new Player(1),"1 1 h");
         board.placeWall(new Player(1),"7 7 v");
-        assertFalse(board.validWall(new Player(1),"1 1 v"));
-        assertFalse(board.validWall(new Player(1),"7 7 h"));
+        assertFalse(board.validWall(1,"1 1 v"));
+        assertFalse(board.validWall(1,"7 7 h"));
         
         //Wall blocks some player's only path to victory
         

@@ -212,7 +212,12 @@ public class LogicalBoard{
 	}
     }      
 
-    public boolean validMove(Player player, String move){
+    public boolean validMove(int playerNum, String move){
+        Player player = null;
+        for(Player p : players)
+          if(p.getPlayerNum() == playerNum)
+              player=p;
+
         Scanner sc = new Scanner(move);
         int c = Integer.parseInt(sc.next());
         int r = Integer.parseInt(sc.next());
@@ -253,9 +258,13 @@ public class LogicalBoard{
         return false;
     }
 
-    public boolean validWall(Player player, String wall){
+    public boolean validWall(int playerNum, String wall){
         // cannot leave if one thing is true, must check all
         // but if one thing is false we return
+        Player player = null;
+        for(Player p : players)
+          if(p.getPlayerNum() == playerNum)
+              player=p;
         boolean valid = false;
         Scanner sc = new Scanner(wall);
         int sourceC = Integer.parseInt(sc.next());

@@ -12,7 +12,7 @@ public class Parser {
       case "HELLO":
         //          handleHello();
       case "IAM":
-        //          handleIam();
+        return arrayCharles[1];
       case "GAME":
         //          handleGame();
       case "MYOUSHU":
@@ -40,10 +40,8 @@ public class Parser {
 
   public void handleHello() {
     // Server: Send "IAM" to client
-  }
-
-  public void handleIam() {
-    // Server: send preferred display name to client. Name cannot contain whitespace.
+    // No useful information to be gathered from parsing this
+    // Does it need to exist?
   }
 
   public String handleGame(String[] arr,String input) {
@@ -64,46 +62,6 @@ public class Parser {
   // In future, will consider previous moves
   // Currently returns input, this will be changed as protocol is implemented
   public static String handleTesuji(String[] arr,String input) {
-    // Server: Response to Myoushu, includes move made by player. 
-    // Move is either target location for player's pawn or location to place a wall
-
-    // Check if arr length is correct for this category of message
-    if (!((arr.length == 3) || (arr.length == 4))) {
-      return "Invalid move";
-    } 
-
-    // Check if column and row numbers are valid and properly placed in arrayCharlesay
-    int column = 0;
-    int row = 0;
-    try {
-      column = Integer.parseInt(arr[1]);
-      row = Integer.parseInt(arr[2]);
-    } catch (Exception e){
-      System.out.println("Integer parsing error" + e);
-      e.printStackTrace();
-      return ("Invalid move " + input);
-    }
-    if (!(0 <= column && 9 > column)) {
-      return "Invalid move";
-    } 
-    if (!(0 <= row && 9 > row)) {
-      return "Invalid move";
-    }
-
-    if (arr.length == 4) {  // if wall placement
-      String direction = arr[3].toLowerCase();
-      if (!(direction.equals("h") || direction.equals("v"))) {
-        return "Invalid move";
-      }
-      if ((direction.equals("h") && row == 8) || (direction.equals("v") && column == 8)) {
-        return "Invalid move";
-      }     
-    }
-
-    // Check if direction is correct for wall placements
-
-
-
     return input;
   }
 
