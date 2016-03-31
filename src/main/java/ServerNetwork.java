@@ -42,24 +42,6 @@ public class ServerNetwork implements Runnable{
         }
     }
 
-  //The following finals are all for testing. Please do not
-  //change them!
-  public static final int TEST_SEND_MSG_QUEUE = 0;
-  public static final int TEST_RECIEVE_MSG_QUEUE = 1;
-
-  //The only constructor is private to keep there
-  //From being more than just one NetworkServer
-  private ServerNetwork(int port){
-    try{
-      System.out.println("In the constructor!");
-      socket = new ServerSocket(port);
-      client = new Socket();
-      new Thread(this).start();
-    }catch(Exception e){
-
-    }
-  }
-
   /**
    * Returns a satitically created instance of ServerNetwork. This 
    * Prevents there from being multiple servers. If the instance 
@@ -159,11 +141,12 @@ public class ServerNetwork implements Runnable{
       if(buffRead.readLine().equals("HELLO")){
         writer.println("IAM ORT");
         String tempIn = buffRead.readLine();
-        if(tempIn.beginsWith("GAME")){
+        if(tempIn.startsWith("GAME")){
           String[] toProcess = tempIn.split(" ");
           playerNumber = Integer.parseInt(toProcess[1]);
         }else{
           System.out.println("Error: Invalid player number!");
+	}
       }else{
         System.out.println("Error: Unexpected startup message recieved!");
       }
@@ -176,11 +159,11 @@ public class ServerNetwork implements Runnable{
         }
         if(buffRead.ready()){
           String tempIn = buffRead.readLine();
-          if(tempIn.beginsWith("GOTE")){
+          if(tempIn.startsWith("GOTE")){
             if(Character.getNumericValue(tempIn.charAt(5)) == playerNumber){
               this.close();
             }
-          }else if(tempIn.beginsWith("KIKASHI")){
+          }else if(tempIn.startsWith("KIKASHI")){
             this.close();
           }
           recieved.add(buffRead.readLine());
