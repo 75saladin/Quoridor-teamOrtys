@@ -40,12 +40,14 @@ public class GameClient{
       System.out.println("IOException: " + ioe);
       ioe.printStackTrace();
     }
-
     p1out.println("HELLO");
     String p1Name = Parser.parse(p1in.nextLine());
     System.out.println("TEST: P1Name: " + p1Name);
+    p2out.println("HELLO");
+    String p2Name = Parser.parse(p2in.nextLine());
+    System.out.println("TEST: P2Name: " + p2Name);
 
-
+    
 
   }
 
@@ -101,8 +103,8 @@ public class GameClient{
     * @return <code>Socket</code> open to the machine/port pair given or dies
     */
   public static Socket socketSetup(String host, int port) {
-    try(Socket client = new Socket(host, port)) {
-      return client;
+    try{
+      return new Socket(host, port);
     } catch(UnknownHostException uhe) {
       System.out.println("Unknown host: " + host);
       uhe.printStackTrace();
