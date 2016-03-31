@@ -106,8 +106,9 @@ public class GUI extends Application implements GUIInterface {
         // place the board in the center
         // the controls on the right, description left, and label top
         root = new BorderPane();
-        root.getStylesheets().addAll(this.getClass().getResource("Layout.css").toExternalForm());
-        root.setId("root");
+        
+        //root.setId("root");
+	//root.getStylesheets().addAll(this.getClass().getResource("Layout.css").toExternalForm());
         
         grid = drawGrid(player.getPlayerCount());
         
@@ -262,6 +263,7 @@ public class GUI extends Application implements GUIInterface {
     private Region setTitleRegion() {
         Text text = new Text("QUORIDOR");
         text.setStyle("-fx-background-color: gray");
+        text.setId("title_text");
         text.setFont(Font.font("Arial", FontWeight.BOLD, 50));
         
         StackPane stackPane = new StackPane();
