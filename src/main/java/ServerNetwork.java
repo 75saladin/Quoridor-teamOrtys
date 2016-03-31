@@ -21,6 +21,7 @@ public class ServerNetwork implements Runnable{
     public static final int DEFAULT_PORT = 5555;
     public static final String IAM_MSG = "IAM ORT";
     private int port;
+    private static int playerNumber;
 
     //The following finals are all for testing. Please do not
     //change them!
@@ -30,15 +31,15 @@ public class ServerNetwork implements Runnable{
     //The only constructor is private to keep there
     //From being more than just one NetworkServer
     private ServerNetwork(int port){
-	try{
-	    System.out.println("In the constructor!");
-	    socket = new ServerSocket(port);
-	    client = new Socket();
-	    this.port = port;
-	    new Thread(this).start();
-	}catch(Exception e){
+        try{
+            System.out.println("In the constructor!");
+            socket = new ServerSocket(port);
+            client = new Socket();
+            this.port = port;
+            new Thread(this).start();
+        }catch(Exception e){
 
-	}
+        }
     }
 
   //The following finals are all for testing. Please do not
@@ -129,7 +130,7 @@ public class ServerNetwork implements Runnable{
   }
 
   private boolean hasToSend(){
-    return !toSend.isEmpty();	
+    return !toSend.isEmpty();   
   }
 
   /**
@@ -157,8 +158,15 @@ public class ServerNetwork implements Runnable{
       BufferedReader buffRead = new BufferedReader(new InputStreamReader(client.getInputStream()));
       if(buffRead.readLine().equals("HELLO")){
         writer.println("IAM ORT");
+        String tempIn = buffRead.readLine();
+        if(tempIn.beginsWith("GAME")){
+          String[] toProcess = tempIn.split(" ");
+          playerNumber = Integer.parseInt(toProcess[1]);
+        }else{
+          System.out.println("Error: Invalid player number!");
+      }else{
+        System.out.println("Error: Unexpected startup message recieved!");
       }
-      //input = new GetInput(scan);
       while(running){
         if(hasToSend()){
           String send = toSend.remove();
@@ -167,6 +175,14 @@ public class ServerNetwork implements Runnable{
           writer.flush();
         }
         if(buffRead.ready()){
+          String tempIn = buffRead.readLine();
+          if(tempIn.beginsWith("GOTE")){
+            if(Character.getNumericValue(tempIn.charAt(5)) == playerNumber){
+              this.close();
+            }
+          }else if(tempIn.beginsWith("KIKASHI")){
+            this.close();
+          }
           recieved.add(buffRead.readLine());
         }
       }
@@ -176,9 +192,9 @@ public class ServerNetwork implements Runnable{
   }
 
     public String toString(){
-	String toReturn = new Integer(port).toString();
-	toReturn = toReturn + " " + IAM_MSG;
-	return toReturn;
+        String toReturn = new Integer(port).toString();
+        toReturn = toReturn + " " + IAM_MSG;
+        return toReturn;
     }
 
 
@@ -200,7 +216,7 @@ public class ServerNetwork implements Runnable{
           toReturn = (String)recieved.poll();
           System.out.println("Ignore me");
         }
-    }	
+    }   
     return toReturn;
   }
 
