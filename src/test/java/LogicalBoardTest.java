@@ -170,11 +170,44 @@ public class LogicalBoardTest {
         //Wall intersects another wall
         board.placeWall(new Player(1),"1 1 h");
         board.placeWall(new Player(1),"7 7 v");
+	board.placeWall(new Player(1),"4 4 h");
         assertFalse(board.validWall(1,"1 1 v"));
         assertFalse(board.validWall(1,"7 7 h"));
-        
-        //Wall blocks some player's only path to victory
-        
+	assertFalse(board.validWall(1,"3 5 v"));
+    }
+    
+    public void validWallRejectsWinBlockingWall() throws Exception {
+	board.validWall(1, "0 0 h");
+	board.validWall(1, "2 0 h");
+	board.validWall(1, "4 0 h");
+	board.validWall(1, "6 0 h");
+	board.validWall(1, "7 0 v");
+	
+	assertFalse(board.validWall(1, "7 1 h"));
+    }
+    
+    public void validWallShouldDecrementPlayerCount() throws Exception {
+	
+	assertEquals("Player 1 should start with 10 walls", board.getPlayer(1).getWalls(), 10);
+	assertEquals("Player 2 should start with 10 walls", board.getPlayer(2).getWalls(), 10);
+	board.validWall(1, "0 0 h");
+	board.validWall(1, "2 0 h");
+	board.validWall(2, "4 0 h");
+	board.validWall(1, "6 0 h");
+	board.validWall(1, "7 0 v");
+	
+	assertEquals("Player 1 should start with 10 walls", board.getPlayer(1).getWalls(), 6);
+	assertEquals("Player 2 should start with 10 walls", board.getPlayer(2).getWalls(), 9);
+	
+	board.validWall(1, "0 4 h");
+	board.validWall(1, "2 4 h");
+	board.validWall(1, "4 4 h");
+	board.validWall(1, "6 4 h");
+	board.validWall(1, "2 6 h");
+	//Player 1 should have no walls left
+	assertFalse(board.validWall(1, "4 6 h"));
+	
+	
     }
     
     //test makeMove
