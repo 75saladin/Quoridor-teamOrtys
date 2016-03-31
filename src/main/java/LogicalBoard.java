@@ -67,6 +67,14 @@ public class LogicalBoard{
             setWalls(playerCount);
     }
     
+    public Player getPlayer(int playerNum) {
+	for (Player p : players) {
+	    if (p.getPlayerNum()==playerNum)
+		return p;
+	}
+	return null;
+    }
+    
     
      /**
      *
