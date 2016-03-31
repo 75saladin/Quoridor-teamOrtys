@@ -18,7 +18,9 @@ public class ServerNetwork implements Runnable{
     private volatile Queue<String> recieved = new LinkedList();
     private volatile Socket client;
     private volatile boolean running = true;
-    public static final int DEFAULT_PORT = 2222;
+    public static final int DEFAULT_PORT = 5555;
+    public static final String IAM_MSG = "IAM ORT";
+    private int port;
 
     //The following finals are all for testing. Please do not
     //change them!
@@ -32,6 +34,7 @@ public class ServerNetwork implements Runnable{
 	    System.out.println("In the constructor!");
 	    socket = new ServerSocket(port);
 	    client = new Socket();
+	    this.port = port;
 	    new Thread(this).start();
 	}catch(Exception e){
 
@@ -135,7 +138,8 @@ public class ServerNetwork implements Runnable{
 	    //Scanner scan = new Scanner(client.getInputStream());
 	    BufferedReader buffRead = new BufferedReader(new InputStreamReader(client.getInputStream()));
 	    if(buffRead.readLine().equals("HELLO")){
-		writer.println("IAM ORT");
+		writer.println(IAM_MSG);
+		writer.flush();
 	    }
 	    //input = new GetInput(scan);
 	    while(running){
@@ -152,6 +156,12 @@ public class ServerNetwork implements Runnable{
 	}catch(IOException e){
 	    e.printStackTrace(); //TODO: make this meaningful
 	}
+    }
+
+    public String toString(){
+	String toReturn = new Integer(port).toString();
+	toReturn = toReturn + " " + IAM_MSG;
+	return toReturn;
     }
 
 

@@ -127,6 +127,11 @@ public class ServerWrapper implements Runnable{
 	network = null;	
     }
 
+    public String toString(){
+	String toReturn = network.toString() + " " + running;
+	return toReturn;
+    }
+
     public void run(){
 	while(running.get()){
 	    String tester = "";
