@@ -17,19 +17,20 @@ import org.jgrapht.graph.SimpleGraph;
  * @author craig
  */
 public class LogicalBoard{
-	
-    /**
-     *
-     */
+    
+    // the board as a 9X9 graph
     public UndirectedGraph<Vertex, Edge> board;
+    // the set of players in the game
     public Set<Player> players = new HashSet<>();
+    // the set of edges in the game
     public Set<Edge> edges;
+    // the number of players in the game
     public int playerCount;
 
-    /**
-     * 
+    /** 
+     * Constructor - builds the logical board with the correct number of players 
      *
-     * @param playerCount
+     * @param playerCount - number of players in this game
      */
     public LogicalBoard(int playerCount){
             // Gotta populate the board
@@ -67,6 +68,11 @@ public class LogicalBoard{
             setWalls(playerCount);
     }
     
+    /**
+     *
+     * @param playerNum - player in game to be returned
+     * @return Player with that playerNum
+     */
     public Player getPlayer(int playerNum) {
 	for (Player p : players) {
 	    if (p.getPlayerNum()==playerNum)
@@ -75,10 +81,9 @@ public class LogicalBoard{
 	return null;
     }
     
-    
      /**
-     *
-     * @return set of vertices in board
+     * 
+     * @return the set of vertices in board
      */
     public Set<Vertex> getVertexSet(){
         return board.vertexSet();
@@ -86,13 +91,18 @@ public class LogicalBoard{
     
     /**
      *
-     * @return set of edges in board
+     * @return the set of edges in board
      */
     public Set<Edge> getEdgeSet(){
         return board.edgeSet();
     }
     
         // helper method to get set of all players on the board
+
+    /**
+     *
+     * @return
+     */
     public Set<Player> getPlayers(){
         Set<Player> players = new HashSet<Player>();
         Set<Vertex> vertices = board.vertexSet();
@@ -102,6 +112,12 @@ public class LogicalBoard{
         return players;
     }
     
+    /**
+     *  addPlayer - adds player to the board in corresponding player position
+     *            - adds player to players set
+     * 
+     * @param player
+     */
     public void addPlayer(Player player){
         Vertex destination = getVertexByCoord(player.getC(), player.getR());
         destination.placePlayer(player);
@@ -110,6 +126,13 @@ public class LogicalBoard{
 
     // method takes in wall move and gets the set of edges to be removed
     // uses wall move protocol
+
+    /**
+     *  getEdgesToRemove - gets the edges to remove when placing a wall
+     * 
+     * @param wall
+     * @return
+     */
     public Set<Edge> getEdgesToRemove(String wall){
         Scanner sc = new Scanner(wall);
         int pc = Integer.parseInt(sc.next());
@@ -194,6 +217,7 @@ public class LogicalBoard{
      * Places a wall. This wall must be validated by validWall() BEFORE being 
      * placed. 
      *
+     * @param player - player that is placing the wall
      * @param wall The previously validated wall to be placed, as a string in
      *             the protocol form.
      */
@@ -220,6 +244,12 @@ public class LogicalBoard{
 	}
     }      
 
+    /**
+     *
+     * @param playerNum - player that is trying to move
+     * @param move - move the player is making
+     * @return whether or not it is a valid move
+     */
     public boolean validMove(int playerNum, String move){
         Player player = null;
         for(Player p : players)
@@ -266,6 +296,12 @@ public class LogicalBoard{
         return false;
     }
 
+    /**
+     *
+     * @param playerNum - player placing wall 
+     * @param wall - wall position ( "C R Direction" )
+     * @return
+     */
     public boolean validWall(int playerNum, String wall){
         // cannot leave if one thing is true, must check all
         // but if one thing is false we return
@@ -323,6 +359,17 @@ public class LogicalBoard{
     
     // pathBlocked - Uses Dijkstras algorithm to make sure that the path to the 
     //               Winner row is not blocked by a player placed wall
+
+    /**
+     *
+     *  pathBlocked - Uses Dijkstras algorithm to make sure that the path to the 
+     *               Winner row is not blocked by a player placed wall
+     * 
+     * @param source
+     * @param playerNum
+     * @param edgeSet
+     * @return
+     */
     public boolean pathBlocked(Vertex source,int playerNum,Set<Edge> edgeSet){
         boolean blocked = true;
         DijkstraShortestPath<Vertex,Edge> Dijkstra;
@@ -377,13 +424,11 @@ public class LogicalBoard{
         return blocked;
     }
        
-    
-
-
-
-
-
-    
+    /**
+     * Sets wall counts for all players depending on player count
+     *
+     * @param playerCount
+     */
     public void setWalls(int playerCount){
         if(playerCount==2)
             for(Player p : players)
