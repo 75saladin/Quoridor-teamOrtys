@@ -12,7 +12,6 @@ import java.io.BufferedReader;
 
 public class ServerNetwork implements Runnable{
 
-<<<<<<< HEAD
     private static ServerNetwork server;
     private ServerSocket socket;
     private volatile Queue<String> toSend = new LinkedList();
@@ -41,15 +40,6 @@ public class ServerNetwork implements Runnable{
 
 	}
     }
-=======
-  private static ServerNetwork server;
-  private ServerSocket socket;
-  private volatile Queue<String> toSend = new LinkedList();
-  private volatile Queue<String> recieved = new LinkedList();
-  private volatile Socket client;
-  private volatile boolean running = true;
-  public static final int DEFAULT_PORT = 2222;
->>>>>>> f8e8988ee87953a3294aad4ed629edba72aec23e
 
   //The following finals are all for testing. Please do not
   //change them!
