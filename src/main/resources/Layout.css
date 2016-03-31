@@ -1,5 +1,6 @@
 #board {
-    -fx-background-image: url("http://cs.potsdam.edu/faculty/laddbc/images/PortraitStamp.png");
+    -fx-border-insets:20;
+    -fx-background-color: #8B0000;
     -fx-background-repeat: stretch;   
     -fx-background-position: center center;
     -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
@@ -7,7 +8,6 @@
 
 #description {
     -fx-background-color: blue;
-    -fx-background-image: url("http://en.aobo-shop.com/img/p/733-1671-thickbox.jpg");
     
     -fx-effect: dropshadow(three-pass-box, blue, 20, 0.5, 0.5, 0);
     
@@ -17,4 +17,14 @@
     -fx-background-color: #E0FFFF;
     -fx-border-color:  #545454;
     -fx-border-style: solid;
+}
+
+#title {
+	-fx-background-color: #8B0000;
+	-fx-background-insets: 20;
+	
+}
+	
+#description {
+	-fx-background-color: #8B0000;
 }
