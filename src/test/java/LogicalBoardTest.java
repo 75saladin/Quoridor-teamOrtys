@@ -206,11 +206,93 @@ public class LogicalBoardTest {
 	board.validWall(1, "2 6 h");
 	//Player 1 should have no walls left
 	assertFalse(board.validWall(1, "4 6 h"));
+    }
+    
+    
+    public void validMovesAcceptsValidMoves() throws Exception {
+	//Moves in a circle, testing each direction
+	assertTrue(board.validMove(1, "4 1"));
+	assertTrue(board.validMove(1, "3 1"));
+	assertTrue(board.validMove(1, "4 1"));
+	assertTrue(board.validMove(1, "4 0"));	
+    }
+    
+    public void validMovesRejectsInvalidMoves() throws Exception {
+	//Moves too far
+	assertFalse(board.validMove(1, "4 2"));
+	assertFalse(board.validMove(1, "6 0"));
+	assertFalse(board.validMove(1, "2 0"));
 	
+	//Tries to jump over a horizontal wall then a vertical wall
+	board.validWall(1, "3 0 h");
+	assertFalse(board.validMove(1, "4 1"));
+	board.validWall(1, "4 0 v");
+	assertFalse(board.validMove(1, "5 0"));
+	
+	//Tries to leave the board
+	assertFalse(board.validMove(1, "4 -1"));
+	for (int i=4; i<9; i++)
+	    board.validMove(1, i+" 0");
+	assertFalse(board.validMove(1, "9 0"));
+    }    
+    
+    public void validMovesRejectsMoreInvalidMoves() throws Exception {
+	//Move to current location
+	assertFalse(board.validMove(1, "4 0"));
+	
+	//Can't move onto player 2
+	for (int i=0; i<8; i++)
+	    board.validMove(1, "4 "+i);
+	assertFalse(board.validMove(1, "4 8"));
+    }
+    
+    public void jumping() throws Exception {
+	Player one = board.getPlayer(1);
+	Player two = board.getPlayer(2);
+	board.makeMove(one, "4 4");
+	board.makeMove(two, "4 5");
+	assertTrue(board.validMove(1, "4 6"));
+    }
+    
+    public void jumpingOverAWallIsInvalid() throws Exception {
+	Player one = board.getPlayer(1);
+	Player two = board.getPlayer(2);
+	board.makeMove(one, "4 4");
+	board.makeMove(two, "4 5");
+	board.validWall(1, "4 4 h");
+	assertFalse(board.validMove(1, "4 6"));
+    }
+    
+    public void theMegaJump() throws Exception {
+	board = new LogicalBoard(4);
+	Player one = board.getPlayer(1);
+	Player two = board.getPlayer(2);
+	Player three = board.getPlayer(3);
+	Player four = board.getPlayer(4);
+	
+	board.makeMove(one, "4 3");
+	board.makeMove(two, "4 4");
+	board.makeMove(three, "4 5");
+	board.makeMove(four, "4 6");
+	
+	assertTrue(board.validMove(1, "4 7"));
 	
     }
     
-    //test makeMove
-    
-    //test validMove
+        public void megaJumpingOverAWallIsInvalid() throws Exception {
+	board = new LogicalBoard(4);
+	Player one = board.getPlayer(1);
+	Player two = board.getPlayer(2);
+	Player three = board.getPlayer(3);
+	Player four = board.getPlayer(4);
+	
+	board.makeMove(one, "4 3");
+	board.makeMove(two, "4 4");
+	board.makeMove(three, "4 5");
+	board.makeMove(four, "4 6");
+	board.validWall(1, "4 4 h");
+	
+	assertTrue(board.validMove(1, "4 7"));
+	
+    }
 }
