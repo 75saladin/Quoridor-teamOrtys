@@ -20,35 +20,10 @@ public class GameClient{
     * Goes through the initial contact, then executes turn order game.
     *
     * @param pNum number of players and number to mod turn counter by to get player
-    * @param players array of <code>Socket</code> open to servers 
+    * @param players array of Socket open to servers 
     */
-  public static void runGame(int pNum, Socket[] players){
-    // TODO: Initial contact with servers and play game
-        PrintStream p1out = null;
-        Scanner p1in = null;
-        PrintStream p2out = null;
-        Scanner p2in = null;
-    try{
-      if(pNum == 2){
-        p1out = new PrintStream(players[0].getOutputStream());
-        p1in = new Scanner(players[0].getInputStream());    
-        p2out = new PrintStream(players[1].getOutputStream());
-        p2in = new Scanner(players[1].getInputStream());
-      }
-    }
-    catch(IOException ioe){
-      System.out.println("IOException: " + ioe);
-      ioe.printStackTrace();
-    }
-    p1out.println("HELLO");
-    String p1Name = Parser.parse(p1in.nextLine());
-    System.out.println("TEST: P1Name: " + p1Name);
-    p2out.println("HELLO");
-    String p2Name = Parser.parse(p2in.nextLine());
-    System.out.println("TEST: P2Name: " + p2Name);
-
-    
-
+  public static void runGame(Socket[] players){
+    contactServers(players);
   }
 
   /**
@@ -76,7 +51,7 @@ public class GameClient{
     players[0] = socketSetup(machine1,port1);
     players[1] = socketSetup(machine2,port2);
 
-    runGame(2,players);
+    runGame(players);
 
     closeConnection(players);
 
@@ -90,8 +65,71 @@ public class GameClient{
     */
   // Currently not implemented
   public static void setup4Player(String[] pairs){
-  
+    //TODO: this
   }
+
+  /**
+    * Handle initial server contact.
+    * Send HELLO and GAME messages.
+    *
+    * @param players Array of Sockets open to all servers.
+    *
+    * @return String array of player names.
+    */
+  public static void contactServers(Socket[] players){
+    PrintStream p1out = getOut(players[0]);
+    Scanner p1in = getIn(players[0]);
+    PrintStream p2out = getOut(players[1]);
+    Scanner p2in = getIn(players[1]);
+
+    p1out.println("HELLO");
+    String p1Name = Parser.parse(p1in.nextLine());
+    System.out.println("TEST: P1Name: " + p1Name);
+    p2out.println("HELLO");
+    String p2Name = Parser.parse(p2in.nextLine());
+    System.out.println("TEST: P2Name: " + p2Name);
+    p1out.println("GAME 1 " + p1Name + " " + p2Name);
+    p2out.println("GAME 2 " + p1Name + " " + p2Name);
+  }
+
+  /**
+    * Get PrintStream wrapping OutputStream of Socket.
+    * Takes care of gross try-catch block stuff.
+    *
+    * @param player Socket open to a server
+    *
+    * @return PrintStream wrapper for OutputStream
+    */
+  public static PrintStream getOut(Socket player){
+    try{
+      return new PrintStream(player.getOutputStream());
+    }
+    catch(IOException ioe){
+      System.out.println("IOException: " + ioe);
+      ioe.printStackTrace();
+    }
+    return null;
+  }
+
+  /**
+    * Get Scanner wrapping InputStream of Socket.
+    * Takes care of gross try-catch block stuff.
+    *
+    * @param player Socket open to a server.
+    *
+    * @return Scanner wrapper for InputStream
+    */
+  public static Scanner getIn(Socket player){
+    try{
+      return new Scanner(player.getInputStream());
+    }
+    catch(IOException ioe){
+      System.out.println("IOException: " + ioe);
+      ioe.printStackTrace();
+    }
+    return null;
+  }
+
 
   /**
     * Handle creation of socket.
@@ -100,7 +138,7 @@ public class GameClient{
     * @param host machine name to connect to
     * @param port port number to connect to
     *
-    * @return <code>Socket</code> open to the machine/port pair given or dies
+    * @return Socket open to the machine/port pair given or dies
     */
   public static Socket socketSetup(String host, int port) {
     try{
@@ -118,12 +156,13 @@ public class GameClient{
   /**
     * Closes connections to all servers at end of game.
     * 
-    * @param players <code>Socket</code> array of connections to close
+    * @param players Socket array of connections to close
     */
   public static void closeConnection(Socket[] players){
-    for(Socket p : players){
+    for(int i = 0; i < players.length; i++){
       try{
-        p.close();
+        getOut(players[i]).println("KIKASHI " + (i+1));
+        players[i].close();
       }
       catch(IOException ioe){
         System.out.println("IOException: " + ioe);
@@ -132,12 +171,11 @@ public class GameClient{
     }
   }
 
-  // need method for close specific players incase of invalid move
   /**
     * Handles the closing of a specific player connection.
     * i.e. when a player is kicked for an invalid move
     *
-    * @param player <code>Socket</code> of a player to close
+    * @param player Socket of a player to close
     */
   public static void closeConnection(Socket player){
     try{
