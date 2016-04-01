@@ -17,7 +17,7 @@ public class ServerNetwork implements Runnable{
     private volatile Queue<String> toSend = new LinkedList();
     private volatile Queue<String> recieved = new LinkedList();
     private volatile Socket client;
-    private volatile boolean running = true;
+    private static volatile boolean running = true;
     public static final int DEFAULT_PORT = 5555;
     public static final String IAM_MSG = "IAM ORT";
     private int port;
@@ -126,6 +126,10 @@ public class ServerNetwork implements Runnable{
     }
     running = false;
     server = null;
+  }
+
+  public static boolean isRunning(){
+    return running;
   }
 
   public void run(){

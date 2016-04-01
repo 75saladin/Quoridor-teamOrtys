@@ -13,6 +13,7 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.Ignore;
 
 /**
  *
@@ -26,7 +27,7 @@ public class GUITest {
     private Controller player1;
     private Controller player2;
     
-    
+    @Ignore
     @Before
     public void setUpClass() {
         player1 = new Controller(2);
@@ -45,6 +46,7 @@ public class GUITest {
         region = new Region();
     }
     
+    @Ignore
     @After
     public void tearDown() {
         gui = null;
@@ -57,6 +59,7 @@ public class GUITest {
     /**
      * Test the set up and check for null gui. 
      */
+    @Ignore
     @Test
     public void testGUISetUp() {
         assertNotNull(gui);
@@ -66,6 +69,7 @@ public class GUITest {
     /**
      * Test getRootRegion
      */
+    @Ignore
     @Test
     public void testGetRootRegion() {
         assertNotNull("Grab the gui borderpane ", gui.getRootRegion());
@@ -75,6 +79,7 @@ public class GUITest {
     /**
      * Tests getting the player position
      */
+    @Ignore
     @Test
     public void testGetPlayerPosition() {
         String p = "Player:1 c:4 r:0";

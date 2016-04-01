@@ -121,8 +121,8 @@ public class ServerWrapper implements Runnable{
     /**
      * Cleanly closes this server, and shuts down the thread.
      */
-    public void close(){
-	running.set(false);
+  public void close(){
+      running.set(false);
 	network.close();
 	network = null;	
     }
@@ -140,6 +140,9 @@ public class ServerWrapper implements Runnable{
 		if(network.hasMessage()){
 		    tester = network.getMessage();
 		    hasMessage.set(true);
+		}
+		if(!network.isRunning()){
+		    running.set(false);
 		}
 		inSem.release();
 	    }catch(InterruptedException e){
