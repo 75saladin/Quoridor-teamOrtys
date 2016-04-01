@@ -13,7 +13,7 @@ public class ServerNetworkTest {
     private ServerNetwork network;
     private Socket testSocket;
 
-    @Ignore
+    
     @Test
     public void testStartup() {
 	network = ServerNetwork.serverFactory(ServerNetwork.DEFAULT_PORT);
@@ -21,7 +21,7 @@ public class ServerNetworkTest {
 	network.close();
     }
 
-    @Ignore
+    
     @Test
 	public void testNetworkInit(){
 	network = ServerNetwork.serverFactory(ServerNetwork.DEFAULT_PORT);
@@ -41,7 +41,7 @@ public class ServerNetworkTest {
 	}
     }
     
-    @Ignore
+    
     @Test
     public void testSendMessage(){
 	network = ServerNetwork.serverFactory(ServerNetwork.DEFAULT_PORT);
@@ -50,6 +50,7 @@ public class ServerNetworkTest {
 	network.close();
     }
 
+    //Here there be dragons
     @Ignore
     @Test
     public void testConnection(){
