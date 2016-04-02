@@ -59,6 +59,7 @@ public class LogicalBoardTest {
         assertEquals("Center vertex should have 4 edges", board.board.edgesOf(center).size(), 4);
     }
     
+    @Test
     public void getVertexByCoordShouldReturnCorrectVertex() throws Exception {
         Random r = new Random();
         int randC;
@@ -72,6 +73,7 @@ public class LogicalBoardTest {
         }
     }
     
+    @Test
     public void placeHorizontalWallShouldRemoveCorrectEdges() throws Exception {
         Vertex src = board.getVertexByCoord(1,1);
         Vertex below = board.getVertexByCoord(1,2);
@@ -91,6 +93,7 @@ public class LogicalBoardTest {
         assertFalse(board.board.containsEdge(below, src));
     }
     
+    @Ignore
     public void placeVerticalWallShouldRemoveCorrectEdges() throws Exception {
         Vertex src = board.getVertexByCoord(1,1);
         Vertex below = board.getVertexByCoord(1,2);
@@ -110,6 +113,7 @@ public class LogicalBoardTest {
         assertTrue(board.board.containsEdge(below, src));
     }
     
+    @Test
     public void getEdgesToRemoveForHorizontalWallShouldReturnTwoCorrectEdges() throws Exception {
         Vertex src = board.getVertexByCoord(1,1);
         Vertex below = board.getVertexByCoord(1,2);
@@ -128,6 +132,7 @@ public class LogicalBoardTest {
         }
     }
     
+    @Test
     public void getEdgesToRemoveForVerticalWallShouldReturnTwoCorrectEdges() throws Exception {
         Vertex src = board.getVertexByCoord(1,1);
         Vertex below = board.getVertexByCoord(1,2);
@@ -146,6 +151,7 @@ public class LogicalBoardTest {
         }
     }
     
+    @Ignore
     public void validWallAcceptsValidWalls() throws Exception {
         Random r = new Random();
         String direction;
@@ -160,6 +166,7 @@ public class LogicalBoardTest {
         }
     }
     
+    @Ignore
     public void validWallRejectsInvalidWalls() throws Exception {
         //Wall out of bounds: <col/row> >7 or <0
         assertFalse(board.validWall(1,"-1 4 v"));
@@ -176,6 +183,7 @@ public class LogicalBoardTest {
 	assertFalse(board.validWall(1,"3 5 v"));
     }
     
+    @Test
     public void validWallRejectsWinBlockingWall() throws Exception {
 	board.validWall(1, "0 0 h");
 	board.validWall(1, "2 0 h");
@@ -186,6 +194,7 @@ public class LogicalBoardTest {
 	assertFalse(board.validWall(1, "7 1 h"));
     }
     
+    @Test
     public void validWallShouldDecrementPlayerCount() throws Exception {
 	
 	assertEquals("Player 1 should start with 10 walls", board.getPlayer(1).getWalls(), 10);
@@ -208,7 +217,7 @@ public class LogicalBoardTest {
 	assertFalse(board.validWall(1, "4 6 h"));
     }
     
-    
+    @Ignore
     public void validMovesAcceptsValidMoves() throws Exception {
 	//Moves in a circle, testing each direction
 	assertTrue(board.validMove(1, "4 1"));
@@ -217,6 +226,7 @@ public class LogicalBoardTest {
 	assertTrue(board.validMove(1, "4 0"));	
     }
     
+    @Ignore
     public void validMovesRejectsInvalidMoves() throws Exception {
 	//Moves too far
 	assertFalse(board.validMove(1, "4 2"));
@@ -236,6 +246,7 @@ public class LogicalBoardTest {
 	assertFalse(board.validMove(1, "9 0"));
     }    
     
+    @Ignore
     public void validMovesRejectsMoreInvalidMoves() throws Exception {
 	//Move to current location
 	assertFalse(board.validMove(1, "4 0"));
@@ -246,6 +257,7 @@ public class LogicalBoardTest {
 	assertFalse(board.validMove(1, "4 8"));
     }
     
+    @Ignore
     public void jumping() throws Exception {
 	Player one = board.getPlayer(1);
 	Player two = board.getPlayer(2);
@@ -254,6 +266,7 @@ public class LogicalBoardTest {
 	assertTrue(board.validMove(1, "4 6"));
     }
     
+    @Test
     public void jumpingOverAWallIsInvalid() throws Exception {
 	Player one = board.getPlayer(1);
 	Player two = board.getPlayer(2);
@@ -263,6 +276,7 @@ public class LogicalBoardTest {
 	assertFalse(board.validMove(1, "4 6"));
     }
     
+    @Ignore
     public void theMegaJump() throws Exception {
 	board = new LogicalBoard(4);
 	Player one = board.getPlayer(1);
@@ -279,7 +293,8 @@ public class LogicalBoardTest {
 	
     }
     
-        public void megaJumpingOverAWallIsInvalid() throws Exception {
+    @Ignore
+    public void megaJumpingOverAWallIsInvalid() throws Exception {
 	board = new LogicalBoard(4);
 	Player one = board.getPlayer(1);
 	Player two = board.getPlayer(2);
