@@ -397,7 +397,6 @@ public class GUI extends Application implements GUIInterface {
         VBox buttons = new VBox(10, label, up, down, left, right);
         buttons.setAlignment(Pos.CENTER);
         buttons.setStyle("-fx-background-color: #008000ff");
-        
         return buttons;
     }
     
