@@ -307,9 +307,9 @@ public class LogicalBoard{
         // but if one thing is false we return
         Player player = null;
         for(Player p : players)
-          if(p.getPlayerNum() == playerNum)
+          if(p.getPlayerNum() == 
+	      playerNum)
               player=p;
-        boolean valid = false;
         Scanner sc = new Scanner(wall);
         int sourceC = Integer.parseInt(sc.next());
         int sourceR = Integer.parseInt(sc.next());
@@ -321,7 +321,7 @@ public class LogicalBoard{
         
         //wall must be on board and not in the 8th row or col
         if (sourceC>7 || sourceR>7 || sourceC<0 || sourceR<0)
-            return false; 
+            return false;
         
         // getting positions of the vertexes for this wall
         Vertex sourceV = getVertexByCoord(sourceC, sourceR);
@@ -330,13 +330,19 @@ public class LogicalBoard{
         Vertex belowRV = getVertexByCoord(sourceC+1, sourceR+1);
         
             if(direction.equals("V"))
-                if( board.containsEdge(sourceV, rightV) &&
-                        board.containsEdge(belowV, belowRV))
-                    valid = true;
+                if( !board.containsEdge(sourceV, rightV) ||
+                        !board.containsEdge(belowV, belowRV) ||
+                        (!board.containsEdge(sourceV, belowV) &&
+                        !board.containsEdge(rightV, belowRV))
+			)
+                    return false;
             else if(direction.equals("H"))
-                if( board.containsEdge(sourceV, belowV) &&
-                        board.containsEdge(rightV, belowRV))
-                    valid = true;
+                if( !board.containsEdge(sourceV, belowV) ||
+                        !board.containsEdge(rightV, belowRV) ||
+                        (!board.containsEdge(sourceV, rightV) &&
+                        !board.containsEdge(belowV, belowRV))
+			)
+                    return false;
             else
                 return false;
         
@@ -352,9 +358,9 @@ public class LogicalBoard{
                 return false;
             }
         }
-        // if we get here return valid which should be true.....
+        // if we get here return true
         placeWall(player, wall);
-        return valid;
+        return true;
     }
     
     // pathBlocked - Uses Dijkstras algorithm to make sure that the path to the 
@@ -436,6 +442,28 @@ public class LogicalBoard{
         else
             for(Player p : players)
                 p.setWalls(5);
+    }
+    
+    //FOR TESTING PURPOSES ONLY. Removes a wall. To be called just after placing a wall.
+    public void removeWall(String wall) {
+	Scanner sc = new Scanner(wall);
+        int cB = Integer.parseInt(sc.next()); // Column of beginning Vertex
+        int rB = Integer.parseInt(sc.next()); // Row of beginning Vertex
+        String direction = sc.next();
+	
+	// getting positions of the vertexes for this wall
+        Vertex sourceV = getVertexByCoord(cB, rB);
+        Vertex belowV = getVertexByCoord(cB, rB+1);
+        Vertex rightV = getVertexByCoord(cB+1, rB);
+        Vertex belowRV = getVertexByCoord(cB+1, rB+1);
+	
+	if (direction.toUpperCase().equals("V")) {
+	    board.addEdge(sourceV, rightV);
+	    board.addEdge(belowV, belowRV);
+	} else {
+	    board.addEdge(sourceV, belowV);
+	    board.addEdge(rightV, belowRV);
+	}
     }
     
 }

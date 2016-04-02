@@ -57,6 +57,18 @@ public class LogicalBoardTest {
         assertEquals("Center vertex should have 4 edges", board.board.edgesOf(blCenter).size(), 4);
         assertEquals("Center vertex should have 4 edges", board.board.edgesOf(brCenter).size(), 4);
         assertEquals("Center vertex should have 4 edges", board.board.edgesOf(center).size(), 4);
+	
+	//from center
+	Vertex right = board.getVertexByCoord(5,4);
+	Vertex below = board.getVertexByCoord(4,5);
+	Vertex belowRight = board.getVertexByCoord(5,5);
+	
+	assertTrue(board.board.containsEdge(center, right));
+	assertTrue(board.board.containsEdge(right, belowRight));
+	assertTrue(board.board.containsEdge(belowRight, below));
+	assertTrue(board.board.containsEdge(below, center));
+	assertFalse(board.board.containsEdge(center, belowRight));
+	assertFalse(board.board.containsEdge(right, below));
     }
     
     @Test
@@ -151,18 +163,19 @@ public class LogicalBoardTest {
         }
     }
     
-    @Ignore
+    @Test
     public void validWallAcceptsValidWalls() throws Exception {
         Random r = new Random();
         String direction;
         String wallString;
-        for (int i=0; i<20; i++) {
+        for (int i=0; i<10; i++) {
             if (r.nextInt(2)==0)
                 direction = "h";
             else
                 direction = "v";  
-            wallString = ""+r.nextInt(9)+" "+r.nextInt(9)+" "+direction;
-            assertTrue("Wall "+wallString+" was judged invalid", board.validWall(1,wallString));
+            wallString = ""+r.nextInt(8)+" "+r.nextInt(8)+" "+direction;
+            assertTrue("Wall "+wallString+" was judged invalid on iteration "+i, board.validWall(1,wallString));
+	    board.removeWall(wallString);
         }
     }
     
@@ -174,16 +187,19 @@ public class LogicalBoardTest {
         assertFalse(board.validWall(1,"8 4 v"));
         assertFalse(board.validWall(1,"4 8 h"));
         
+	board.placeWall(new Player(1),"1 1 h");
+	board.placeWall(new Player(1),"7 7 v");
+	
+	//Wall overlaps another wall
+	assertFalse(board.validWall(1,"2 1 h"));
+	assertFalse(board.validWall(1,"7 6 v"));
+	
         //Wall intersects another wall
-        board.placeWall(new Player(1),"1 1 h");
-        board.placeWall(new Player(1),"7 7 v");
-	board.placeWall(new Player(1),"4 4 h");
         assertFalse(board.validWall(1,"1 1 v"));
         assertFalse(board.validWall(1,"7 7 h"));
-	assertFalse(board.validWall(1,"3 5 v"));
     }
     
-    @Test
+    @Ignore
     public void validWallRejectsWinBlockingWall() throws Exception {
 	board.validWall(1, "0 0 h");
 	board.validWall(1, "2 0 h");
@@ -205,15 +221,17 @@ public class LogicalBoardTest {
 	board.validWall(1, "6 0 h");
 	board.validWall(1, "7 0 v");
 	
-	assertEquals("Player 1 should start with 10 walls", board.getPlayer(1).getWalls(), 6);
-	assertEquals("Player 2 should start with 10 walls", board.getPlayer(2).getWalls(), 9);
+	assertEquals("Player 1 should have 6 walls left", board.getPlayer(1).getWalls(), 6);
+	assertEquals("Player 2 should have 9 walls left", board.getPlayer(2).getWalls(), 9);
 	
 	board.validWall(1, "0 4 h");
 	board.validWall(1, "2 4 h");
 	board.validWall(1, "4 4 h");
 	board.validWall(1, "6 4 h");
 	board.validWall(1, "2 6 h");
-	//Player 1 should have no walls left
+	board.validWall(1, "4 6 h");
+
+	assertEquals("Player 1 should have no walls left", board.getPlayer(1).getWalls(), 0);
 	assertFalse(board.validWall(1, "4 6 h"));
     }
     
