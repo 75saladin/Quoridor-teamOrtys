@@ -3,14 +3,15 @@
     -fx-background-color: #8B0000;
     -fx-background-repeat: stretch;   
     -fx-background-position: center center;
-    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0.5, 0); 
 }
 
 #description {
-    -fx-background-color: blue;
-    
-    -fx-effect: dropshadow(three-pass-box, blue, 20, 0.5, 0.5, 0);
-    
+    -fx-background-color: #8B0000;
+    -fx-effect: dropshadow(three-pass-box, yellow, 20, 0.5, 0.5, 0);
+    -fx-border-insets: 20;
+    -fx-border-color: yellow;
+    -fx-border-radius: 20;  
 }
 
 #circles {
@@ -22,9 +23,6 @@
 #title {
 	-fx-background-color: #8B0000;
 	-fx-background-insets: 20;
-	
+	-fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0.5, 0);
 }
 	
-#description {
-	-fx-background-color: #8B0000;
-}
