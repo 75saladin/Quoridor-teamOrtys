@@ -93,7 +93,7 @@ public class LogicalBoardTest {
         assertFalse(board.board.containsEdge(below, src));
     }
     
-    @Ignore
+    @Test
     public void placeVerticalWallShouldRemoveCorrectEdges() throws Exception {
         Vertex src = board.getVertexByCoord(1,1);
         Vertex below = board.getVertexByCoord(1,2);

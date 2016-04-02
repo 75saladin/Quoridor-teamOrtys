@@ -233,7 +233,7 @@ public class LogicalBoard{
         Vertex rightV = getVertexByCoord(cB+1, rB);
         Vertex belowRV = getVertexByCoord(cB+1, rB+1);
 	
-	if (direction.toUpperCase()=="V") {
+	if (direction.toUpperCase().equals("V")) {
 	    board.removeEdge(sourceV, rightV);
 	    board.removeEdge(belowV, belowRV);
             player.decrementWall();
