@@ -437,7 +437,7 @@ public class GUI extends Application implements GUIInterface {
         StackPane sp = new StackPane();
         sp.getStylesheets().addAll(this.getClass().getResource("Layout.css").toExternalForm());
         sp.getChildren().addAll(player.getPlayerNode(player.getPlayerTurn()));
-        sp.setId("cirles");
+        sp.setId("circles");
         sp.getChildren().addAll(player.getPlayerNode(player.getPlayerTurn()));
     }    
     
