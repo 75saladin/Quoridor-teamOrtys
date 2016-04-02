@@ -1,0 +1,26 @@
+Instantiate:
+    LogicalBoard b = new LogicalBoard(int playerNumber);
+    
+    Player number is either 2 or 4. The board gets populated with the players 
+    in the locations specified by Dr. Ladd's protocol.txt. Players are
+    identified by their number, 1-4.
+
+Check a move:
+    b.validMove(int playerNumber, String move);
+
+    Returns a boolean representing whether or not the given move is valid for
+    the given player. Move format: "<c> <r>", where <c> is a digit representing
+    column number and <r> is a digit representing row number.
+    If it returns false, the move will not be made. If it returns true, the
+    move will automatically be made on the board.
+
+Check a wall:
+    b.validWall(int playerNumber, String wall);
+
+    Returns a boolean representing whether or not the given wall is valid for
+    the given player. Wall format: "<c> <r> <d>", where <c> is a digit 
+    representing column number, <r> is a digit representing row number, and <d>
+    is a case-insensitive single character, either "v" or "h", representing 
+    wall direction.
+    If it returns false, the wall will not be placed. If it returns true, the
+    wall will automatically be placed on the board.
