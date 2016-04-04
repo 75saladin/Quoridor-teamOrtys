@@ -68,6 +68,13 @@ public class LogicalBoard{
             setWalls(playerCount);
     }
     
+    public boolean checkValid(int playerNum,String move){
+        if(move.length()>3)
+            return validWall(playerNum, move);
+        else 
+            return validMove(playerNum, move);
+    }
+    
     /**
      *
      * @param playerNum - player in game to be returned
