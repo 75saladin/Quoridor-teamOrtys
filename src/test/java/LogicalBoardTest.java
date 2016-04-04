@@ -328,4 +328,35 @@ public class LogicalBoardTest {
 	assertTrue(board.validMove(1, "4 7"));
 	
     }
+    @Test
+    public void testKick() throws Exception{
+        board = new LogicalBoard(4);
+        Player one = board.getPlayer(1);
+        Player two = board.getPlayer(2);
+        Player three = board.getPlayer(3);
+	Player four = board.getPlayer(4);
+        assertEquals(4,board.getPlayerCount());
+        board.kick(1);
+        assertEquals(3,board.getPlayerCount());
+        board.kick(2);
+        assertEquals(2,board.getPlayerCount());
+        board.kick(3);
+        assertEquals(1,board.getPlayerCount());
+    }
+    
+    @Test
+    public void testHasWon() throws Exception{
+        board = new LogicalBoard(4);
+        Player one = board.getPlayer(1);
+        board.makeMove(one, "4 8");
+        assertTrue(board.hasWon(1));
+        board.makeMove(one, "4 7");
+        assertFalse(board.hasWon(1));
+        board.kick(1);
+        assertFalse(board.hasWon(2));
+        board.kick(2);
+        assertFalse(board.hasWon(3));
+        board.kick(3);
+        assertTrue(board.hasWon(4));
+    }
 }

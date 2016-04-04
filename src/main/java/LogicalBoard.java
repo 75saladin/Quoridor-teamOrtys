@@ -58,10 +58,10 @@ public class LogicalBoard{
                 }
             }   
             this.edges = getEdgeSet();
-            if(playerCount==2 || playerCount == 4){
+            if(playerCount>=2){
                 this.addPlayer(new Player(1));
                 this.addPlayer(new Player(2));
-            }else if(playerCount==4){
+            }if(playerCount==4){
                 this.addPlayer(new Player(3));
                 this.addPlayer(new Player(4));
             }
@@ -79,6 +79,10 @@ public class LogicalBoard{
 		return p;
 	}
 	return null;
+    }
+    
+    public int getPlayerCount(){
+        return players.size();
     }
     
      /**
@@ -122,6 +126,20 @@ public class LogicalBoard{
         Vertex destination = getVertexByCoord(player.getC(), player.getR());
         destination.placePlayer(player);
         players.add(player);
+    }
+    
+    
+    // kicks a player from the game
+    public void kick(int playerNum){
+        Vertex v = null;
+        Player p = null;
+        for(Player temp : players)
+            if(temp.getPlayerNum()==playerNum){
+               p = temp; 
+            }
+        v = getVertexByCoord(p.getC(), p.getR());
+        v.removePlayer();
+        players.remove(p);
     }
 
     // method takes in wall move and gets the set of edges to be removed
@@ -464,6 +482,50 @@ public class LogicalBoard{
 	    board.addEdge(sourceV, belowV);
 	    board.addEdge(rightV, belowRV);
 	}
+    }
+ 
+    /*
+    *   hasWon - determines if player has won the game
+    *
+    *   @Param playerNum - player to be determined winner
+    *   @Return - true or false if player has won
+    */
+    public boolean hasWon(int playerNum){
+        Player p = null;
+        for(Player player : players)
+            if(player.getPlayerNum()==playerNum)
+                p = player;
+        // if he is not in the game he did not win
+        if(p == null)
+            return false;
+        // player 1 must reach Row 8
+        if(playerNum==1 && p.getR()==8){
+            return true;
+        }
+        // player 2 must reach Row 0
+        if(playerNum==2 && p.getR()==0){
+            return true;
+        }
+        // player 3 must reach Column 8
+        if(playerNum==3 && p.getC()==8){
+            return true;
+        }
+        // player 4 must reach Column 0
+        if(playerNum==4 && p.getC()==0){
+            return true;
+        }
+        
+        // if he hasnt made it to the end but is the last man standing he wins
+        if(!enoughPlayers())
+            return true;
+        return false;
+    }
+    
+    // Returns true if there are more than one players
+    public boolean enoughPlayers(){
+        if(players.size()>1)
+            return true;
+        return false;
     }
     
 }
