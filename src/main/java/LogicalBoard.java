@@ -19,12 +19,28 @@ import org.jgrapht.graph.SimpleGraph;
 public class LogicalBoard{
     
     // the board as a 9X9 graph
+
+    /**
+     *
+     */
     public UndirectedGraph<Vertex, Edge> board;
     // the set of players in the game
+
+    /**
+     *
+     */
     public Set<Player> players = new HashSet<>();
     // the set of edges in the game
+
+    /**
+     *
+     */
     public Set<Edge> edges;
     // the number of players in the game
+
+    /**
+     *
+     */
     public int playerCount;
 
     /** 
@@ -68,6 +84,13 @@ public class LogicalBoard{
             setWalls(playerCount);
     }
     
+    /**
+     *  checkValid - returns boolean if move is valid or not and updates board
+     * 
+     * @param playerNum - player making the move
+     * @param move 
+     * @return if valid move
+     */
     public boolean checkValid(int playerNum,String move){
         if(move.length()>3)
             return validWall(playerNum, move);
@@ -88,6 +111,10 @@ public class LogicalBoard{
 	return null;
     }
     
+    /**
+     *
+     * @return
+     */
     public int getPlayerCount(){
         return players.size();
     }
@@ -137,6 +164,11 @@ public class LogicalBoard{
     
     
     // kicks a player from the game
+
+    /**
+     *
+     * @param playerNum
+     */
     public void kick(int playerNum){
         Vertex v = null;
         Player p = null;
@@ -190,7 +222,7 @@ public class LogicalBoard{
     }
 
     
-    /*
+    /**
      * getVertexByCoord - returns Vertex object at that coordinate on the board
      * 
      * @param c - Column of vertex
@@ -205,13 +237,14 @@ public class LogicalBoard{
         return null;
     }    
     
-    /*
+    /**
      * getVertexByCoord - returns Vertex object at that coordinate on the board
      * 
      * @param c - Column of vertex
      * @param r - Row of Vertex
      * @return - Vertex object at that location on the board
      */
+
     public Vertex getVertexByCoord(int c,int r){
         for(Vertex v : board.vertexSet())
             if(v.c == c && v.r == r)
@@ -221,7 +254,7 @@ public class LogicalBoard{
 
     
     /**
-     * Puts a player in a given destination. This will make the move, always;
+     * makeMove - Puts a player in a given destination. This will make the move, always;
      * the given player and move combo should be passed into validMove() just 
      * before makeMove().
      * 
@@ -388,9 +421,6 @@ public class LogicalBoard{
         return true;
     }
     
-    // pathBlocked - Uses Dijkstras algorithm to make sure that the path to the 
-    //               Winner row is not blocked by a player placed wall
-
     /**
      *
      *  pathBlocked - Uses Dijkstras algorithm to make sure that the path to the 
@@ -470,6 +500,11 @@ public class LogicalBoard{
     }
     
     //FOR TESTING PURPOSES ONLY. Removes a wall. To be called just after placing a wall.
+
+    /**
+     *
+     * @param wall
+     */
     public void removeWall(String wall) {
 	Scanner sc = new Scanner(wall);
         int cB = Integer.parseInt(sc.next()); // Column of beginning Vertex
@@ -491,11 +526,11 @@ public class LogicalBoard{
 	}
     }
  
-    /*
+    /**
     *   hasWon - determines if player has won the game
     *
-    *   @Param playerNum - player to be determined winner
-    *   @Return - true or false if player has won
+    *   @param playerNum - player to be determined winner
+    *   @return - true or false if player has won
     */
     public boolean hasWon(int playerNum){
         Player p = null;
@@ -528,7 +563,11 @@ public class LogicalBoard{
         return false;
     }
     
-    // Returns true if there are more than one players
+
+    /**
+     *
+     * @returns true if there are more than one players
+     */
     public boolean enoughPlayers(){
         if(players.size()>1)
             return true;
