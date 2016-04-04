@@ -1,5 +1,4 @@
 #board {
-    -fx-border-insets:20;
     -fx-background-color: #8B0000;
     -fx-background-repeat: stretch;   
     -fx-background-position: center center;
@@ -9,9 +8,10 @@
 #description {
     -fx-background-color: #8B0000;
     -fx-effect: dropshadow(three-pass-box, black, 20, 0.5, 0.5, 0);
-    -fx-border-insets: 20;
+    -fx-border-insets: 0;
     -fx-border-color: yellow;
-    -fx-border-radius: 10;  
+    -fx-border-radius: 5;
+    -fx-border-width: 5;  
 }
 
 #circles {
@@ -27,5 +27,12 @@
    -fx-border-insets: 20;
    -fx-border-color: yellow;
    -fx-border-radius: 20; 
+   -fx-border-width: 5;
 }
 	
+#bottom {
+	-fx-background-image: url(607099.png);
+	-fx-background-position: center;
+	-fx-background-insets: 50;	
+	-fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0.5, 0);
+}
