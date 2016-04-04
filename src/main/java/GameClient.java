@@ -11,9 +11,16 @@ import java.util.Scanner;
   */
 public class GameClient{
 
-  private static final String usage = "usage: GameClient <machine1>:<port1> "
+  private static final String USAGE = "usage: GameClient <machine1>:<port1> "
                                     + "<machine2>:<port2> \\\n[<machine3>:<port3> "
                                     + "<machine4>:<port4>]";
+
+  private static final String HELLO = "HELLO";
+  private static final String GAME = "GAME";
+  private static final String MOVE_REQUEST = "MYOUSHU";
+  private static final String MOVE_MADE = "ATARI";
+  private static final String GAME_WON = "KIKASHI";
+  private static final String PLAYER_KICKED = "GOTE";
 
   /**
     * Start the game logic.
@@ -24,16 +31,9 @@ public class GameClient{
     */
   public static void runGame(Socket[] players){
     contactServers(players);
-  
-    // Start gui
-    new Thread() {
-      @Override
-      public void run() {
-        javafx.application.Application.launch(GUI.class);
-      }
-    }.start();
-    GUI gui = GUI.waitForGUIStartUpTest();
-    
+    startGUI(); 
+    LogicalBoard gameBoard = new LogicalBoard(players.length); 
+    // Start asking for moves
   }
 
   /**
@@ -79,6 +79,20 @@ public class GameClient{
   }
 
   /**
+    * Handles starting the GUI.
+    * Nothing more. Nothing less.
+    */
+  public static void startGUI(){
+    new Thread() {
+      @Override
+      public void run() {
+        javafx.application.Application.launch(GUI.class);
+      }
+    }.start();
+    GUI gui = GUI.waitForGUIStartUpTest();
+  }
+
+  /**
     * Handle initial server contact.
     * Send HELLO and GAME messages.
     *
@@ -103,31 +117,31 @@ public class GameClient{
       p4in = getIn(players[3]);
     }
 
-    p1out.println("HELLO");
+    p1out.println(HELLO);
     String p1Name = Parser.parse(p1in.nextLine());
     System.out.println("TEST: P1Name: " + p1Name);
-    p2out.println("HELLO");
+    p2out.println(HELLO);
     String p2Name = Parser.parse(p2in.nextLine());
     System.out.println("TEST: P2Name: " + p2Name);
     String p3Name = null;
     String p4Name = null;
     if(players.length == 4){
-      p3out.println("HELLO");
+      p3out.println(HELLO);
       p3Name = Parser.parse(p3in.nextLine());
       System.out.println("TEST: P3Name: " + p3Name);
-      p4out.println("HELLO");
+      p4out.println(HELLO);
       p4Name = Parser.parse(p4in.nextLine());
       System.out.println("TEST: P4Name: " + p4Name);
     }
     if(players.length == 2){
-      p1out.println("GAME 1 " + p1Name + " " + p2Name);
-      p2out.println("GAME 2 " + p1Name + " " + p2Name);
+      p1out.println(GAME + " 1 " + p1Name + " " + p2Name);
+      p2out.println(GAME + " 2 " + p1Name + " " + p2Name);
     }
     else{
-      p1out.println("GAME 1 " + p1Name + " " + p2Name + " " + p3Name + " " + p4Name); 
-      p2out.println("GAME 2 " + p1Name + " " + p2Name + " " + p3Name + " " + p4Name); 
-      p3out.println("GAME 3 " + p1Name + " " + p2Name + " " + p3Name + " " + p4Name); 
-      p4out.println("GAME 4 " + p1Name + " " + p2Name + " " + p3Name + " " + p4Name); 
+      p1out.println(GAME + " 1 " + p1Name + " " + p2Name + " " + p3Name + " " + p4Name); 
+      p2out.println(GAME + " 2 " + p1Name + " " + p2Name + " " + p3Name + " " + p4Name); 
+      p3out.println(GAME + " 3 " + p1Name + " " + p2Name + " " + p3Name + " " + p4Name); 
+      p4out.println(GAME + " 4 " + p1Name + " " + p2Name + " " + p3Name + " " + p4Name); 
     }
   }
 
@@ -200,7 +214,7 @@ public class GameClient{
   public static void closeConnection(Socket[] players){
     for(int i = 0; i < players.length; i++){
       try{
-        getOut(players[i]).println("KIKASHI " + (i+1));
+        getOut(players[i]).println(GAME_WON + " " + (i+1));
         players[i].close();
       }
       catch(IOException ioe){
@@ -236,7 +250,7 @@ public class GameClient{
     */
   public static String[] processParams(String[] args){
     if(args.length != 2 && args.length != 4){
-      System.out.println(usage);
+      System.out.println(USAGE);
       System.out.println("Error: Invalid number of players");
       System.exit(1);
     }
