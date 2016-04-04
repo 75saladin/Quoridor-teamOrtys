@@ -24,6 +24,16 @@ public class GameClient{
     */
   public static void runGame(Socket[] players){
     contactServers(players);
+  
+    // Start gui
+    new Thread() {
+      @Override
+      public void run() {
+        javafx.application.Application.launch(GUI.class);
+      }
+    }.start();
+    GUI gui = GUI.waitForGUIStartUpTest();
+    
   }
 
   /**
@@ -81,6 +91,17 @@ public class GameClient{
     Scanner p1in = getIn(players[0]);
     PrintStream p2out = getOut(players[1]);
     Scanner p2in = getIn(players[1]);
+    PrintStream p3out = null;
+    Scanner p3in = null;
+    PrintStream p4out = null;
+    Scanner p4in = null;
+
+    if(players.length == 4){
+      p3out = getOut(players[2]);
+      p3in = getIn(players[2]);
+      p4out = getOut(players[3]);
+      p4in = getIn(players[3]);
+    }
 
     p1out.println("HELLO");
     String p1Name = Parser.parse(p1in.nextLine());
@@ -88,8 +109,26 @@ public class GameClient{
     p2out.println("HELLO");
     String p2Name = Parser.parse(p2in.nextLine());
     System.out.println("TEST: P2Name: " + p2Name);
-    p1out.println("GAME 1 " + p1Name + " " + p2Name);
-    p2out.println("GAME 2 " + p1Name + " " + p2Name);
+    String p3Name = null;
+    String p4Name = null;
+    if(players.length == 4){
+      p3out.println("HELLO");
+      p3Name = Parser.parse(p3in.nextLine());
+      System.out.println("TEST: P3Name: " + p3Name);
+      p4out.println("HELLO");
+      p4Name = Parser.parse(p4in.nextLine());
+      System.out.println("TEST: P4Name: " + p4Name);
+    }
+    if(players.length == 2){
+      p1out.println("GAME 1 " + p1Name + " " + p2Name);
+      p2out.println("GAME 2 " + p1Name + " " + p2Name);
+    }
+    else{
+      p1out.println("GAME 1 " + p1Name + " " + p2Name + " " + p3Name + " " + p4Name); 
+      p2out.println("GAME 2 " + p1Name + " " + p2Name + " " + p3Name + " " + p4Name); 
+      p3out.println("GAME 3 " + p1Name + " " + p2Name + " " + p3Name + " " + p4Name); 
+      p4out.println("GAME 4 " + p1Name + " " + p2Name + " " + p3Name + " " + p4Name); 
+    }
   }
 
   /**

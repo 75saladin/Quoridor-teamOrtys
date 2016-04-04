@@ -25,9 +25,9 @@ if [ "$1" -eq "$2" ]; then
   exit 1
 fi
 
-# Launch servers when it has a main
-java -cp build/libs/Quoridor.jar ServerMain --port $1 &
-java -cp build/libs/Quoridor.jar ServerMain --port $2 &
+# Launch servers in own terminals
+gnome-terminal -e "java -cp build/libs/Quoridor.jar ServerMain --port $1"
+gnome-terminal -e "java -cp build/libs/Quoridor.jar ServerMain --port $2"
 
 # Wait for servers to start. (Thank you hivemind for the idea)
 sleep 1;
