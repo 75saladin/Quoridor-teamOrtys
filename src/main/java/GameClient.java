@@ -31,9 +31,20 @@ public class GameClient{
     */
   public static void runGame(Socket[] players){
     contactServers(players);
-    startGUI(); 
+    startGUI(players.length); 
     LogicalBoard gameBoard = new LogicalBoard(players.length); 
     // Start asking for moves
+    boolean running = true;
+    int pNum = 0;
+    while(running){
+      System.out.println("REQUESTING MOVE: Player " + (pNum+1));
+      String move = requestMove(players[pNum]);
+      if(move.equals("Error")){
+        kickPlayer(players,pNum+1);
+      }
+      System.out.println("GOT MOVE: " + move);
+      //TODO: Broadcast move to players and check for winner
+    }
   }
 
   /**
@@ -79,10 +90,26 @@ public class GameClient{
   }
 
   /**
+    * Handles the requesting of a move from the server.
+    *
+    * @param player Socket of player to request move from
+    * @param pNum number of the player
+    *
+    * @return move made by player
+    */
+  public static String requestMove(Socket player){
+    getOut(player).println(MOVE_REQUEST);
+    String move = Parser.parse(getIn(player).nextLine());
+    return move;
+  }
+
+  /**
     * Handles starting the GUI.
     * Nothing more. Nothing less.
+    *
+    * @param pNum number of players in game
     */
-  public static void startGUI(){
+  public static void startGUI(int pNum){
     new Thread() {
       @Override
       public void run() {
@@ -90,6 +117,8 @@ public class GameClient{
       }
     }.start();
     GUI gui = GUI.waitForGUIStartUpTest();
+    if(pNum == 4)
+      gui.setPlayer(new Controller(4));
   }
 
   /**
@@ -228,11 +257,15 @@ public class GameClient{
     * Handles the closing of a specific player connection.
     * i.e. when a player is kicked for an invalid move
     *
-    * @param player Socket of a player to close
+    * @param players Array of players
+    * @param pNum number of player kicked
     */
-  public static void closeConnection(Socket player){
+  public static void kickPlayer(Socket[] players,int pNum){
+    for(int i = 0; i < players.length; i++)
+      getOut(players[i]).println(PLAYER_KICKED + " " + pNum);
+    
     try{
-      player.close();
+      players[pNum-1].close();
     }
     catch(IOException ioe){
       System.out.println("IOException: " + ioe);
