@@ -1,8 +1,11 @@
 #board {
-    -fx-background-color: #8B0000;
     -fx-background-repeat: stretch;   
     -fx-background-position: center center;
     -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0.5, 0); 
+    -fx-border-color: blue;
+    -fx-border-insets: 50;
+    -fx-border-width: 20;
+    -fx-border-radius: 5;
 }
 
 #description {
@@ -32,7 +35,7 @@
 	
 #bottom {
 	-fx-background-image: url(607099.png);
-	-fx-background-position: center;
+	-fx-background-position: 50% 57%;
 	-fx-background-insets: 50;	
 	-fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0.5, 0);
 }

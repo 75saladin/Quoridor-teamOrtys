@@ -253,7 +253,7 @@ public class GUI extends Application implements GUIInterface {
             gp.add(player.getPlayerNode(3), 0, 8);
             gp.add(player.getPlayerNode(4), 16, 8);
         }
-        grid.getStylesheets().addAll(this.getClass().getResource("Layout.css").toExternalForm());
+        gp.getStylesheets().addAll(this.getClass().getResource("Layout.css").toExternalForm());
         gp.setId("board"); // set the css id of the gridpane
         return gp;
     }
