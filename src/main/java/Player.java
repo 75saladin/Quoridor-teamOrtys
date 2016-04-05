@@ -21,17 +21,17 @@ public class Player {
      */
     public Player(int playerNum){
             if(playerNum==1){
-                this.c = 0;
-                this.r = 4;
-            }if(playerNum==2){
-                this.c = 8;
-                this.r = 4;
-            }if(playerNum==3){
                 this.c = 4;
                 this.r = 0;
-            }if(playerNum==4){
+            }if(playerNum==2){
                 this.c = 4;
                 this.r = 8;
+            }if(playerNum==3){
+                this.c = 0;
+                this.r = 4;
+            }if(playerNum==4){
+                this.c = 8;
+                this.r = 4;
             }
     }
   

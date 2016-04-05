@@ -237,7 +237,7 @@ public class LogicalBoard{
      */
     public void makeMove(int playerNum, String move) {
         Player player = players[playerNum-1];
-	Scanner sc = new Scanner(move);
+		Scanner sc = new Scanner(move);
         int c = Integer.parseInt(sc.next());
         int r = Integer.parseInt(sc.next());
         
@@ -247,7 +247,7 @@ public class LogicalBoard{
         getVertexByCoord(c, r).here = true;
 	
         player.setC(c);
-	player.setR(r);
+		player.setR(r);
     }
     
     /**
@@ -258,27 +258,28 @@ public class LogicalBoard{
      * @param wall The previously validated wall to be placed, as a string in
      *             the protocol form.
      */
-    public void placeWall(Player player, String wall){
+    public void placeWall(int playerNum, String wall){
+        Player player = players[playerNum-1];
         Scanner sc = new Scanner(wall);
-        int cB = Integer.parseInt(sc.next()); // Column of beginning Vertex
-        int rB = Integer.parseInt(sc.next()); // Row of beginning Vertex
+        int cS = Integer.parseInt(sc.next()); // Column of beginning Vertex
+        int rS = Integer.parseInt(sc.next()); // Row of beginning Vertex
         String direction = sc.next();
 	
 	// getting positions of the vertexes for this wall
-        Vertex sourceV = getVertexByCoord(cB, rB);
-        Vertex belowV = getVertexByCoord(cB, rB+1);
-        Vertex rightV = getVertexByCoord(cB+1, rB);
-        Vertex belowRV = getVertexByCoord(cB+1, rB+1);
+        Vertex sourceV = getVertexByCoord(cS, rS);
+        Vertex belowV = getVertexByCoord(cS, rS+1);
+        Vertex rightV = getVertexByCoord(cS+1, rS);
+        Vertex belowRV = getVertexByCoord(cS+1, rS+1);
 	
-	if (direction.toUpperCase().equals("V")) {
-	    board.removeEdge(sourceV, rightV);
-	    board.removeEdge(belowV, belowRV);
-            player.decrementWall();
-	} else {
-	    board.removeEdge(sourceV, belowV);
-	    board.removeEdge(rightV, belowRV);
-            player.decrementWall();
-	}
+		if (direction.toUpperCase().equals("V")) {
+			board.removeEdge(sourceV, rightV);
+			board.removeEdge(belowV, belowRV);
+			player.decrementWall();
+		} else if (direction.toUpperCase().equals("H")){
+			board.removeEdge(sourceV, belowV);
+			board.removeEdge(rightV, belowRV);
+			player.decrementWall();
+		}
     }      
 
     /**
@@ -354,9 +355,8 @@ public class LogicalBoard{
         int sourceR = Integer.parseInt(sc.next());
         String direction = sc.next().toUpperCase();
         
-        if(player.getWalls() <= 0){
+        if(player.getWalls() <= 0)
             return false;
-        }
         
         //wall must be on board and not in the 8th row or col
         if (sourceC>7 || sourceR>7 || sourceC<0 || sourceR<0)
@@ -368,14 +368,12 @@ public class LogicalBoard{
         Vertex rightV = getVertexByCoord(sourceC+1, sourceR);
         Vertex belowRV = getVertexByCoord(sourceC+1, sourceR+1);
         
-            if(direction.equals("V"))
-                if( !board.containsEdge(sourceV, rightV) || !board.containsEdge(belowV, belowRV) ||
-                    (!board.containsEdge(sourceV, belowV) || !board.containsEdge(rightV, belowRV)))
-                    return false;
-            else if(direction.equals("H"))
-                if( !board.containsEdge(sourceV, belowV) || !board.containsEdge(rightV, belowRV) ||
-                    (!board.containsEdge(sourceV, rightV) || !board.containsEdge(belowV, belowRV)))
-                    return false;
+        if(direction.equals("V"))
+            if(!board.containsEdge(sourceV, rightV) || !board.containsEdge(belowV, belowRV))
+                return false;
+        else if(direction.equals("H"))
+            if(!board.containsEdge(sourceV, belowV) || !board.containsEdge(rightV, belowRV))
+                return false;
         
         // Starting logic to test if winners path is blocked......
         Vertex source;
@@ -390,7 +388,7 @@ public class LogicalBoard{
             }
         }
         // if we get here return true
-        placeWall(player, wall);
+        placeWall(playerNum, wall);
         return true;
     }
     
@@ -410,14 +408,13 @@ public class LogicalBoard{
         boolean blocked = true;
         DijkstraShortestPath<Vertex,Edge> Dijkstra;
         Vertex destination;
-        Set<Edge> boardEdgeSet = board.edgeSet();
         
         UndirectedGraph<Vertex,Edge> boardCopy = new SimpleGraph<Vertex,Edge>(Edge.class);
         Graphs.addGraph(boardCopy, this.board);
         // Removing Edges to place wall temporarily to check if winning path is 
         //  blocked will replace at the end before returning
         
-        for(Edge e : boardEdgeSet) {
+        for(Edge e : edgeSet) {
                 boardCopy.removeEdge(e);
         }
 
