@@ -137,7 +137,7 @@ public class LogicalBoard{
      * @param player
      */
     private void addPlayer(Player player){
-        getVertexByCoord(player.getC(), player.getR()).placePlayer(player);
+        getVertexByCoord(player.getC(), player.getR()).placePlayer();
     }
     
     
@@ -242,9 +242,9 @@ public class LogicalBoard{
         int r = Integer.parseInt(sc.next());
         
         //source 
-        getVertexByCoord(player.getC(), player.getR()).removePlayer();
+        getVertexByCoord(player.getC(), player.getR()).here = false;
         //destination
-        getVertexByCoord(c, r).placePlayer(player);
+        getVertexByCoord(c, r).here = true;
 	
         player.setC(c);
 	player.setR(r);
@@ -308,16 +308,15 @@ public class LogicalBoard{
         if(dijkstra.getPath()==null)
             return false;
         // if there is a player in this location
-        if(Destination.isPlayerHere()){
+        if(Destination.here)
             return false;
-        }
-        if(dijkstra.getPathLength()>1){
-            if(!jump(Source,Destination,dijkstra)){
+        if(Destination.equals(Source))
+            return false;
+        if(dijkstra.getPathEdgeList().size()>1)
+            if(!jump(Source,Destination,dijkstra))
                 return false;
-            }
-        }
-        
-        // if there is no edge or Destination or there is a player
+
+                // if there is no edge or Destination or there is a player
         // on the destination or the source and destination are the same
         // the player cannot be a move here and needs to be kicked from the game
         makeMove(playerNum, move);
@@ -331,13 +330,12 @@ public class LogicalBoard{
             vertexOnPath.add(e.getTarget());
             vertexOnPath.add(e.getSource());
         }
-        //vertexOnPath.remove(Source);
+        vertexOnPath.remove(Source);
         for(Vertex v : vertexOnPath){
-            if(v.isPlayerHere() && !v.equals(Destination)){
-                if(!v.isPlayerHere() && v.equals(Destination)){
-                    return true;
-                }
-            }
+            if(!v.here && !v.equals(Destination))
+                return false;
+            if (v.here && !v.equals(Destination) || !v.here && v.equals(Destination))
+                return true;
         }
         return false;
     }
@@ -371,21 +369,13 @@ public class LogicalBoard{
         Vertex belowRV = getVertexByCoord(sourceC+1, sourceR+1);
         
             if(direction.equals("V"))
-                if( !board.containsEdge(sourceV, rightV) ||
-                        !board.containsEdge(belowV, belowRV) ||
-                        (!board.containsEdge(sourceV, belowV) &&
-                        !board.containsEdge(rightV, belowRV))
-			)
+                if( !board.containsEdge(sourceV, rightV) || !board.containsEdge(belowV, belowRV) ||
+                    (!board.containsEdge(sourceV, belowV) || !board.containsEdge(rightV, belowRV)))
                     return false;
             else if(direction.equals("H"))
-                if( !board.containsEdge(sourceV, belowV) ||
-                        !board.containsEdge(rightV, belowRV) ||
-                        (!board.containsEdge(sourceV, rightV) &&
-                        !board.containsEdge(belowV, belowRV))
-			)
+                if( !board.containsEdge(sourceV, belowV) || !board.containsEdge(rightV, belowRV) ||
+                    (!board.containsEdge(sourceV, rightV) || !board.containsEdge(belowV, belowRV)))
                     return false;
-            else
-                return false;
         
         // Starting logic to test if winners path is blocked......
         Vertex source;

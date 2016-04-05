@@ -13,7 +13,7 @@
  */
 public class Vertex {
 
-    public Player player;
+    public boolean here;
     public int c;  // COlumn of vertex on Logical Graph
     public int r;  // Row of vertex on Logical Graph
 
@@ -21,7 +21,7 @@ public class Vertex {
     public Vertex(){
         this.r = -1;
         this.c = -1;
-        player = null;
+        here = false;
     }
     
     /**
@@ -42,22 +42,22 @@ public class Vertex {
 
     @Override
     public String toString() {
-        return "Vertex{" + "player=" + player + ", c=" + c + ", r=" + r + '}';
+        return "Vertex{" + "player= " + here + ", c= " + c + ", r= " + r + '}';
     }
 
     /**
      *
      * @param player
      */
-    public void placePlayer(Player player){
-        this.player = player;
+    public void placePlayer(){
+        here=true;
     }
     
     /**
      *
      */
     public void removePlayer(){
-        this.player = null;
+        here=false;
     }
 
     /**
@@ -65,8 +65,6 @@ public class Vertex {
      * @return
      */
     public boolean isPlayerHere(){
-        if(this.player == null)
-            return false;
-        return true;
+        return here;
     }
 }
