@@ -13,7 +13,7 @@
  */
 public class Vertex {
 
-    public Player player = null;
+    public Player player;
     public int c;  // COlumn of vertex on Logical Graph
     public int r;  // Row of vertex on Logical Graph
 
@@ -21,6 +21,7 @@ public class Vertex {
     public Vertex(){
         this.r = -1;
         this.c = -1;
+        player = null;
     }
     
     /**
@@ -44,8 +45,6 @@ public class Vertex {
         return "Vertex{" + "player=" + player + ", c=" + c + ", r=" + r + '}';
     }
 
-
-    
     /**
      *
      * @param player

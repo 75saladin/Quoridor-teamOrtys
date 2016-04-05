@@ -20,27 +20,12 @@ public class LogicalBoard{
     
     // the board as a 9X9 graph
 
-    /**
-     *
-     */
     public UndirectedGraph<Vertex, Edge> board;
     // the set of players in the game
 
-    /**
-     *
-     */
-    public Set<Player> players = new HashSet<>();
+    public Player[] players;
     // the set of edges in the game
 
-    /**
-     *
-     */
-    public Set<Edge> edges;
-    // the number of players in the game
-
-    /**
-     *
-     */
     public int playerCount;
 
     /** 
@@ -72,18 +57,37 @@ public class LogicalBoard{
                     c=0;
                     r++;
                 }
-            }   
-            this.edges = getEdgeSet();
+            }  
+            if(playerCount==2)
+                players = new Player[2];
+            else
+                players = new Player[4];
+            
             if(playerCount>=2){
-                this.addPlayer(new Player(1));
-                this.addPlayer(new Player(2));
-            }if(playerCount==4){
-                this.addPlayer(new Player(3));
-                this.addPlayer(new Player(4));
+                Player one = new Player(1);
+                players[0] = one;
+                addPlayer(one);
+                Player two = new Player(2);
+                players[1] = two;
+                addPlayer(two);
+                if(playerCount==4){
+                    Player three = new Player(3);
+                    players[2] = three;
+                    addPlayer(new Player(3));
+                    Player four = new Player(4);
+                    players[3] = four;
+                    addPlayer(four);
+                }
             }
             setWalls(playerCount);
     }
     
+    public Set<Vertex> vertexSet(){
+        return board.vertexSet();
+    }
+    public Set<Edge> edgeSet(){
+        return board.edgeSet();
+    }
     /**
      *  checkValid - returns boolean if move is valid or not and updates board
      * 
@@ -104,11 +108,14 @@ public class LogicalBoard{
      * @return Player with that playerNum
      */
     public Player getPlayer(int playerNum) {
-	for (Player p : players) {
-	    if (p.getPlayerNum()==playerNum)
-		return p;
-	}
-	return null;
+	return players[playerNum-1];
+    }
+
+    public int getPlayerNum(Player p){
+        for(int i=0;i<4;i++)
+            if(players[i].equals(p))
+                return i+1;
+        return -1;
     }
     
     /**
@@ -116,38 +123,11 @@ public class LogicalBoard{
      * @return
      */
     public int getPlayerCount(){
-        return players.size();
-    }
-    
-     /**
-     * 
-     * @return the set of vertices in board
-     */
-    public Set<Vertex> getVertexSet(){
-        return board.vertexSet();
-    }
-    
-    /**
-     *
-     * @return the set of edges in board
-     */
-    public Set<Edge> getEdgeSet(){
-        return board.edgeSet();
-    }
-    
-        // helper method to get set of all players on the board
-
-    /**
-     *
-     * @return
-     */
-    public Set<Player> getPlayers(){
-        Set<Player> players = new HashSet<Player>();
-        Set<Vertex> vertices = board.vertexSet();
-        for(Vertex v : vertices)
-            if(v.isPlayerHere())
-                players.add(v.player);
-        return players;
+        int temp = 0;
+        for(int i = 0; i<players.length;i++)
+            if(players[i]!=null)
+                temp++;
+        return temp;
     }
     
     /**
@@ -156,10 +136,8 @@ public class LogicalBoard{
      * 
      * @param player
      */
-    public void addPlayer(Player player){
-        Vertex destination = getVertexByCoord(player.getC(), player.getR());
-        destination.placePlayer(player);
-        players.add(player);
+    private void addPlayer(Player player){
+        getVertexByCoord(player.getC(), player.getR()).placePlayer(player);
     }
     
     
@@ -170,15 +148,11 @@ public class LogicalBoard{
      * @param playerNum
      */
     public void kick(int playerNum){
-        Vertex v = null;
-        Player p = null;
-        for(Player temp : players)
-            if(temp.getPlayerNum()==playerNum){
-               p = temp; 
-            }
-        v = getVertexByCoord(p.getC(), p.getR());
+        Player p = getPlayer(playerNum);
+        Vertex v = getVertexByCoord(p.getC(), p.getR());
         v.removePlayer();
-        players.remove(p);
+        
+        players[playerNum-1] = null;
     }
 
     // method takes in wall move and gets the set of edges to be removed
@@ -261,13 +235,18 @@ public class LogicalBoard{
      * @param player The player to move
      * @param move The destination to move the player to
      */
-    public void makeMove(Player player, String move) {
+    public void makeMove(int playerNum, String move) {
+        Player player = players[playerNum-1];
 	Scanner sc = new Scanner(move);
         int c = Integer.parseInt(sc.next());
         int r = Integer.parseInt(sc.next());
-        Vertex destination = getVertexByCoord(c, r);
-	destination.placePlayer(player);
-	player.setC(c);
+        
+        //source 
+        getVertexByCoord(player.getC(), player.getR()).removePlayer();
+        //destination
+        getVertexByCoord(c, r).placePlayer(player);
+	
+        player.setC(c);
 	player.setR(r);
     }
     
@@ -309,51 +288,59 @@ public class LogicalBoard{
      * @return whether or not it is a valid move
      */
     public boolean validMove(int playerNum, String move){
-        Player player = null;
-        for(Player p : players)
-          if(p.getPlayerNum() == playerNum)
-              player=p;
+        Player player = getPlayer(playerNum);
 
+        
+        // if the player doesnt exist invalid move
+        if(player == null)
+            return false;
+        
         Scanner sc = new Scanner(move);
         int c = Integer.parseInt(sc.next());
         int r = Integer.parseInt(sc.next());
+
+        if(c<0 || c>8 || r<0 ||r>8)
+            return false;
         Vertex Destination = getVertexByCoord(c, r);  // Destination of move
         Vertex Source = getVertexByCoord(player.getC(), player.getR()); // location of player
         DijkstraShortestPath<Vertex,Edge> dijkstra = new DijkstraShortestPath<>(board,Source,Destination);
-        GraphPath path = dijkstra.getPath();  // path of this move
-        List<Edge> edgeList = path.getEdgeList(); 
-        Set<Vertex> vertexOnPath = new HashSet<>();
+        //if the path doesnt exist - false
+        if(dijkstra.getPath()==null)
+            return false;
+        // if there is a player in this location
+        if(Destination.isPlayerHere()){
+            return false;
+        }
+        if(dijkstra.getPathLength()>1){
+            if(!jump(Source,Destination,dijkstra)){
+                return false;
+            }
+        }
         
-        //if the destination is outside the board there will be no vertex
-        if(Destination != null)
-            // if the destination is not the same as the current location
-            if(!Destination.equals(Source))
-                // if there is not a player in this location
-                if(!Destination.isPlayerHere())
-                    if(board.containsEdge(Source, Destination)){
-                        if(edgeList.size()>1){
-                            for(Edge e : edgeList){
-                                vertexOnPath.add(e.getTarget());
-                                vertexOnPath.add(e.getSource());
-                            }
-                            for(Vertex v : vertexOnPath)
-                                if(v.isPlayerHere() && !v.equals(Destination)){
-                                    if(!v.isPlayerHere() && v.equals(Destination))
-                                        makeMove(player, move);
-                                        return true;
-                                }
-                        }else{
-                            makeMove(player, move);
-                            return true;
-                        }
-                    }
         // if there is no edge or Destination or there is a player
         // on the destination or the source and destination are the same
         // the player cannot be a move here and needs to be kicked from the game
-        
-        return false;
+        makeMove(playerNum, move);
+        return true;
     }
 
+    public boolean jump(Vertex Source, Vertex Destination,DijkstraShortestPath dijkstra){
+        List<Edge> edgeList = dijkstra.getPathEdgeList();
+        Set<Vertex> vertexOnPath = new HashSet<>();
+        for(Edge e : edgeList){
+            vertexOnPath.add(e.getTarget());
+            vertexOnPath.add(e.getSource());
+        }
+        //vertexOnPath.remove(Source);
+        for(Vertex v : vertexOnPath){
+            if(v.isPlayerHere() && !v.equals(Destination)){
+                if(!v.isPlayerHere() && v.equals(Destination)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     /**
      *
      * @param playerNum - player placing wall 
@@ -363,11 +350,7 @@ public class LogicalBoard{
     public boolean validWall(int playerNum, String wall){
         // cannot leave if one thing is true, must check all
         // but if one thing is false we return
-        Player player = null;
-        for(Player p : players)
-          if(p.getPlayerNum() == 
-	      playerNum)
-              player=p;
+        Player player = getPlayer(playerNum);
         Scanner sc = new Scanner(wall);
         int sourceC = Integer.parseInt(sc.next());
         int sourceR = Integer.parseInt(sc.next());
@@ -412,7 +395,7 @@ public class LogicalBoard{
             // vertex that contains this Player p
             source = getVertexByCoord(p.getC(), p.getR()); 
             // if path is blocked return false
-            if(pathBlocked(source,p.getPlayerNum(),EdgeSetToRemove)){
+            if(pathBlocked(source,getPlayerNum(p),EdgeSetToRemove)){
                 return false;
             }
         }
@@ -420,6 +403,8 @@ public class LogicalBoard{
         placeWall(player, wall);
         return true;
     }
+    
+
     
     /**
      *
@@ -435,7 +420,7 @@ public class LogicalBoard{
         boolean blocked = true;
         DijkstraShortestPath<Vertex,Edge> Dijkstra;
         Vertex destination;
-        Set<Edge> boardEdgeSet = getEdgeSet();
+        Set<Edge> boardEdgeSet = board.edgeSet();
         
         UndirectedGraph<Vertex,Edge> boardCopy = new SimpleGraph<Vertex,Edge>(Edge.class);
         Graphs.addGraph(boardCopy, this.board);
@@ -490,13 +475,16 @@ public class LogicalBoard{
      *
      * @param playerCount
      */
-    public void setWalls(int playerCount){
-        if(playerCount==2)
-            for(Player p : players)
-                p.setWalls(10);
-        else
-            for(Player p : players)
-                p.setWalls(5);
+    private void setWalls(int playerCount){
+        if(playerCount==2){
+            players[0].setWalls(10);
+            players[1].setWalls(10);
+        }else{
+            players[0].setWalls(5);
+            players[1].setWalls(5);
+            players[2].setWalls(5);
+            players[3].setWalls(5);
+        }
     }
     
     //FOR TESTING PURPOSES ONLY. Removes a wall. To be called just after placing a wall.
@@ -533,10 +521,9 @@ public class LogicalBoard{
     *   @return - true or false if player has won
     */
     public boolean hasWon(int playerNum){
-        Player p = null;
-        for(Player player : players)
-            if(player.getPlayerNum()==playerNum)
-                p = player;
+        Player p = players[playerNum-1];
+        
+        
         // if he is not in the game he did not win
         if(p == null)
             return false;
@@ -569,7 +556,7 @@ public class LogicalBoard{
      * @returns true if there are more than one players
      */
     public boolean enoughPlayers(){
-        if(players.size()>1)
+        if(getPlayerCount()>1)
             return true;
         return false;
     }

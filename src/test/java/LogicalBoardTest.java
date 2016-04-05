@@ -15,12 +15,12 @@ public class LogicalBoardTest {
     @Test
     public void testConstructor() throws Exception {
         assertNotNull("Board constructed null", board);
-        assertEquals("Board has incorrect number of verticies", board.getVertexSet().size(), 81);
-        assertEquals("Board has incorrect number of edges", board.getEdgeSet().size(), 144);
+        assertEquals("Board has incorrect number of verticies", board.vertexSet().size(), 81);
+        assertEquals("Board has incorrect number of edges", board.edgeSet().size(), 144);
        
         int c = 0;
         int r = 0;
-        for (Vertex v : board.getVertexSet()) {
+        for (Vertex v : board.vertexSet()) {
             assertEquals("Vertex ["+v.c+" "+v.r+"] should have been ["+c+" "+r+"]: col mismatch", v.c, c);
             assertEquals("Vertex ["+v.c+" "+v.r+"] should have been ["+c+" "+r+"]: row mismatch", v.r, r);
             c++;        
@@ -179,8 +179,9 @@ public class LogicalBoardTest {
         }
     }
     
-    @Ignore
+    @Test
     public void validWallRejectsInvalidWalls() throws Exception {
+        board = new LogicalBoard(4);
         //Wall out of bounds: <col/row> >7 or <0
         assertFalse(board.validWall(1,"-1 4 v"));
         assertFalse(board.validWall(1,"4 -1 h"));
@@ -199,8 +200,9 @@ public class LogicalBoardTest {
         assertFalse(board.validWall(1,"7 7 h"));
     }
     
-    @Ignore
+    @Test
     public void validWallRejectsWinBlockingWall() throws Exception {
+        board = new LogicalBoard(4);
 	board.validWall(1, "0 0 h");
 	board.validWall(1, "2 0 h");
 	board.validWall(1, "4 0 h");
@@ -238,13 +240,30 @@ public class LogicalBoardTest {
     @Ignore
     public void validMovesAcceptsValidMoves() throws Exception {
 	//Moves in a circle, testing each direction
+        board = new LogicalBoard(4);
+        assertTrue(board.getVertexByCoord(4,0).isPlayerHere());
+        Player one = board.getVertexByCoord(4, 0).player;
+        assertEquals(board.getPlayerNum(one),1);
+        assertTrue(board.getVertexByCoord(4,8).isPlayerHere());
+        assertTrue(board.getVertexByCoord(0,4).isPlayerHere());
+        assertTrue(board.getVertexByCoord(8,4).isPlayerHere());
 	assertTrue(board.validMove(1, "4 1"));
+        assertEquals(board.getPlayer(1).getR(),1);
+        assertEquals(board.getPlayer(1).getC(),4);
+        assertFalse(board.getVertexByCoord(4,0).isPlayerHere());
 	assertTrue(board.validMove(1, "3 1"));
+        assertEquals(board.getPlayer(1).getR(),1);
+        assertEquals(board.getPlayer(1).getC(),3);
 	assertTrue(board.validMove(1, "4 1"));
+        assertEquals(board.getPlayer(1).getR(),1);
+        assertEquals(board.getPlayer(1).getC(),4);
+        assertFalse(board.getVertexByCoord(4,0).isPlayerHere());
 	assertTrue(board.validMove(1, "4 0"));	
+        assertEquals(board.getPlayer(1).getR(),0);
+        assertEquals(board.getPlayer(1).getC(),4);
     }
     
-    @Ignore
+    @Test
     public void validMovesRejectsInvalidMoves() throws Exception {
 	//Moves too far
 	assertFalse(board.validMove(1, "4 2"));
@@ -264,9 +283,10 @@ public class LogicalBoardTest {
 	assertFalse(board.validMove(1, "9 0"));
     }    
     
-    @Ignore
+    @Test
     public void validMovesRejectsMoreInvalidMoves() throws Exception {
 	//Move to current location
+        board = new LogicalBoard(4);
 	assertFalse(board.validMove(1, "4 0"));
 	
 	//Can't move onto player 2
@@ -277,19 +297,17 @@ public class LogicalBoardTest {
     
     @Ignore
     public void jumping() throws Exception {
-	Player one = board.getPlayer(1);
-	Player two = board.getPlayer(2);
-	board.makeMove(one, "4 4");
-	board.makeMove(two, "4 5");
+        board = new LogicalBoard(4);
+	board.makeMove(1, "4 4");
+	board.makeMove(2, "4 5");
 	assertTrue(board.validMove(1, "4 6"));
     }
     
     @Test
     public void jumpingOverAWallIsInvalid() throws Exception {
-	Player one = board.getPlayer(1);
-	Player two = board.getPlayer(2);
-	board.makeMove(one, "4 4");
-	board.makeMove(two, "4 5");
+        board = new LogicalBoard(4);
+	board.makeMove(1, "4 4");
+	board.makeMove(2, "4 5");
 	board.validWall(1, "4 4 h");
 	assertFalse(board.validMove(1, "4 6"));
     }
@@ -297,15 +315,11 @@ public class LogicalBoardTest {
     @Ignore
     public void theMegaJump() throws Exception {
 	board = new LogicalBoard(4);
-	Player one = board.getPlayer(1);
-	Player two = board.getPlayer(2);
-	Player three = board.getPlayer(3);
-	Player four = board.getPlayer(4);
 	
-	board.makeMove(one, "4 3");
-	board.makeMove(two, "4 4");
-	board.makeMove(three, "4 5");
-	board.makeMove(four, "4 6");
+	board.makeMove(1, "4 3");
+	board.makeMove(2, "4 4");
+	board.makeMove(3, "4 5");
+	board.makeMove(4, "4 6");
 	
 	assertTrue(board.validMove(1, "4 7"));
 	
@@ -314,15 +328,11 @@ public class LogicalBoardTest {
     @Ignore
     public void megaJumpingOverAWallIsInvalid() throws Exception {
 	board = new LogicalBoard(4);
-	Player one = board.getPlayer(1);
-	Player two = board.getPlayer(2);
-	Player three = board.getPlayer(3);
-	Player four = board.getPlayer(4);
 	
-	board.makeMove(one, "4 3");
-	board.makeMove(two, "4 4");
-	board.makeMove(three, "4 5");
-	board.makeMove(four, "4 6");
+	board.makeMove(1, "4 3");
+	board.makeMove(2, "4 4");
+	board.makeMove(3, "4 5");
+	board.makeMove(4, "4 6");
 	board.validWall(1, "4 4 h");
 	
 	assertTrue(board.validMove(1, "4 7"));
@@ -331,10 +341,6 @@ public class LogicalBoardTest {
     @Test
     public void testKick() throws Exception{
         board = new LogicalBoard(4);
-        Player one = board.getPlayer(1);
-        Player two = board.getPlayer(2);
-        Player three = board.getPlayer(3);
-	Player four = board.getPlayer(4);
         assertEquals(4,board.getPlayerCount());
         board.kick(1);
         assertEquals(3,board.getPlayerCount());
@@ -347,10 +353,9 @@ public class LogicalBoardTest {
     @Test
     public void testHasWon() throws Exception{
         board = new LogicalBoard(4);
-        Player one = board.getPlayer(1);
-        board.makeMove(one, "4 8");
+        board.makeMove(1, "4 8");
         assertTrue(board.hasWon(1));
-        board.makeMove(one, "4 7");
+        board.makeMove(1, "4 7");
         assertFalse(board.hasWon(1));
         board.kick(1);
         assertFalse(board.hasWon(2));

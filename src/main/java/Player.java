@@ -4,9 +4,8 @@
  *
  * @author craig
  */
-public class Player{
+public class Player {
     
-    private int playerNum;
     private int c;
     private int r;
     private int walls;
@@ -15,33 +14,27 @@ public class Player{
 
     /**
      * Player Constructor
-	 * player number will determine starting position
-	 * board will be placing it on the board logically
+     * player number will determine starting position
+     * board will be placing it on the board logically
+     *
+     * @param playerNum number of this player
      */
     public Player(int playerNum){
-            setPlayerNum(playerNum);
             if(playerNum==1){
-                setC(0);
-                setR(5);
+                this.c = 0;
+                this.r = 4;
             }if(playerNum==2){
-                setC(8);
-                setR(5);
+                this.c = 8;
+                this.r = 4;
             }if(playerNum==3){
-                setC(5);
-                setR(0);
+                this.c = 4;
+                this.r = 0;
             }if(playerNum==4){
-                setC(5);
-                setR(8);
+                this.c = 4;
+                this.r = 8;
             }
     }
   
-    public int getPlayerNum() {
-         return playerNum;
-    }
-
-    public void setPlayerNum(int playerNum) {
-        this.playerNum = playerNum;
-    }
 
     public int getC() {
         return c;
@@ -69,5 +62,33 @@ public class Player{
     
     public void setWalls(int walls) {
         this.walls = walls;
+    }
+    /*
+    @Override public boolean equals(Object other){
+        if (other == this) return true;
+        if (other == null) return false;
+        if (getClass() != other.getClass()) return false;
+        Player player = (Player)other;
+        return (r == player.r && c == player.c && walls == player.walls);
+    */
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof Player)) {
+            return false;
+        }
+
+        Player player = (Player) other;
+
+        // Custom equality check here.
+        return (r == player.r && c == player.c && walls == player.walls);
+}
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + this.c;
+        hash = 37 * hash + this.r;
+        hash = 37 * hash + this.walls;
+        return hash;
     }
 }
