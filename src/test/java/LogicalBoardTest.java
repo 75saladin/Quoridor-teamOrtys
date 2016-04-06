@@ -299,7 +299,7 @@ public class LogicalBoardTest {
 	assertTrue(boardTwo.validMove(1, "4 6"));
     }
     
-    @Ignore
+    @Test
     public void jumpingOverAWallIsInvalid() throws Exception {
 	boardTwo.makeMove(1, "4 4");
 	boardTwo.makeMove(2, "4 5");
