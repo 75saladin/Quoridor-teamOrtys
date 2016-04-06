@@ -140,6 +140,9 @@ public class ControllerTest {
         
     }
     
+    /**
+     * tests getting the player position
+     */
     @Test
     public void testGetPlayerPosition() {
         Point p1 = new Point(4, 0);
@@ -147,6 +150,19 @@ public class ControllerTest {
         
         assertEquals(p1, controller1.getPlayerPosition(1));
         assertEquals(p2, controller2.getPlayerPosition(2));
+        
+        assertEquals(p1.x, controller1.getPlayerPosition(1).x);
+    }
+    
+    @Test 
+    public void testSetPlayerPosition() {
+        Point p1 = new Point(5, 3);
+        Point p2 = new Point(2, 6);
+        controller1.setPlayerPosition(2, 5, 3);
+        controller2.setPlayerPosition(4, 2, 6);
+        assertEquals(p1, controller1.getPlayerPosition(2));
+        assertEquals(p2, controller2.getPlayerPosition(4));
+
     }
 
 }
