@@ -161,25 +161,31 @@ public class GUI extends Application implements GUIInterface {
      */
     @Override
     public void buildWall(int column, int row, String direction) {
-//        column = revert(column); row = revert(row);
-//        grid.add(new Rectangle(5.0, 50.0, Color.LAWNGREEN), column, row);
-//        row+=2;
-//        grid.add(new Rectangle(5.0, 50.0, Color.LAWNGREEN), column, row);
-//        player.setPlayerTurn();
+
+        // example [(0,0), v] will build fill in the colors for 
+        // 1, 0 and 1, 2
+        // [(0, 0), h] will fill in two rectangles 
+        // 0, 1 and 2, 1
         final int c = revert(column);
         final int r = revert(row);
+        final GridPane gp = grid;
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                grid.getChildren().remove(player.getPlayerNode(player.getPlayerTurn()));
-                System.out.println("Moving player");
-                grid.add(player.getPlayerNode(player.getPlayerTurn()), c, r);
-                player.setPlayerTurn();
+                System.out.println("Building wall");
+                if(direction.equals("v")) {
+                    gp.add(new Rectangle(5.0, 50, Color.WHITE), c + 1, r);
+                    gp.add(new Rectangle(5.0, 50, Color.WHITE), c + 1, r + 2);
+                } else {
+                    gp.add(new Rectangle(50, 5.0, Color.WHITE), c, r + 1);
+                    gp.add(new Rectangle(50, 5.0, Color.WHITE), c+2, r +1);
+                }
                 //output.appendText("Player " + player.getPlayerTurn() + " moved to " +
                               //"Column " + col + " Row " + nrow + "\n\n");
                 player.setPlayerTurn();
             }
         });
+        grid = gp;
     }
 
 
@@ -206,6 +212,11 @@ public class GUI extends Application implements GUIInterface {
             }
         });
           
+    }
+    
+    private int convertWall(int n) {
+     
+        return n;
     }
 
     /**
@@ -250,9 +261,9 @@ public class GUI extends Application implements GUIInterface {
                     gp.add(new Rectangle(50, 50, Color.BROWN), i , j);
                     gp.add(new Text("(" + i + ", " + j + ")"), i, j);
                 } else if(i % 2 != 0 && j % 2 == 0) { // vertical rectangles
-                    gp.add(new Rectangle(5.0, 50, Color.WHITE), i, j);
+                    gp.add(new Rectangle(5.0, 50, Color.BLACK), i, j);
                 }else if(i % 2 == 0 && j % 2 != 0) { // horizontal rectangles
-                    gp.add(new Rectangle(50, 5.0, Color.WHITE), i, j);
+                    gp.add(new Rectangle(50, 5.0, Color.BLACK), i, j);
                 }         
             }
         } 

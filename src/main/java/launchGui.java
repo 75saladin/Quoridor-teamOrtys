@@ -40,10 +40,11 @@ public class launchGui {
             System.out.println("column and row");
             int c = sc.nextInt();
             int r = sc.nextInt();
+            String s = sc.next();
             if(c == -1) {
                 break;
             }
-            gui.movePlayer(c, r);
+            gui.buildWall(c, r, s);
         }
         
         
