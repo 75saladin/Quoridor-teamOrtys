@@ -1,7 +1,6 @@
 
 
 import java.util.Scanner;
-import javafx.application.Application;
 
 /*
  * This is how you launch the application. 
@@ -12,22 +11,27 @@ import javafx.application.Application;
  * @author jed_lechner
  */
 public class launchGui {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         /**
          * How to launch the application thread in order to be
          * able to update the player move
+         * 
          */
-        new Thread() {
+
+        Thread t = new Thread() {
             @Override
             public void run() {
                 javafx.application.Application.launch(GUI.class);
             }
-        }.start();
+        };
+        
+        t.setDaemon(true);
+        t.start();
         /**
          * Called after launching the UI
          */
         GUI gui = GUI.waitForGUIStartUpTest();
-        gui.printSomething();
+
          
         // you can set for four player by saying 
         // gui.setPlayer(new Controller(4));
@@ -44,7 +48,14 @@ public class launchGui {
             if(c == -1) {
                 break;
             }
+            if(s.equals("stop")){
+                gui.stop();
+                break;
+            }
+                
+            
             gui.buildWall(c, r, s);
+           
         }
         
         

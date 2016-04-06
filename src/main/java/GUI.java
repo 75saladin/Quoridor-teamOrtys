@@ -78,14 +78,6 @@ public class GUI extends Application implements GUIInterface {
         latch.countDown();
     }
     
-
-    /**
-     * tester method
-     */
-    public void printSomething() {
-        System.out.println("you called a method on the application");
-    }
-    
     /**
      * 
      * @param c: The player object to set up with
@@ -93,6 +85,15 @@ public class GUI extends Application implements GUIInterface {
      */
     public void setPlayer(Controller c) {
         player = c;
+    }
+    
+    public void stopApplication() {
+        try {
+            Platform.exit(); 
+        } catch(Exception e) {
+            
+        }
+       
     }
     
     /**

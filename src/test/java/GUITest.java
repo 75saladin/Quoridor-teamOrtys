@@ -8,6 +8,7 @@
 import java.awt.Point;
 import javafx.scene.layout.Region;
 import org.junit.After;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,12 +31,16 @@ public class GUITest {
         player1 = new Controller(2);
         player2 = new Controller(4);
         
-        new Thread() {
+        Thread t = new Thread() {
             @Override
             public void run() {
                 javafx.application.Application.launch(GUI.class);
             }
-        }.start();
+        };
+        
+        t.setDaemon(true);
+        
+        t.start();
         gui = GUI.waitForGUIStartUpTest();
         gui2 = GUI.waitForGUIStartUpTest();
         gui.setPlayer(player1);
@@ -65,17 +70,13 @@ public class GUITest {
     /**
      * Tests getting the player position
      */
-    @Ignore
     @Test
     public void testGetPlayerPosition() {
         Point p1 = new Point(4, 0);
-        Point p2 = new Point(4, 0);
-        Point p3 = new Point(4, 0);
-        Point p4 = new Point(4, 0);
+        Point p2 = new Point(0, 4);
+
         
-//        assertEquals("Test player position", p, gui2.getPlayerPosition(1));
-//        assertEquals("Test player position", p2, gui2.getPlayerPosition(2));
-//        assertEquals("Test player position", p3, gui2.getPlayerPosition(3));
-//        assertEquals("Test player position", p4, gui2.getPlayerPosition(4));
+        assertEquals(p1, gui.getPlayerPosition(1));
+        assertEquals(p2, gui2.getPlayerPosition(3));
     }
 }
