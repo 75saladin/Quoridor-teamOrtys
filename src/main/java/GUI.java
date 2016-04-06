@@ -203,16 +203,19 @@ public class GUI extends Application implements GUIInterface {
             public void run() {
                 int turn = player.getPlayerTurn();
                 grid.getChildren().remove(player.getPlayerNode(turn));
-                System.out.println("Moving player");
                 grid.add(player.getPlayerNode(turn), c, r);
-                player.setPlayerTurn();
                 output.appendText("Player " + player.getPlayerTurn() + " moved to " +
                               "Column " + col + " Row " + nrow + "\n\n");
-                player.setPlayerPosition(turn, c, r);
+                System.out.println("Setting Player " + turn + " position " + col + " " + nrow);
+                player.setPlayerPosition(turn, col, nrow);
                 player.setPlayerTurn();
             }
         });
           
+    }
+    
+    public Controller getController() {
+        return player;
     }
     
     /** 

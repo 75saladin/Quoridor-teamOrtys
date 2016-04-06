@@ -1,5 +1,6 @@
 
 
+import java.awt.Point;
 import java.util.Scanner;
 
 /*
@@ -31,32 +32,24 @@ public class launchGui {
          * Called after launching the UI
          */
         GUI gui = GUI.waitForGUIStartUpTest();
-        gui.setPlayer(new Controller(4));
-
+        Controller player = new Controller(2);
+        gui.setPlayer(player);
+        
+        RandomAI ai = new RandomAI(gui);
+       
          
-        // you can set for four player by saying 
-        // gui.setPlayer(new Controller(4));
-        //gui.setPlayer(new Controller(4));
-        /**
-         * For testing purposes
-         */
-        Scanner sc = new Scanner(System.in);
         while(true) {
-            System.out.println("column and row");
-            int c = sc.nextInt();
-            int r = sc.nextInt();
-            String s = sc.next();
-            if(c == -1) {
-                break;
-            }
-            if(s.equals("stop")){
-                gui.stopApplication();
-                break;
-            }
-                
+            System.out.println("Player # and turn " + gui.getController().getPlayerTurn());
+            Point p = ai.getRandomMove(gui.getController());
             
-            gui.buildWall(c, r, s);
-           
+            if(ai.valid(p, gui.getController())) {
+                System.out.println("Point " + p);
+                System.out.println(gui.getController().getPlayerTurn());
+                gui.movePlayer(p.x, p.y);
+                Thread.sleep(5000);
+            }
+            
+            
         }
         
         

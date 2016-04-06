@@ -1,5 +1,7 @@
 
+import java.awt.Point;
 import java.util.List;
+import java.util.Random;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -13,43 +15,59 @@ import java.util.List;
  */
 public class RandomAI {
     
-    static final Controller player = new Controller(2);
+    private GUI gui;
     
-    public static void main() {
-        Thread t = new Thread() {
-            @Override
-            public void run() {
-                javafx.application.Application.launch(GUI.class);
-            }
-        };
+    public RandomAI(GUI g) {
+        gui = g;
+    }
+    
+    
+    public Point getRandomMove(Controller pl) {
+        Controller player = pl;
+        // is there a player in the surrounding squares
+        int turn = player.getPlayerTurn();
+        // current players position
+        Point p = player.getPlayerPosition(turn);
         
-        t.setDaemon(true);
-        t.start();
-        /**
-         * Called after launching the UI
-         */
-        GUI gui = GUI.waitForGUIStartUpTest();
+        Random rand = new Random();
 
-        gui.setPlayer(player);
-        
-        while(true) {
-            
-            
+        // example player1 is at 4, 0
+        // player 1 can move to (4, 1), (3, 0), or (5, 0)
+        // same column + or - 1 row or same row + or - one column
+        int move = rand.nextInt(4);
+        switch(move) {
+            case 0: // same column - 1 row
+                return new Point(p.x, p.y - 1);
+            case 1: // same column + 1 row
+                return new Point(p.x, p.y + 1);
+            case 2: // same row + 1 column
+                return new Point(p.x + 1, p.y);
+            case 3:
+                return new Point(p.x-1, p.y);
         }
+        return null;
     }
     
-    
-    public void getMoves() {
-        // is there a player in the surrounding squares 
+    public boolean valid(Point p, Controller pl) {
+        Controller player = pl;
+        int turn = player.getPlayerTurn();
+        // current players position
         
+        // next players position
+        if(turn == player.getPlayerCount()) {
+            turn = 1;
+        }else {
+            turn++;
+        }
+        // next players position
+        Point p1 = player.getPlayerPosition(turn);
         
+        if(p.equals(p1) || (p.y < 0 || p.y > 8) || (p.x < 0 || p.x > 8))
+            return false;
         
-        
+        return true;
     }
-    
-    public void makeMove() {
-        
-    }
+
     
     // you can't build walls 8, 0 
     // you can't build walls a, 8

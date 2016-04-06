@@ -105,7 +105,7 @@ public class  Controller{
      * Post: Sets the players point position
      */
     public void setPlayerPosition(int p, int col, int row) {
-        if(col < 0 && row < 0 && col > 8 && row > 8) 
+        if(col < 0 || row < 0 || col > 8 || row > 8) 
             throw new IllegalArgumentException();
         switch(p) {
             case 1:
