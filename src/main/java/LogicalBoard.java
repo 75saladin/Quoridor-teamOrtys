@@ -2,7 +2,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
-import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 
 import org.jgrapht.alg.DijkstraShortestPath;
@@ -20,7 +19,7 @@ public class LogicalBoard{
     
     // the board as a 9X9 graph
 
-    public UndirectedGraph<Vertex, Edge> board;
+    public UndirectedGraph<Vertex, Edge> board = buildGraph(new SimpleGraph<Vertex, Edge>(Edge.class));;
     // the set of players in the game
 
     public Player[] players;
@@ -34,52 +33,30 @@ public class LogicalBoard{
      * @param playerCount - number of players in this game
      */
     public LogicalBoard(int playerCount){
-            // Gotta populate the board
-            board = new SimpleGraph<Vertex, Edge>(Edge.class);
+        //this.board = buildGraph(new SimpleGraph<Vertex, Edge>(Edge.class));
 
-            GridGraphGenerator<Vertex, Edge> graphGenerator =
-                            new GridGraphGenerator<Vertex, Edge>(9, 9);
-
-            VertexFactory<Vertex> vertexFactory =
-                new ClassBasedVertexFactory<Vertex>(Vertex.class);
-
-            graphGenerator.generateGraph(board, vertexFactory, null);
-            // The graph is now constructed with no C,R Data, must fill
-            int c = 0;
-            int r = 0;
-            // Iterate through each Vertex and put in its actual position
-            // on the logical board
-            for(Vertex v : board.vertexSet()){
-                v.setC(c);   
-                v.setR(r);  
-                c++;        
-                if(c==9){   // when you reach end of the row go to next
-                    c=0;
-                    r++;
-                }
-            }  
-            if(playerCount==2)
-                players = new Player[2];
-            else
-                players = new Player[4];
+        if(playerCount==2)
+            players = new Player[2];
+        else
+            players = new Player[4];
             
-            if(playerCount>=2){
-                Player one = new Player(1);
-                players[0] = one;
-                addPlayer(one);
-                Player two = new Player(2);
-                players[1] = two;
-                addPlayer(two);
-                if(playerCount==4){
-                    Player three = new Player(3);
-                    players[2] = three;
-                    addPlayer(new Player(3));
-                    Player four = new Player(4);
-                    players[3] = four;
-                    addPlayer(four);
-                }
+        if(playerCount>=2){
+            Player one = new Player(1);
+            players[0] = one;
+            addPlayer(one);
+            Player two = new Player(2);
+            players[1] = two;
+            addPlayer(two);
+            if(playerCount==4){
+                Player three = new Player(3);
+                players[2] = three;
+                addPlayer(new Player(3));
+                Player four = new Player(4);
+                players[3] = four;
+                addPlayer(four);
             }
-            setWalls(playerCount);
+        }
+        setWalls(playerCount);
     }
     
     public Set<Vertex> vertexSet(){
@@ -411,6 +388,11 @@ public class LogicalBoard{
         
         UndirectedGraph<Vertex,Edge> boardCopy = new SimpleGraph<Vertex,Edge>(Edge.class);
         Graphs.addGraph(boardCopy, this.board);
+        // builds the graph with correct C R Vertex Positions
+        boardCopy = buildGraph(boardCopy);
+        // puts each player on the board in the correct position
+        for(Player p: players)
+            getVertexByCoord(p.getC(), p.getR(), boardCopy).placePlayer();
         // Removing Edges to place wall temporarily to check if winning path is 
         //  blocked will replace at the end before returning
         
@@ -548,4 +530,32 @@ public class LogicalBoard{
         return false;
     }
     
+    
+    
+    
+    public UndirectedGraph<Vertex,Edge> buildGraph(UndirectedGraph<Vertex,Edge> graph){
+        GridGraphGenerator<Vertex, Edge> graphGenerator =
+                            new GridGraphGenerator<Vertex, Edge>(9, 9);
+
+        VertexFactory<Vertex> vertexFactory =
+                new ClassBasedVertexFactory<Vertex>(Vertex.class);
+
+        graphGenerator.generateGraph(graph, vertexFactory, null);
+        // The graph is now constructed with no C,R Data, must fill
+        int c = 0;
+        int r = 0;
+        // Iterate through each Vertex and put in its actual position
+        // on the logical board
+        for(Vertex v : graph.vertexSet()){
+            v.setC(c);   
+            v.setR(r);  
+            c++;        
+            if(c==9){   // when you reach end of the row go to next
+                c=0;
+                r++;
+            }
+        }
+        return graph;
+    }
+       
 }
