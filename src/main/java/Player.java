@@ -76,4 +76,9 @@ public class Player {
         return (r == player.r && c == player.c && walls == player.walls);
     }
 
+    @Override
+    public String toString() {
+        return "Player{" + "c=" + c + ", r=" + r + ", walls=" + walls + '}';
+    }
+
 }
