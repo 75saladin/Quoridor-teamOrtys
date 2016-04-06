@@ -18,8 +18,6 @@ public interface GUIInterface {
     
     public abstract String getPlayerPosition(int num); //return the current players position
     
-    public abstract Region getRootRegion();
-    
     public abstract void buildWall(int column, int row, String direction); // build a wall based on a string passed in
     
     public abstract void movePlayer(int column, int row); // move a player based on a string passed in

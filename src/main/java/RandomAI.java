@@ -14,9 +14,10 @@ import java.util.List;
 public class RandomAI {
     
     List<String> walls;
+    Controller player;
     
-    public RandomAI() {
-        
+    public RandomAI(Controller player) {
+        this.player = player;
     }
     
     public String getPlayerPostition(int playerNumber) {

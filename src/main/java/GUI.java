@@ -16,7 +16,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -148,15 +147,6 @@ public class GUI extends Application implements GUIInterface {
         int row = convert(grid.getRowIndex(player.getPlayerNode(num)));
         int column = convert(grid.getColumnIndex(player.getPlayerNode(num)));
         return "Player:" + num + " c:" + column + " r:" + row;
-    }
-    
-    /**
-     * 
-     * @return the root region of the gridPane
-     */
-    @Override
-    public Region getRootRegion() {
-        return root;
     }
 
     /**
@@ -439,7 +429,8 @@ public class GUI extends Application implements GUIInterface {
         label.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         VBox buttons = new VBox(10, label, up, down, left, right);
         buttons.setAlignment(Pos.CENTER);
-        buttons.setStyle("-fx-background-color: #008000ff");
+        buttons.getStylesheets().addAll(this.getClass().getResource("Layout.css").toExternalForm());
+        buttons.setId("title");
         return buttons;
     }
     
