@@ -1,8 +1,10 @@
 
 
 
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 
 /* This object handles the number of players in the game
  * 
@@ -17,10 +19,16 @@ public class  Controller{
     private int playerCount; // the number of players competing
     private int playerTurn; // which player turn it is
     
-    private Circle player1;
-    private Circle player2;
-    private Circle player3;
-    private Circle player4;
+    private StackPane player1;
+    private StackPane player2;
+    private StackPane player3;
+    private StackPane player4;
+    
+    private Circle circle1;
+    private Circle circle2;
+    private Circle circle3;
+    private Circle circle4;
+
     
     
     // constructor
@@ -69,7 +77,7 @@ public class  Controller{
      * @param n: The player turn
      * @return The player object of whose turn it is. 
      */
-    public Circle getPlayerNode(int n) {
+    public StackPane getPlayerNode(int n) {
         switch(n) {
             case 1:
                 return player1;
@@ -88,11 +96,16 @@ public class  Controller{
      * @param n: The number of players. 
      */
     private void setPlayers(int n) {
-        player1 = new Circle(25.0, Color.BLUE);
-        player2 = new Circle(25.0, Color.DARKGREEN);
+        
+        circle1 = new Circle(20.0, Color.BLUE);
+        player1 = new StackPane(circle1, new Text("1"));
+        circle2 = new Circle(20.0, Color.DARKGREEN);
+        player2 = new StackPane(circle2, new Text("2"));
         if(n == 4) {
-            player3 = new Circle(25.0, Color.YELLOW);
-            player4 = new Circle(25.0, Color.DARKORANGE);
+            circle3 = new Circle(20.0, Color.YELLOW);
+            player3 = new StackPane(circle3, new Text("3"));
+            circle4 = new Circle(20.0, Color.DARKORANGE);
+            player4 = new StackPane(circle4, new Text("4"));
         } 
     }
    

@@ -4,8 +4,10 @@ import java.util.concurrent.CountDownLatch;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,6 +16,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -114,6 +117,7 @@ public class GUI extends Application implements GUIInterface {
         root.setTop(setTitleRegion());
         root.setBottom(setBottomRegion()); 
         TRUMPwall();
+        centerAlignNodes();
     }
     
     /**
@@ -129,6 +133,7 @@ public class GUI extends Application implements GUIInterface {
         
         stage.setScene(scene);
         stage.show();
+        stage.setFullScreen(true);
         
     }
     
@@ -168,24 +173,23 @@ public class GUI extends Application implements GUIInterface {
         // 0, 1 and 2, 1
         final int c = revert(column);
         final int r = revert(row);
-        final GridPane gp = grid;
+
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 System.out.println("Building wall");
                 if(direction.equals("v")) {
-                    gp.add(new Rectangle(5.0, 50, Color.WHITE), c + 1, r);
-                    gp.add(new Rectangle(5.0, 50, Color.WHITE), c + 1, r + 2);
+                    grid.add(new Rectangle(7.0, 50, Color.WHITE), c + 1, r);
+                    grid.add(new Rectangle(7.0, 50, Color.WHITE), c + 1, r + 2);
                 } else {
-                    gp.add(new Rectangle(50, 5.0, Color.WHITE), c, r + 1);
-                    gp.add(new Rectangle(50, 5.0, Color.WHITE), c+2, r +1);
+                    grid.add(new Rectangle(50, 7.0, Color.WHITE), c, r + 1);
+                    grid.add(new Rectangle(50, 7.0, Color.WHITE), c+2, r +1);
                 }
                 //output.appendText("Player " + player.getPlayerTurn() + " moved to " +
                               //"Column " + col + " Row " + nrow + "\n\n");
                 player.setPlayerTurn();
             }
         });
-        grid = gp;
     }
 
 
@@ -214,10 +218,6 @@ public class GUI extends Application implements GUIInterface {
           
     }
     
-    private int convertWall(int n) {
-     
-        return n;
-    }
 
     /**
      * 
@@ -250,7 +250,8 @@ public class GUI extends Application implements GUIInterface {
     private GridPane drawGrid(int numOfPlayers) {
         player = new Controller(numOfPlayers);
         GridPane gp = new GridPane();
-        gp.setAlignment(Pos.CENTER); 
+        
+         
 
         
 
@@ -258,13 +259,15 @@ public class GUI extends Application implements GUIInterface {
         for(int i = 0; i < 17; i++) {
             for(int j = 0; j < 17; j++) {
                 if(i % 2 == 0 && j%2==0) {
+                    
                     gp.add(new Rectangle(50, 50, Color.BROWN), i , j);
-                    gp.add(new Text("(" + i + ", " + j + ")"), i, j);
+                    //gp.add(new Text("(" + i + ", " + j + ")"), i, j);
                 } else if(i % 2 != 0 && j % 2 == 0) { // vertical rectangles
-                    gp.add(new Rectangle(5.0, 50, Color.BLACK), i, j);
+                    gp.add(new Rectangle(7.0, 50, Color.BLACK), i, j);
                 }else if(i % 2 == 0 && j % 2 != 0) { // horizontal rectangles
-                    gp.add(new Rectangle(50, 5.0, Color.BLACK), i, j);
-                }         
+                    gp.add(new Rectangle(50, 7.0, Color.BLACK), i, j);
+                } 
+                
             }
         } 
         
@@ -275,9 +278,25 @@ public class GUI extends Application implements GUIInterface {
             gp.add(player.getPlayerNode(3), 0, 8);
             gp.add(player.getPlayerNode(4), 16, 8);
         }
+        
+        
+        gp.setAlignment(Pos.CENTER);
         gp.getStylesheets().addAll(this.getClass().getResource("Layout.css").toExternalForm());
         gp.setId("board"); // set the css id of the gridpane
+        
         return gp;
+    }
+    
+    /**
+     * Aligns all of the nodes to the center
+     */
+    private void centerAlignNodes() {
+        List <Node> childrens = grid.getChildren();
+        
+        for(Node c : childrens) {
+            GridPane.setHalignment(c, HPos.CENTER);
+            GridPane.setValignment(c, VPos.CENTER);
+        }
     }
     
     /**
