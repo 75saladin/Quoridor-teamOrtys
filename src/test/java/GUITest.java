@@ -5,13 +5,11 @@
  */
 
 
+import java.awt.Point;
 import javafx.scene.layout.Region;
 import org.junit.After;
-import org.junit.Assert;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -27,7 +25,6 @@ public class GUITest {
     private Controller player1;
     private Controller player2;
     
-    @Ignore
     @Before
     public void setUpClass() {
         player1 = new Controller(2);
@@ -46,7 +43,6 @@ public class GUITest {
         region = new Region();
     }
     
-    @Ignore
     @After
     public void tearDown() {
         gui = null;
@@ -59,22 +55,12 @@ public class GUITest {
     /**
      * Test the set up and check for null gui. 
      */
-    @Ignore
     @Test
     public void testGUISetUp() {
         assertNotNull(gui);
         assertNotNull(gui2);
     }
     
-    /**
-     * Test getRootRegion
-     */
-    @Ignore
-    @Test
-    public void testGetRootRegion() {
-        assertNotNull("Grab the gui borderpane ", gui.getRootRegion());
-        assertNotNull("Grab the gui borderpane ", gui2.getRootRegion());
-    }
     
     /**
      * Tests getting the player position
@@ -82,10 +68,11 @@ public class GUITest {
     @Ignore
     @Test
     public void testGetPlayerPosition() {
-        String p = "Player:1 c:4 r:0";
-        String p2 = "Player:2 c:4 r:8";
-        String p3 = "Player:3 c:0 r:4";
-        String p4 = "Player:4 c:8 r:4";
+        Point p1 = new Point(4, 0);
+        Point p2 = new Point(4, 0);
+        Point p3 = new Point(4, 0);
+        Point p4 = new Point(4, 0);
+        
 //        assertEquals("Test player position", p, gui2.getPlayerPosition(1));
 //        assertEquals("Test player position", p2, gui2.getPlayerPosition(2));
 //        assertEquals("Test player position", p3, gui2.getPlayerPosition(3));

@@ -1,7 +1,7 @@
 
 
 
-import javafx.scene.layout.Region;
+import java.awt.Point;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -16,7 +16,7 @@ import javafx.scene.layout.Region;
 public interface GUIInterface {
     
     
-    public abstract String getPlayerPosition(int num); //return the current players position
+    public abstract Point getPlayerPosition(int num); //return the current players position
     
     public abstract void buildWall(int column, int row, String direction); // build a wall based on a string passed in
     

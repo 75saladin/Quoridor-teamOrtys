@@ -20,10 +20,8 @@ public class RandomAI {
         this.player = player;
     }
     
-    public String getPlayerPostition(int playerNumber) {
-        
-        return "";
-    }
+    
+
     
     public void getMoves() {
         // is there a player in the surrounding squares 

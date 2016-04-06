@@ -1,4 +1,5 @@
 
+import java.awt.Point;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import javafx.application.Application;
@@ -142,25 +143,18 @@ public class GUI extends Application implements GUIInterface {
      * @return the player position of the player you asked for
      */
     @Override
-    public String getPlayerPosition(int num) {
-        assert(num < 4);
-        int row = convert(grid.getRowIndex(player.getPlayerNode(num)));
-        int column = convert(grid.getColumnIndex(player.getPlayerNode(num)));
-        return "Player:" + num + " c:" + column + " r:" + row;
+    public Point getPlayerPosition(int num) {
+        return player.getPlayerPosition(num);
     }
 
     /**
      * 
      * @param column: the column to move the player
      * @param row: the column to move the player
+     * builds a wall based on the c, r, and direction
      */
     @Override
     public void buildWall(int column, int row, String direction) {
-
-        // example [(0,0), v] will build fill in the colors for 
-        // 1, 0 and 1, 2
-        // [(0, 0), h] will fill in two rectangles 
-        // 0, 1 and 2, 1
         final int c = revert(column);
         final int r = revert(row);
 

@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 
+import java.awt.Point;
 import javafx.scene.shape.Circle;
 import org.junit.After;
 import org.junit.Before;
@@ -136,10 +137,16 @@ public class ControllerTest {
     @Test
     public void testGetPlayerNode() {
         assertNull(new Controller(2).getPlayerNode(4));
-        Controller p = new Controller(4);
-        assertEquals(controller1.getPlayerNode(4), controller1.getPlayerNode(4));
-        Circle c = controller1.getPlayerNode(2);
-        assertEquals(c, controller1.getPlayerNode(2));
+        
+    }
+    
+    @Test
+    public void testGetPlayerPosition() {
+        Point p1 = new Point(4, 0);
+        Point p2 = new Point(4, 8);
+        
+        assertEquals(p1, controller1.getPlayerPosition(1));
+        assertEquals(p2, controller2.getPlayerPosition(2));
     }
 
 }
