@@ -13,18 +13,35 @@ import java.util.List;
  */
 public class RandomAI {
     
-    List<String> walls;
-    Controller player;
+    static final Controller player = new Controller(2);
     
-    public RandomAI(Controller player) {
-        this.player = player;
+    public static void main() {
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                javafx.application.Application.launch(GUI.class);
+            }
+        };
+        
+        t.setDaemon(true);
+        t.start();
+        /**
+         * Called after launching the UI
+         */
+        GUI gui = GUI.waitForGUIStartUpTest();
+
+        gui.setPlayer(player);
+        
+        while(true) {
+            
+            
+        }
     }
     
     
-
-    
     public void getMoves() {
         // is there a player in the surrounding squares 
+        
         
         
         

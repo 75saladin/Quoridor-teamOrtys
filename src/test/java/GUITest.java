@@ -39,7 +39,6 @@ public class GUITest {
         };
         
         t.setDaemon(true);
-        
         t.start();
         gui = GUI.waitForGUIStartUpTest();
         gui2 = GUI.waitForGUIStartUpTest();
@@ -50,6 +49,8 @@ public class GUITest {
     
     @After
     public void tearDown() {
+        gui.stopApplication();
+        gui2.stopApplication();
         gui = null;
         gui2 = null;
         region = null;

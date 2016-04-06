@@ -31,6 +31,7 @@ public class launchGui {
          * Called after launching the UI
          */
         GUI gui = GUI.waitForGUIStartUpTest();
+        gui.setPlayer(new Controller(4));
 
          
         // you can set for four player by saying 
@@ -49,7 +50,7 @@ public class launchGui {
                 break;
             }
             if(s.equals("stop")){
-                gui.stop();
+                gui.stopApplication();
                 break;
             }
                 

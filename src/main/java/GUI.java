@@ -1,5 +1,6 @@
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import javafx.application.Application;
@@ -42,7 +43,9 @@ public class GUI extends Application implements GUIInterface {
     /* Players in the Game. Right now they are represented by circles */
     private Controller player; 
     
-    private TextArea output = null;
+    private TextArea output = null; // text area to broadcast game events
+    
+    private List<Wall> walls;
     
     // on off latch
     public static final CountDownLatch latch = new CountDownLatch(1);
@@ -55,7 +58,8 @@ public class GUI extends Application implements GUIInterface {
      */
     public GUI() {
         guiStartUpTest(this);
-        player = new Controller(2); 
+        player = new Controller(2);
+        walls = new ArrayList();
     }
     
     // waiting for gui to set up
@@ -87,6 +91,9 @@ public class GUI extends Application implements GUIInterface {
         player = c;
     }
     
+    /**
+     *  closes the application upon call
+     */
     public void stopApplication() {
         try {
             Platform.exit(); 
@@ -158,6 +165,8 @@ public class GUI extends Application implements GUIInterface {
     public void buildWall(int column, int row, String direction) {
         final int c = revert(column);
         final int r = revert(row);
+        
+        walls.add(new Wall(column, row, direction));
 
         Platform.runLater(new Runnable() {
             @Override
@@ -188,19 +197,30 @@ public class GUI extends Application implements GUIInterface {
     public void movePlayer(int col, int nrow) {
         final int c = revert(col);
         final int r = revert(nrow);
+        
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                grid.getChildren().remove(player.getPlayerNode(player.getPlayerTurn()));
+                int turn = player.getPlayerTurn();
+                grid.getChildren().remove(player.getPlayerNode(turn));
                 System.out.println("Moving player");
-                grid.add(player.getPlayerNode(player.getPlayerTurn()), c, r);
+                grid.add(player.getPlayerNode(turn), c, r);
                 player.setPlayerTurn();
                 output.appendText("Player " + player.getPlayerTurn() + " moved to " +
                               "Column " + col + " Row " + nrow + "\n\n");
+                player.setPlayerPosition(turn, c, r);
                 player.setPlayerTurn();
             }
         });
           
+    }
+    
+    /** 
+     * 
+     * @return The list of walls. Temporarily there for testing purposes. 
+     */
+    public List<Wall> getWallList() {
+        return walls;
     }
     
 
