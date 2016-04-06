@@ -3,11 +3,6 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -23,7 +18,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -166,12 +160,26 @@ public class GUI extends Application implements GUIInterface {
      * @param row: the column to move the player
      */
     @Override
-    public void buildWall(int column, int row) {
+    public void buildWall(int column, int row, String direction) {
 //        column = revert(column); row = revert(row);
 //        grid.add(new Rectangle(5.0, 50.0, Color.LAWNGREEN), column, row);
 //        row+=2;
 //        grid.add(new Rectangle(5.0, 50.0, Color.LAWNGREEN), column, row);
 //        player.setPlayerTurn();
+        final int c = revert(column);
+        final int r = revert(row);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                grid.getChildren().remove(player.getPlayerNode(player.getPlayerTurn()));
+                System.out.println("Moving player");
+                grid.add(player.getPlayerNode(player.getPlayerTurn()), c, r);
+                player.setPlayerTurn();
+                //output.appendText("Player " + player.getPlayerTurn() + " moved to " +
+                              //"Column " + col + " Row " + nrow + "\n\n");
+                player.setPlayerTurn();
+            }
+        });
     }
 
 
@@ -191,6 +199,9 @@ public class GUI extends Application implements GUIInterface {
                 grid.getChildren().remove(player.getPlayerNode(player.getPlayerTurn()));
                 System.out.println("Moving player");
                 grid.add(player.getPlayerNode(player.getPlayerTurn()), c, r);
+                player.setPlayerTurn();
+                output.appendText("Player " + player.getPlayerTurn() + " moved to " +
+                              "Column " + col + " Row " + nrow + "\n\n");
                 player.setPlayerTurn();
             }
         });
