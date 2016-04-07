@@ -45,7 +45,6 @@ public class GUI extends Application implements GUIInterface {
     
     private TextArea output = null; // text area to broadcast game events
     
-    private List<Wall> walls;
     
     // on off latch
     public static final CountDownLatch latch = new CountDownLatch(1);
@@ -59,7 +58,6 @@ public class GUI extends Application implements GUIInterface {
     public GUI() {
         guiStartUpTest(this);
         player = new Controller(2);
-        walls = new ArrayList();
     }
     
     // waiting for gui to set up
@@ -98,7 +96,7 @@ public class GUI extends Application implements GUIInterface {
         try {
             Platform.exit(); 
         } catch(Exception e) {
-            
+            e.printStackTrace();
         }
        
     }
@@ -111,20 +109,11 @@ public class GUI extends Application implements GUIInterface {
         // place the board in the center
         // the controls on the right, description left, and label top
         root = new BorderPane();
-        
-        //root.setId("root");
-	//root.getStylesheets().addAll(this.getClass().getResource("Layout.css").toExternalForm());
-        
         grid = drawGrid(player.getPlayerCount());
-        
         root.setCenter(grid);
-        
-        
         root.setLeft(setDescriptionRegion());
-        root.setRight(setRightRegion());
         root.setTop(setTitleRegion());
         root.setBottom(setBottomRegion()); 
-        TRUMPwall();
         centerAlignNodes();
     }
     
@@ -141,16 +130,29 @@ public class GUI extends Application implements GUIInterface {
         
         stage.setScene(scene);
         stage.show();
-        stage.setFullScreen(true);
+        //stage.setFullScreen(true);
         
     }
-    
-    /**
-     * 
-     * @param num: The number of player
-     * @return the player position of the player you asked for
-     */
+
     @Override
+    public void update(String move) {
+        move = move.toLowerCase();
+        int column = 0;
+        int row = 0;
+        String[] s = move.split(" ");
+        if(move.contains("h") || move.contains("v")) {
+            column = parseToInt(s[0]);
+            row = parseToInt(s[1]);
+            buildWall(column, row, s[2]);
+        } else {
+            column = parseToInt(s[0]);
+            row = parseToInt(s[1]);
+            movePlayer(column, row);
+        }
+
+    }
+    
+
     public Point getPlayerPosition(int num) {
         return player.getPlayerPosition(num);
     }
@@ -166,8 +168,6 @@ public class GUI extends Application implements GUIInterface {
         final int c = revert(column);
         final int r = revert(row);
         
-        walls.add(new Wall(column, row, direction));
-
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -206,7 +206,6 @@ public class GUI extends Application implements GUIInterface {
                 grid.add(player.getPlayerNode(turn), c, r);
                 output.appendText("Player " + player.getPlayerTurn() + " moved to " +
                               "Column " + col + " Row " + nrow + "\n\n");
-                System.out.println("Setting Player " + turn + " position " + col + " " + nrow);
                 player.setPlayerPosition(turn, col, nrow);
                 player.setPlayerTurn();
             }
@@ -217,13 +216,16 @@ public class GUI extends Application implements GUIInterface {
     public Controller getController() {
         return player;
     }
-    
-    /** 
-     * 
-     * @return The list of walls. Temporarily there for testing purposes. 
-     */
-    public List<Wall> getWallList() {
-        return walls;
+
+
+        
+    private int parseToInt(String s) {
+        try { 
+            return Integer.parseInt(s);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
     
 
@@ -258,11 +260,6 @@ public class GUI extends Application implements GUIInterface {
     private GridPane drawGrid(int numOfPlayers) {
         player = new Controller(numOfPlayers);
         GridPane gp = new GridPane();
-        
-         
-
-        
-
         // loop through and add rectangles to create the board
         for(int i = 0; i < 17; i++) {
             for(int j = 0; j < 17; j++) {
@@ -373,124 +370,7 @@ public class GUI extends Application implements GUIInterface {
         // set the max width 
         stackPane.setMinHeight(200);
         return stackPane;
-    }
-    
-    // used to set on mouseClick for game
-    // note the board can only be clicked if it is your turn
-    // and there isn't a wall there
-    private Region setRightRegion() {
-        Button up = new Button("UP");       
-        Button down = new Button("DOWN");      
-        Button left = new Button("LEFT");
-        Button right = new Button("RIGHT");
-        
-        // needs to know if there is a wall or other player in that spot 
-        // if there is handle the specific situation
-        // need move validator
-                
-        // up moves the player node up two rows
-        up.setOnAction((ActionEvent e) -> {
-            int row = GridPane.getRowIndex(player.getPlayerNode(player.getPlayerTurn()))-2;
-            int column = GridPane.getColumnIndex(player.getPlayerNode(player.getPlayerTurn()));
-            grid.getChildren().remove(player.getPlayerNode(player.getPlayerTurn()));
-            grid.add(player.getPlayerNode(player.getPlayerTurn()), column, row);
-            output.clear();
-            output.appendText("Player " + player.getPlayerTurn() + " moved to " +
-                              "Column " + convert(column) + " Row " + convert(row) + "\n\n");
-            player.setPlayerTurn();
-            
-        });
-        
-        // down moves the player node down two rows
-        down.setOnAction((ActionEvent e) -> {
-            int row = GridPane.getRowIndex(player.getPlayerNode(player.getPlayerTurn())) + 2;
-            int column = GridPane.getColumnIndex(player.getPlayerNode(player.getPlayerTurn()));
-            grid.getChildren().remove(player.getPlayerNode(player.getPlayerTurn()));
-            grid.add(player.getPlayerNode(player.getPlayerTurn()), column, row);
-            output.clear();
-            output.appendText("Player " + player.getPlayerTurn() + " moved to " +
-                              "Column " + convert(column) + " Row " + convert(row) + "\n\n");
-            player.setPlayerTurn();
-        });
-        
-        // left moves the player node left two columns
-        left.setOnAction((ActionEvent e) -> {
-            int row = GridPane.getRowIndex(player.getPlayerNode(player.getPlayerTurn()));
-            int column = GridPane.getColumnIndex(player.getPlayerNode(player.getPlayerTurn())) - 2;
-            grid.getChildren().remove(player.getPlayerNode(player.getPlayerTurn()));
-            grid.add(player.getPlayerNode(player.getPlayerTurn()), column, row);
-            output.clear();
-            output.appendText("Player " + player.getPlayerTurn() + " moved to " +
-                              "Column " + convert(column) + " Row " + convert(row) + "\n\n");
-            player.setPlayerTurn();
-        });
-        
-        // right moves the player node right two columns
-        right.setOnAction((ActionEvent e) -> {
-            int row = GridPane.getRowIndex(player.getPlayerNode(player.getPlayerTurn()));
-            int column = GridPane.getColumnIndex(player.getPlayerNode(player.getPlayerTurn())) + 2;
-            grid.getChildren().remove(player.getPlayerNode(player.getPlayerTurn()));
-            grid.add(player.getPlayerNode(player.getPlayerTurn()), column, row);
-            output.clear();
-            output.appendText("Player " + player.getPlayerTurn() + " moved to " +
-                              "Column " + convert(column) + " Row " + convert(row) + "\n\n");
-            player.setPlayerTurn();
-        });
-
-        // set the minimum width of the buttons
-        up.setMinWidth(100.0);
-        down.setMinWidth(100.0);
-        left.setMinWidth(100.0);
-        right.setMinWidth(100.0);
-        // create a label for the controls called controls
-        Label label = new Label("      Controls       ");
-        label.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        VBox buttons = new VBox(10, label, up, down, left, right);
-        buttons.setAlignment(Pos.CENTER);
-        buttons.getStylesheets().addAll(this.getClass().getResource("Layout.css").toExternalForm());
-        buttons.setId("title");
-        return buttons;
-    }
-    
-
-    // pre: none
-    // post: sets a wall in the area clicked. It will cover two rows or two columns
-    // depending on where you click. As of right now the click is between the squares
-    private void TRUMPwall() {
-        List <Node> childrens = grid.getChildren();
-        
-        // still need valid wall placement check
-        
-        // loop through and add the event to each node
-        childrens.stream().forEach((node) -> {
-            node.setOnMousePressed((MouseEvent event) -> {
-                int row = GridPane.getRowIndex(node);
-                int column = GridPane.getColumnIndex(node);
-                if(row % 2 == 0 && column % 2 != 0 && row != 16) { // vertical wall
-                    grid.add(new Rectangle(5.0, 50.0, Color.LAWNGREEN), column, row);
-                    row+=2;
-                    grid.add(new Rectangle(5.0, 50.0, Color.LAWNGREEN), column, row);
-                    player.setPlayerTurn();
-                } else if (row % 2 != 0 && column % 2 == 0 && column != 16) { // horizontal wall
-                    grid.add(new Rectangle(50, 5.0, Color.LAWNGREEN), column, row);
-                    column += 2;
-                    grid.add(new Rectangle(50, 5.0, Color.LAWNGREEN), column, row);
-                    player.setPlayerTurn();
-                }
-            });
-        });
-    }
-    
-    
-    // this sets the effect on the player
-    // currently in progress
-    private void setEffectOnPlayer() {
-        StackPane sp = new StackPane();
-        sp.getStylesheets().addAll(this.getClass().getResource("Layout.css").toExternalForm());
-        sp.getChildren().addAll(player.getPlayerNode(player.getPlayerTurn()));
-        sp.setId("circles");
-        sp.getChildren().addAll(player.getPlayerNode(player.getPlayerTurn()));
-    }    
+    } 
     
     public static void main(String[] args) {
         Application.launch(args);
