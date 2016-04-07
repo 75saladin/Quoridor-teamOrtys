@@ -8,7 +8,8 @@ public class Parser {
     
     String[] arrayCharles = strip.split(" ");
 
-    String noKey = strip.substring(strip.indexOf(" " + 1));
+    if(strip.contains(" "))
+      String noKey = strip.substring(strip.indexOf(" " + 1));
 
     String opCode = arrayCharles[0];
 
