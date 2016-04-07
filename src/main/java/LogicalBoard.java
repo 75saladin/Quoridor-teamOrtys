@@ -171,7 +171,7 @@ public class LogicalBoard{
      * @return if valid move
      */
     public boolean checkValid(int playerNum,String move){
-        if(move.equals("error"))
+        if(move.equals("Error"))
             return false;
         if(move.length()==3 || move.length()==5){
             if(move.length()==3){

@@ -62,4 +62,21 @@ public class launchGui {
             ai2.update("2 "+ move2);          
         }   
     }
+      /**
+    * Handles starting the GUI.
+    * Nothing more. Nothing less.
+    *
+    * @param pNum number of players in game
+    */
+  public static void startGUI(int pNum){
+    new Thread() {
+      @Override
+      public void run() {
+        javafx.application.Application.launch(GUI.class);
+      }
+    }.start();
+    GUI gui = GUI.waitForGUIStartUpTest();
+    if(pNum == 4)
+      gui.setPlayer(new Controller(pNum));
+  }
 }
