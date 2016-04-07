@@ -8,6 +8,8 @@ public class Parser {
     
     String[] arrayCharles = strip.split(" ");
 
+    String noKey = strip.substring(strip.indexOf(" " + 1));
+
     String opCode = arrayCharles[0];
 
     switch(opCode) {
@@ -20,7 +22,7 @@ public class Parser {
       case "MYOUSHU":
         //          handleMyoushu();
       case "TESUJI":
-        return strip;
+        return noKey;
       case "ATARI":
         //          handleAtari();
       case "GOTE":
