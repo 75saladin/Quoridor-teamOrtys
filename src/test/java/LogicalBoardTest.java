@@ -124,45 +124,52 @@ public class LogicalBoardTest {
     }
     
     @Test
-    public void placeHorizontalWallShouldRemoveCorrectEdges() throws Exception {
-        Vertex src = boardTwo.getVertexByCoord(1,1);
-        Vertex below = boardTwo.getVertexByCoord(1,2);
-        Vertex right = boardTwo.getVertexByCoord(2,1);
-        Vertex belowRight = boardTwo.getVertexByCoord(2,2);
-        
-        assertTrue(boardTwo.board.containsEdge(src, right));
-        assertTrue(boardTwo.board.containsEdge(right, belowRight));
-        assertTrue(boardTwo.board.containsEdge(belowRight, below));
-        assertTrue(boardTwo.board.containsEdge(below, src));
-        
-        boardTwo.placeWall(1,"1 1 h");
-        
-        assertTrue(boardTwo.board.containsEdge(src, right));
-        assertFalse(boardTwo.board.containsEdge(right, belowRight));
-        assertTrue(boardTwo.board.containsEdge(belowRight, below));
-        assertFalse(boardTwo.board.containsEdge(below, src));
-    }
+    public void placeWallShouldRemoveCorrectEdges() throws Exception {
+        Random r = new Random();
+        int randC;
+        int randR;
+        String dir;
+        String placedWalls = "";
     
-    @Test
-    public void placeVerticalWallShouldRemoveCorrectEdges() throws Exception {
-        Vertex src = boardTwo.getVertexByCoord(1,1);
-        Vertex below = boardTwo.getVertexByCoord(1,2);
-        Vertex right = boardTwo.getVertexByCoord(2,1);
-        Vertex belowRight = boardTwo.getVertexByCoord(2,2);
+        for (int i=0; i<20; i++) {
+            randC = r.nextInt(8);
+            randR = r.nextInt(8);
+            if (r.nextInt(2)==0)
+                dir = "v";
+            else
+                dir = "h";
+                
+            String wall = ""+randC+" "+randR+" "+dir;
+            
+            Vertex src = boardTwo.getVertexByCoord(randC,randR);
+            Vertex below = boardTwo.getVertexByCoord(randC,randR+1);
+            Vertex right = boardTwo.getVertexByCoord(randC+1,randR);
+            Vertex belowRight = boardTwo.getVertexByCoord(randC+1,randR+1);
         
-        assertTrue(boardTwo.board.containsEdge(src, right));
-        assertTrue(boardTwo.board.containsEdge(right, belowRight));
-        assertTrue(boardTwo.board.containsEdge(belowRight, below));
-        assertTrue(boardTwo.board.containsEdge(below, src));
+            assertTrue("Iteration "+i+" with wall: "+wall+" after successfully placing:"+ placedWalls, boardTwo.board.containsEdge(src, right));
+            assertTrue("Iteration "+i+" with wall: "+wall+" after successfully placing:"+ placedWalls, boardTwo.board.containsEdge(right, belowRight));
+            assertTrue("Iteration "+i+" with wall: "+wall+" after successfully placing:"+ placedWalls, boardTwo.board.containsEdge(belowRight, below));
+            assertTrue("Iteration "+i+" with wall: "+wall+" after successfully placing:"+ placedWalls, boardTwo.board.containsEdge(below, src));
         
-        boardTwo.placeWall(1,"1 1 v");
-        
-        assertFalse(boardTwo.board.containsEdge(src, right));
-        assertTrue(boardTwo.board.containsEdge(right, belowRight));
-        assertFalse(boardTwo.board.containsEdge(belowRight, below));
-        assertTrue(boardTwo.board.containsEdge(below, src));
+            boardTwo.placeWall(1, wall);
+            
+            if (dir.equals("h")) {
+                assertTrue("Iteration "+i+" with wall: "+wall+" after successfully placing:"+ placedWalls, boardTwo.board.containsEdge(src, right));
+                assertFalse("Iteration "+i+" with wall: "+wall+" after successfully placing:"+ placedWalls, boardTwo.board.containsEdge(right, belowRight));
+                assertTrue("Iteration "+i+" with wall: "+wall+" after successfully placing:"+ placedWalls, boardTwo.board.containsEdge(belowRight, below));
+                assertFalse("Iteration "+i+" with wall: "+wall+" after successfully placing:"+ placedWalls, boardTwo.board.containsEdge(below, src));
+            } else {
+                assertFalse("Iteration "+i+" with wall: "+wall+" after successfully placing:"+ placedWalls, boardTwo.board.containsEdge(src, right));
+                assertTrue("Iteration "+i+" with wall: "+wall+" after successfully placing:"+ placedWalls, boardTwo.board.containsEdge(right, belowRight));
+                assertFalse("Iteration "+i+" with wall: "+wall+" after successfully placing:"+ placedWalls, boardTwo.board.containsEdge(belowRight, below));
+                assertTrue("Iteration "+i+" with wall: "+wall+" after successfully placing:"+ placedWalls, boardTwo.board.containsEdge(below, src));
+            }
+            
+            placedWalls += " " + wall + ",";
+            boardTwo.removeWall(wall);
+        }
     }
-    
+ 
     @Test
     public void getEdgesToRemoveForHorizontalWallShouldReturnTwoCorrectEdges() throws Exception {
         Vertex src = boardTwo.getVertexByCoord(1,1);
