@@ -24,6 +24,12 @@ public class Vertex {
         here = false;
     }
     
+    public boolean isHere(){
+        if(here)
+            return true;
+        return false;
+    }
+    
     /**
      *
      * @param c
@@ -42,7 +48,7 @@ public class Vertex {
 
     @Override
     public String toString() {
-        return "Vertex{" + "player= " + here + ", c= " + c + ", r= " + r + '}';
+        return "{"+here+", " + c + "," + r + "}";
     }
 
     /**

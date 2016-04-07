@@ -19,7 +19,7 @@ public class LogicalBoard{
     
     // the board as a 9X9 graph
 
-    public UndirectedGraph<Vertex, Edge> board = buildGraph(new SimpleGraph<Vertex, Edge>(Edge.class));;
+    public UndirectedGraph<Vertex, Edge> board = new SimpleGraph<Vertex, Edge>(Edge.class);
     // the set of players in the game
 
     public Player[] players;
@@ -33,8 +33,14 @@ public class LogicalBoard{
      * @param playerCount - number of players in this game
      */
     public LogicalBoard(int playerCount){
-        //this.board = buildGraph(new SimpleGraph<Vertex, Edge>(Edge.class));
+        GridGraphGenerator<Vertex, Edge> graphGenerator =
+                            new GridGraphGenerator<Vertex, Edge>(9, 9);
 
+        VertexFactory<Vertex> vertexFactory =
+                new ClassBasedVertexFactory<Vertex>(Vertex.class);
+
+        graphGenerator.generateGraph(board, vertexFactory, null);
+        board = buildGraph(board);
         if(playerCount==2)
             players = new Player[2];
         else
@@ -155,15 +161,25 @@ public class LogicalBoard{
         // node below and to the right of source node
         Vertex br = getVertexByCoord(pc+1, pr+1);
         
+        Edge s2r = board.getEdge(s,r);
+        Edge b2br = board.getEdge(b,br);
+        Edge s2b = board.getEdge(s,b);
+        Edge r2br = board.getEdge(r,br);
+        
+        
         Set <Edge> remove = new HashSet<Edge>();
         
         // adding edges to the set to be removed based on wall placement direction
         if(d.equals("V")){
+            if(s2r==null || b2br ==null)
+                return null;
             // edge from source to right
             remove.add(board.getEdge(s, r));
             // edge from node below source to node below and to the right
             remove.add(board.getEdge(b, br));
         }else{
+            if(s2b==null || r2br ==null)
+                return null;
             // edge from source to node below the source
             remove.add(board.getEdge(s,b));
             // edge from node to the right of source to node below and to the right
@@ -219,12 +235,12 @@ public class LogicalBoard{
         int r = Integer.parseInt(sc.next());
         
         //source 
-        getVertexByCoord(player.getC(), player.getR()).here = false;
+        getVertexByCoord(player.getC(), player.getR()).removePlayer();
         //destination
-        getVertexByCoord(c, r).here = true;
+        getVertexByCoord(c, r).placePlayer();
 	
         player.setC(c);
-		player.setR(r);
+        player.setR(r);
     }
     
     /**
@@ -237,26 +253,10 @@ public class LogicalBoard{
      */
     public void placeWall(int playerNum, String wall){
         Player player = players[playerNum-1];
-        Scanner sc = new Scanner(wall);
-        int cS = Integer.parseInt(sc.next()); // Column of beginning Vertex
-        int rS = Integer.parseInt(sc.next()); // Row of beginning Vertex
-        String direction = sc.next();
-	
-	// getting positions of the vertexes for this wall
-        Vertex sourceV = getVertexByCoord(cS, rS);
-        Vertex belowV = getVertexByCoord(cS, rS+1);
-        Vertex rightV = getVertexByCoord(cS+1, rS);
-        Vertex belowRV = getVertexByCoord(cS+1, rS+1);
-	
-		if (direction.toUpperCase().equals("V")) {
-			board.removeEdge(sourceV, rightV);
-			board.removeEdge(belowV, belowRV);
-			player.decrementWall();
-		} else if (direction.toUpperCase().equals("H")){
-			board.removeEdge(sourceV, belowV);
-			board.removeEdge(rightV, belowRV);
-			player.decrementWall();
-		}
+        Set<Edge> edgesToRemove = getEdgesToRemove(wall);
+        for(Edge e : edgesToRemove)
+            board.removeEdge(e);
+        player.decrementWall();
     }      
 
     /**
@@ -302,20 +302,22 @@ public class LogicalBoard{
     }
 
     public boolean jump(Vertex Source, Vertex Destination,DijkstraShortestPath dijkstra){
+        boolean isValidJump = false;
         List<Edge> edgeList = dijkstra.getPathEdgeList();
         Set<Vertex> vertexOnPath = new HashSet<>();
         for(Edge e : edgeList){
             vertexOnPath.add(e.getTarget());
             vertexOnPath.add(e.getSource());
         }
-        vertexOnPath.remove(Source);
+        
         for(Vertex v : vertexOnPath){
-            if(!v.here && !v.equals(Destination))
+            if(v.isHere() && !v.equals(Destination) || !v.isHere() && v.equals(Destination))
+                    isValidJump = true;
+            if(v.isHere() && v.equals(Destination)||!v.isHere() && !v.equals(Destination))
                 return false;
-            if (v.here && !v.equals(Destination) || !v.here && v.equals(Destination))
-                return true;
+            
         }
-        return false;
+        return isValidJump;
     }
     /**
      *
@@ -339,30 +341,19 @@ public class LogicalBoard{
         if (sourceC>7 || sourceR>7 || sourceC<0 || sourceR<0)
             return false;
         
-        // getting positions of the vertexes for this wall
-        Vertex sourceV = getVertexByCoord(sourceC, sourceR);
-        Vertex belowV = getVertexByCoord(sourceC, sourceR+1);
-        Vertex rightV = getVertexByCoord(sourceC+1, sourceR);
-        Vertex belowRV = getVertexByCoord(sourceC+1, sourceR+1);
         
-        if(direction.equals("V"))
-            if(!board.containsEdge(sourceV, rightV) || !board.containsEdge(belowV, belowRV))
-                return false;
-        else if(direction.equals("H"))
-            if(!board.containsEdge(sourceV, belowV) || !board.containsEdge(rightV, belowRV))
-                return false;
         
-        // Starting logic to test if winners path is blocked......
-        Vertex source;
-        // need this edgeset to test if path is blocked
+        
+        // there should always be two edges to remove!
         Set<Edge> EdgeSetToRemove = getEdgesToRemove(wall);
+        if(EdgeSetToRemove==null)
+            return false;
+        // Starting logic to test if winners path is blocked......
         for(Player p : players){
             // vertex that contains this Player p
-            source = getVertexByCoord(p.getC(), p.getR()); 
             // if path is blocked return false
-            if(pathBlocked(source,getPlayerNum(p),EdgeSetToRemove)){
+            if(pathBlocked(getPlayerNum(p),EdgeSetToRemove))
                 return false;
-            }
         }
         // if we get here return true
         placeWall(playerNum, wall);
@@ -381,24 +372,26 @@ public class LogicalBoard{
      * @param edgeSet
      * @return
      */
-    public boolean pathBlocked(Vertex source,int playerNum,Set<Edge> edgeSet){
-        boolean blocked = true;
+    public boolean pathBlocked(int playerNum,Set<Edge> edgeSet){
+        Player p = getPlayer(playerNum);
+        boolean blocked = false;
         DijkstraShortestPath<Vertex,Edge> Dijkstra;
         Vertex destination;
+        Vertex source = getVertexByCoord(p.getC(),p.getR());
         
         UndirectedGraph<Vertex,Edge> boardCopy = new SimpleGraph<Vertex,Edge>(Edge.class);
         Graphs.addGraph(boardCopy, this.board);
         // builds the graph with correct C R Vertex Positions
         boardCopy = buildGraph(boardCopy);
         // puts each player on the board in the correct position
-        for(Player p: players)
-            getVertexByCoord(p.getC(), p.getR(), boardCopy).placePlayer();
+        for(Player temp: players)
+            getVertexByCoord(temp.getC(), temp.getR(), boardCopy).placePlayer();
         // Removing Edges to place wall temporarily to check if winning path is 
         //  blocked will replace at the end before returning
         
-        for(Edge e : edgeSet) {
+        // Remove edges from board for test to see if path is blocked
+        for(Edge e : edgeSet)
                 boardCopy.removeEdge(e);
-        }
 
         switch(playerNum){
         
@@ -406,32 +399,32 @@ public class LogicalBoard{
                 for(int i = 0; i<9; i++){
                     destination = getVertexByCoord(i, 8, boardCopy); // bottom wall of nodes
                     Dijkstra = new DijkstraShortestPath<Vertex,Edge>(boardCopy,source,destination);
-                    if(Dijkstra.getPath() != null) // .getPath() returns null if there is no path
-                        blocked = false;
+                    if(Dijkstra.getPath() == null) // .getPath() returns null if there is no path
+                        blocked = true;
                 }
             
             case 2:
                 for(int i = 0; i<9; i++){
                     destination = getVertexByCoord(i, 0,boardCopy);  // top wall of nodes
                     Dijkstra = new DijkstraShortestPath<Vertex,Edge>(boardCopy,source,destination);
-                    if(Dijkstra.getPath() != null)
-                        blocked = false;
+                    if(Dijkstra.getPath() == null)
+                        blocked = true;
                 }    
             
             case 3:
                 for(int i = 0; i<9; i++){
                     destination = getVertexByCoord(8, i,boardCopy); // right wall of nodes
                     Dijkstra = new DijkstraShortestPath<Vertex,Edge>(boardCopy,source,destination);
-                    if(Dijkstra.getPath() != null)
-                        blocked = false;
+                    if(Dijkstra.getPath() == null)
+                        blocked = true;
                 }    
             
             case 4:
                 for(int i = 0; i<9; i++){
                     destination = getVertexByCoord(0, i,boardCopy); // left wall of nodes
                     Dijkstra = new DijkstraShortestPath<Vertex,Edge>(boardCopy,source,destination);
-                    if(Dijkstra.getPath() != null)
-                        blocked = false;
+                    if(Dijkstra.getPath() == null)
+                        blocked = true;
                 }
         }
 
@@ -534,13 +527,7 @@ public class LogicalBoard{
     
     
     public UndirectedGraph<Vertex,Edge> buildGraph(UndirectedGraph<Vertex,Edge> graph){
-        GridGraphGenerator<Vertex, Edge> graphGenerator =
-                            new GridGraphGenerator<Vertex, Edge>(9, 9);
 
-        VertexFactory<Vertex> vertexFactory =
-                new ClassBasedVertexFactory<Vertex>(Vertex.class);
-
-        graphGenerator.generateGraph(graph, vertexFactory, null);
         // The graph is now constructed with no C,R Data, must fill
         int c = 0;
         int r = 0;

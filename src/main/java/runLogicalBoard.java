@@ -11,6 +11,7 @@
 public class runLogicalBoard {
     public static void main(String[]args){
         LogicalBoard board = new LogicalBoard(2);
+        
         System.out.println("Player 1: "+board.getPlayer(1));
         board.validMove(1, "4 2");
         System.out.println("Player 1: "+board.getPlayer(1));
@@ -46,6 +47,11 @@ public class runLogicalBoard {
         board.checkValid(2, "4 8 V");
         println("Player 2: "+board.getPlayer(1).toString());
         println("Player 2 tried to place an invalid wall");
+        board = new LogicalBoard(2);
+        board.validWall(1, "0 0 h");
+	board.validWall(1, "2 0 h");
+	board.validWall(1, "4 0 h");
+	board.validWall(1, "6 0 h");
     }
     public static void println(String print){
         System.out.println(print);

@@ -63,15 +63,7 @@ public class Player {
     public void setWalls(int walls) {
         this.walls = walls;
     }
-    
-    /* NOT SURE IF THIS DOES THE SAME THING AS THAT \/
-    @Override public boolean equals(Object other){
-        if (other == this) return true;
-        if (other == null) return false;
-        if (getClass() != other.getClass()) return false;
-        Player player = (Player)other;
-        return (r == player.r && c == player.c && walls == player.walls);
-    */
+
     public boolean equals(Player player) {
         return (r == player.r && c == player.c && walls == player.walls);
     }

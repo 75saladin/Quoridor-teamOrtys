@@ -1,6 +1,9 @@
 import org.junit.*;
 import java.util.Random;
 import java.util.Set;
+import org.jgrapht.Graphs;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.graph.SimpleGraph;
 import static org.junit.Assert.*;
 
 public class LogicalBoardTest {
@@ -18,10 +21,12 @@ public class LogicalBoardTest {
     public void testConstructorFourPlayer() throws Exception {
         assertNotNull("Board constructed null", boardTwo);
         assertNotNull("Board constructed null", boardFour);
-        assertEquals("Board has incorrect number of verticies", boardTwo.vertexSet().size(), 81);
-        assertEquals("Board has incorrect number of verticies", boardFour.vertexSet().size(), 81);
-        assertEquals("Board has incorrect number of edges", boardTwo.edgeSet().size(), 144);
-        assertEquals("Board has incorrect number of edges", boardFour.edgeSet().size(), 144);
+        assertEquals("Board Two has incorrect number of verticies", boardTwo.vertexSet().size(), 81);
+        assertEquals("Board Four has incorrect number of verticies", boardFour.vertexSet().size(), 81);
+        assertEquals("Board Two has incorrect number of edges", boardTwo.edgeSet().size(), 144);
+        assertEquals("Board Four has incorrect number of edges", boardFour.edgeSet().size(), 144);
+        assertEquals("Board Two has incorrect number of players", boardTwo.getPlayerCount(),2);
+        assertEquals("Board Four has incorrect number of players", boardFour.getPlayerCount(),4);
         int c = 0;
         int r = 0;
         for (Vertex v : boardTwo.vertexSet()) {
@@ -73,6 +78,35 @@ public class LogicalBoardTest {
 	assertTrue(boardTwo.board.containsEdge(below, center));
 	assertFalse(boardTwo.board.containsEdge(center, belowRight));
 	assertFalse(boardTwo.board.containsEdge(right, below));
+    }
+    
+    
+    @Test
+    public void TestGraphCopy() throws Exception{
+                
+        UndirectedGraph<Vertex,Edge> boardCopy = new SimpleGraph<>(Edge.class);
+        Graphs.addGraph(boardCopy, this.boardTwo.board);
+        // builds the graph with correct C R Vertex Positions
+        boardCopy = boardTwo.buildGraph(boardCopy);
+        while(boardCopy.vertexSet().size()!=0){
+            for(Vertex v : boardTwo.board.vertexSet())
+                assertTrue(boardCopy.removeVertex(v));
+        }
+        
+        assertFalse(boardCopy.vertexSet().size()==boardTwo.board.vertexSet().size());
+        
+        assertEquals("boardCopy Vertex Set should be empty",boardCopy.vertexSet().size(),0);
+        assertEquals("boardTwo Vertex Set should be empty",boardTwo.vertexSet().size(),81);
+        boardCopy = new SimpleGraph<>(Edge.class);
+        Graphs.addGraph(boardCopy, this.boardTwo.board);
+        // builds the graph with correct C R Vertex Positions
+        boardCopy = boardTwo.buildGraph(boardCopy);
+        while(boardCopy.edgeSet().size()!=0){
+            for(Edge e : boardTwo.board.edgeSet())
+                assertTrue(boardCopy.removeEdge(e));
+        }
+        assertEquals("boardCopy Edge Set should be empty",boardCopy.edgeSet().size(),0);
+        assertEquals("boardTwo Edge Set should be empty",boardTwo.edgeSet().size(),144);
     }
     
     @Test
@@ -136,9 +170,7 @@ public class LogicalBoardTest {
         Vertex right = boardTwo.getVertexByCoord(2,1);
         Vertex belowRight = boardTwo.getVertexByCoord(2,2);
         
-        Edge srcRight = boardTwo.board.getEdge(src, right);
         Edge rightBelowRight = boardTwo.board.getEdge(right, belowRight);
-        Edge belowRightBelow = boardTwo.board.getEdge(belowRight, below);
         Edge belowSrc = boardTwo.board.getEdge(below, src);
         
         Set<Edge> remove = boardTwo.getEdgesToRemove("1 1 h");
@@ -156,15 +188,19 @@ public class LogicalBoardTest {
         Vertex belowRight = boardTwo.getVertexByCoord(2,2);
         
         Edge srcRight = boardTwo.board.getEdge(src, right);
-        Edge rightBelowRight = boardTwo.board.getEdge(right, belowRight);
         Edge belowRightBelow = boardTwo.board.getEdge(belowRight, below);
-        Edge belowSrc = boardTwo.board.getEdge(below, src);
         
         Set<Edge> remove = boardTwo.getEdgesToRemove("1 1 v");
         assertEquals("There should always be two edges to remove.", remove.size(), 2);
         for (Edge e : remove) {
             assertTrue(e==srcRight||e==belowRightBelow);
         }
+        
+        assertTrue(boardTwo.checkValid(1,"1 1 h"));
+        
+        //Edges should be removed when a wall is placed!
+        assertNull(boardTwo.getEdgesToRemove("1 1 h"));
+        assertNull(boardTwo.getEdgesToRemove("2 1 h"));
     }
     
     @Test
@@ -191,27 +227,32 @@ public class LogicalBoardTest {
 		assertFalse(boardTwo.validWall(1,"8 4 v"));
 		assertFalse(boardTwo.validWall(1,"4 8 h"));
 
-		boardTwo.placeWall(1,"1 1 h");
-		boardTwo.placeWall(1,"7 7 v");
-
 		//Wall overlaps another wall
-		assertFalse(boardTwo.validWall(1,"2 1 h"));
-		assertFalse(boardTwo.validWall(1,"7 6 v"));
+                assertTrue(boardTwo.checkValid(1,"1 1 h"));
+                assertEquals(boardTwo.edgeSet().size(),142);
+                assertFalse("This wall should overlap prev wall",boardTwo.validWall(1,"2 1 h")); 
+                
+                //Wall overlaps another wall
+                assertTrue(boardTwo.checkValid(1,"7 7 v"));
+                assertFalse(boardTwo.validWall(1,"7 6 v"));
+		
+		
+		
 
 		//Wall intersects another wall
 		assertFalse(boardTwo.validWall(1,"1 1 v"));
 		assertFalse(boardTwo.validWall(1,"7 7 h"));
     }
     
-    @Ignore
+    @Test
     public void validWallRejectsWinBlockingWall() throws Exception {
 	boardTwo.validWall(1, "0 0 h");
 	boardTwo.validWall(1, "2 0 h");
 	boardTwo.validWall(1, "4 0 h");
 	boardTwo.validWall(1, "6 0 h");
-	boardTwo.validWall(1, "7 0 v");
+	assertFalse(boardTwo.validWall(1, "7 0 v"));
 	
-	assertFalse(boardTwo.validWall(1, "7 1 h"));
+	assertTrue(boardTwo.validWall(1, "7 1 h"));
     }
     
     @Test
@@ -261,12 +302,13 @@ public class LogicalBoardTest {
         assertEquals(boardTwo.getPlayer(1).getC(),4);
     }
     
-    @Ignore
+    @Test
     public void validMovesRejectsInvalidMoves() throws Exception {
 	//Moves too far
 	assertFalse(boardTwo.checkValid(1, "4 2"));
 	assertFalse(boardTwo.checkValid(1, "6 0"));
-	assertFalse(boardTwo.checkValid(1, "2 0"));
+	assertFalse("should not be able to move to "+boardTwo.getVertexByCoord(2, 0).toString(),
+                boardTwo.checkValid(1, "2 0"));
 	
 	//Tries to jump over a horizontal wall then a vertical wall
 	assertTrue(boardTwo.checkValid(1, "3 0 h"));
@@ -296,6 +338,8 @@ public class LogicalBoardTest {
     public void jumping() throws Exception {
 	boardTwo.makeMove(1, "4 4");
 	boardTwo.makeMove(2, "4 5");
+        assertTrue(boardTwo.getVertexByCoord(4, 5).here);
+        assertTrue(boardTwo.getVertexByCoord(4, 4).here);
 	assertTrue(boardTwo.validMove(1, "4 6"));
     }
     
@@ -318,7 +362,7 @@ public class LogicalBoardTest {
 	
     }
     
-    @Ignore
+    @Test
     public void megaJumpingOverAWallIsInvalid() throws Exception {
 	boardFour.makeMove(1, "4 3");
 	boardFour.makeMove(2, "4 4");
@@ -326,7 +370,7 @@ public class LogicalBoardTest {
 	boardFour.makeMove(4, "4 6");
 	boardFour.validWall(1, "4 4 h");
 	
-	assertTrue(boardFour.validMove(1, "4 7"));
+	assertFalse(boardFour.validMove(1, "4 7"));
 	
     }
     @Test

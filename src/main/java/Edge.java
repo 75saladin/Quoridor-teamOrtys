@@ -25,6 +25,6 @@ public class Edge extends DefaultEdge{
     }
     
     @Override public String toString(){
-           return "(" + this.getSource().toString() + ":" + this.getTarget().toString()+ ")";
+           return "("+this.getSource().toString() + ":" + this.getTarget().toString()+ ")\n";
     }
 }
