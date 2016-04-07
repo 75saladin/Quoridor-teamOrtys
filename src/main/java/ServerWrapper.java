@@ -167,7 +167,7 @@ public class ServerWrapper implements Runnable{
    */
   private void miniParse(String in){
     if(in.startsWith("MYOUSHU")){
-      String[] arrHold = AI.getMove.split(" ");
+	String[] arrHold = AI.getMove().split(" ");
       if(arrHold[2].equals("0")){
         sendPawnMove(Integer.parseInt(arrHold[0]), 
                      Integer.parseInt(arrHold[1]));
