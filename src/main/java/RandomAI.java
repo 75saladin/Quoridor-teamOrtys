@@ -122,6 +122,7 @@ public class RandomAI {
                     player2BestMove = EdgeTarget;
         }
 
+
         // if we need to make a jump of any kind
         // this second iteration out of the first is so that we get
         // the next position based off of best move
@@ -139,10 +140,10 @@ public class RandomAI {
         
         // if this players path is shorter, move player position to here
         if(this.playerNum==1)
-            if(playerOnePathLength<playerTwoPathLength)
+            //if(playerOnePathLength<playerTwoPathLength)
                 return player1BestMove.c + " " + player1BestMove.r;
         else
-            if(playerOnePathLength>playerTwoPathLength)
+            //if(playerOnePathLength>playerTwoPathLength)
                 return player2BestMove.c + " " + player2BestMove.r;
 
         // START LOGIC FOR CORRECT WALL PLACEMENT IF Opponent has a shorter path
@@ -150,7 +151,7 @@ public class RandomAI {
         
         
 
-        return "";
+        //return "";
     }
     
     

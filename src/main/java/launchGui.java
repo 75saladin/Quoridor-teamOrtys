@@ -35,23 +35,31 @@ public class launchGui {
         Controller player = new Controller(2);
         gui.setPlayer(player);
         
-        RandomAI ai = new RandomAI(gui);
+        RandomAI ai1 = new RandomAI(2, 1);
+        RandomAI ai2 = new RandomAI(2, 2);
        
          
         while(true) {
-            System.out.println("Player # and turn " + gui.getController().getPlayerTurn());
-            Point p = ai.getRandomMove(gui.getController());
+            String move1 = ai1.getMove();
+            String[] s = move1.split(" ");
+            int one = Integer.parseInt(s[0]);
+            int two = Integer.parseInt(s[1]);
+            gui.movePlayer(one, two);
             
-            if(ai.valid(p, gui.getController())) {
-                System.out.println("Point " + p);
-                System.out.println(gui.getController().getPlayerTurn());
-                gui.movePlayer(p.x, p.y);
-                Thread.sleep(5000);
-            }
+            ai1.update(1, move1);
+            ai2.update(1, move1);
             
+            Thread.sleep(2000);
             
-        }
-        
-        
+            String move2 = ai2.getMove();
+            s = move2.split(" ");
+            one = Integer.parseInt(s[0]);
+            two = Integer.parseInt(s[1]);
+            
+            gui.movePlayer(one, two);
+            
+            ai1.update(2, move2);
+            ai2.update(2, move2);          
+        }   
     }
 }
