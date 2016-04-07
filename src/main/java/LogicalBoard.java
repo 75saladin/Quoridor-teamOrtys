@@ -331,9 +331,6 @@ public class LogicalBoard{
         if (sourceC>7 || sourceR>7 || sourceC<0 || sourceR<0)
             return false;
         
-        
-        // need to add logic for criss crossing walls
-        
         // there should always be two edges to remove!
         Set<Edge> EdgeSetToRemove = getEdgesToRemove(wall);
         if(EdgeSetToRemove==null || EdgeSetToRemove.size()<2)
@@ -347,14 +344,12 @@ public class LogicalBoard{
         }
         
         if(direction.equals("V")){
-            if(getEdgesToRemove(sourceC + " " + sourceR + " H")!=null)
-                if(getEdgesToRemove(sourceC + " " + sourceR + " H").size()<1)
-                    return false;
+            if(getEdgesToRemove(sourceC + " " + sourceR + " H").size()==0)
+                return false;
         }
         if(direction.equals("H")){
-            if(getEdgesToRemove(sourceC + " " + sourceR + " v")!=null)
-                if(getEdgesToRemove(sourceC + " " + sourceR + " V").size()<1)
-                    return false;
+            if(getEdgesToRemove(sourceC + " " + sourceR + " v").size()==0)
+                return false;
         }
         
         // if we get here return true
@@ -463,20 +458,16 @@ public class LogicalBoard{
         
         // adding edges to the set to be removed based on wall placement direction
         if(d.equals("V")){
-            if(s2r==null || b2br ==null)
-                return null;
-            // edge from source to right
-            remove.add(board.getEdge(s, r));
-            // edge from node below source to node below and to the right
-            remove.add(board.getEdge(b, br));
+            if(s2r!=null)
+		remove.add(board.getEdge(s, r));
+	    if(b2br!=null)
+		remove.add(board.getEdge(b, br));
         }else{
-            if(s2b==null || r2br ==null)
-                return null;
-            // edge from source to node below the source
-            remove.add(board.getEdge(s,b));
-            // edge from node to the right of source to node below and to the right
-            remove.add(board.getEdge(r,br));
-        }
+            if(s2b!=null)
+		remove.add(board.getEdge(s,b));
+	    if(r2br!=null)
+		remove.add(board.getEdge(r,br));
+	    }
         return remove;
     }
     
@@ -496,11 +487,9 @@ public class LogicalBoard{
             players[3].setWalls(5);
         }
     }
-    
-    //FOR TESTING PURPOSES ONLY. Removes a wall. To be called just after placing a wall.
 
     /**
-     *
+     * FOR TESTING PURPOSES ONLY. Removes a wall. To be called just after placing a wall.
      * @param wall
      */
     public void removeWall(String wall) {

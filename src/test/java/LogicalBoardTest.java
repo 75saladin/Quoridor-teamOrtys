@@ -211,6 +211,24 @@ public class LogicalBoardTest {
     }
     
     @Test
+    public void getEdgesToRemoveShouldReturnNoEdgesForAnAlreadyPlacedWall() throws Exception {
+	Random rand = new Random();
+        String direction;
+        String wallString;
+        for (int i=0; i<20; i++) {
+            if (rand.nextInt(2)==0)
+                direction = "h";
+            else
+                direction = "v";  
+            wallString = ""+rand.nextInt(8)+" "+rand.nextInt(8)+" "+direction;
+	    
+            assertTrue(boardTwo.validWall(0,wallString));
+	    assertEquals(boardTwo.getEdgesToRemove(wallString).size(), 0);
+	    boardTwo.removeWall(wallString);
+	}
+    }
+    
+    @Test
     public void validWallAcceptsValidWalls() throws Exception {
         Random rand = new Random();
         String direction;
@@ -246,30 +264,66 @@ public class LogicalBoardTest {
     
     @Test
     public void validWallRejectsInvalidWalls() throws Exception {
-		//Wall out of bounds: <col/row> >7 or <0
-		assertFalse(boardTwo.validWall(1,"-1 4 v"));
-		assertFalse(boardTwo.validWall(1,"4 -1 h"));
-		assertFalse(boardTwo.validWall(1,"8 4 v"));
-		assertFalse(boardTwo.validWall(1,"4 8 h"));
+	//Wall out of bounds: <col/row> >7 or <0
+	assertFalse(boardTwo.validWall(1,"-1 4 v"));
+	assertFalse(boardTwo.validWall(1,"4 -1 h"));
+	assertFalse(boardTwo.validWall(1,"8 4 v"));
+	assertFalse(boardTwo.validWall(1,"4 8 h"));
 
-		//Wall overlaps another wall
-                assertTrue(boardTwo.checkValid(1,"1 1 h"));
-                assertEquals(boardTwo.edgeSet().size(),142);
-                assertFalse("This wall should overlap prev wall",boardTwo.validWall(1,"2 1 h")); 
-             
-                // wall is cris cross with another wall
-                //assertFalse(boardTwo.checkValid(1,"1 1 v"));
-                
-                //Wall overlaps another wall
-                assertTrue(boardTwo.checkValid(1,"7 7 v"));
-                assertFalse(boardTwo.validWall(1,"7 7 h"));
-		
-		
-		
+	Random rand = new Random();
+	int c;
+	int r;
+        String dir;
+        String wallString;
+	String badWall;
+	
+	//Wall overlaps another wall (ie, one half of the wall is the same as 
+	//one half of the other wall)
+        for (int i=0; i<20; i++) {
+	    //nothing in last 2 cols and rows; need to be able to overlap
+	    c = rand.nextInt(7);
+	    r = rand.nextInt(7);
+            if (rand.nextInt(2)==0) {
+                dir = "h";
+	        badWall = ""+(c+1)+" "+r+" "+dir;
+	    } else {
+		dir = "v";
+                badWall = ""+c+" "+(r+1)+" "+dir;
+	    }
+	    
+	    wallString = ""+c+" "+r+" "+dir;
+	    
+	    assertEquals(boardTwo.edgeSet().size(), 144);
+	    assertTrue(boardTwo.validWall(0, wallString));
+	    assertEquals(boardTwo.edgeSet().size(), 142);
+	    assertFalse(boardTwo.validWall(0, badWall));
+	    boardTwo.removeWall(wallString);
+	}
+	
+	
+	String opDir;
+	
+        //Wall intersects (ie, crisscross) another wall
+        for (int i=0; i<20; i++) {
+	    c = rand.nextInt(8);
+	    r = rand.nextInt(8);
+            if (rand.nextInt(2)==0) {
+		dir = "h";
+		opDir = "v";
+	    } else {
+		dir = "v";
+		opDir = "h";
+	    }
+	    wallString = ""+c+" "+r+" "+dir;
+	    badWall = ""+c+" "+r+" "+opDir;
+	    
+	    assertTrue("Failed on iteration "+i+" on good wall "+wallString+" and bad wall "+badWall, 
+		       boardTwo.validWall(0, wallString));
+	    assertFalse("Failed on iteration "+i+" on good wall "+wallString+" and bad wall "+badWall, 
+			boardTwo.validWall(0, badWall));
+	    boardTwo.removeWall(wallString);
+	}
 
-		//Wall intersects another wall
-		assertFalse(boardTwo.validWall(1,"7 7 v"));
-		assertFalse(boardTwo.validWall(1,"7 7 h"));
     }
     
     @Test
@@ -336,12 +390,12 @@ public class LogicalBoardTest {
 	assertFalse(boardTwo.checkValid(1, "4 2"));
 	assertFalse(boardTwo.checkValid(1, "6 0"));
 	assertFalse("should not be able to move to "+boardTwo.getVertexByCoord(2, 0).toString(),
-        boardTwo.checkValid(1, "2 0"));
+                    boardTwo.checkValid(1, "2 0"));
 	
 	//Tries to jump over a horizontal wall then a vertical wall
 	assertTrue(boardTwo.checkValid(1, "3 0 h"));
 	assertFalse(boardTwo.checkValid(1, "4 1"));
-	boardTwo.validWall(1, "4 0 v");
+	assertTrue(boardTwo.validWall(1, "4 0 v"));
 	assertFalse(boardTwo.checkValid(1, "5 0"));
 	
 	//Tries to leave the board
@@ -369,6 +423,10 @@ public class LogicalBoardTest {
         assertTrue(boardTwo.getVertexByCoord(4, 5).here);
         assertTrue(boardTwo.getVertexByCoord(4, 4).here);
 	assertTrue(boardTwo.validMove(1, "4 6"));
+	boardTwo.makeMove(1, "4 4");
+	//assertTrue(boardTwo.validMove(1, "5 5"));
+	boardTwo.makeMove(1, "4 4");
+	//assertTrue(boardTwo.validMove(1, "3 5"));
     }
     
     @Test
