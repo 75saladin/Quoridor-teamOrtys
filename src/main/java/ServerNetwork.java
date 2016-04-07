@@ -12,35 +12,39 @@ import java.io.BufferedReader;
 
 public class ServerNetwork implements Runnable{
 
-    private static ServerNetwork server;
-    private ServerSocket socket;
-    private volatile Queue<String> toSend = new LinkedList();
-    private volatile Queue<String> recieved = new LinkedList();
-    private volatile Socket client;
-    private static volatile boolean running = true;
-    public static final int DEFAULT_PORT = 5555;
-    public static final String IAM_MSG = "IAM ORT";
-    private int port;
-    private static int playerNumber;
+  private static ServerNetwork server;
+  private ServerSocket socket;
+  private volatile Queue<String> toSend = new LinkedList();
+  private volatile Queue<String> recieved = new LinkedList();
+  private volatile Socket client;
+  private static volatile boolean running = false;
+  public static final int DEFAULT_PORT = 5555;
+  public static final String IAM_MSG = "IAM ORT";
+  private int port;
+  private static int playerNum;
+  private static int numPlayers;
+  private Thread t;
 
-    //The following finals are all for testing. Please do not
-    //change them!
-    public static final int TEST_SEND_MSG_QUEUE = 0;
-    public static final int TEST_RECIEVE_MSG_QUEUE = 1;
+  //The following finals are all for testing. Please do not
+  //change them!
+  public static final int TEST_SEND_MSG_QUEUE = 0;
+  public static final int TEST_RECIEVE_MSG_QUEUE = 1;
 
-    //The only constructor is private to keep there
-    //From being more than just one NetworkServer
-    private ServerNetwork(int port){
-        try{
-            System.out.println("In the constructor!");
-            socket = new ServerSocket(port);
-            client = new Socket();
-            this.port = port;
-            new Thread(this).start();
-        }catch(Exception e){
+  //The only constructor is private to keep there
+  //From being more than just one NetworkServer
+  private ServerNetwork(int port){
+    try{
+      System.out.println("In the constructor!");
+      socket = new ServerSocket(port);
+      client = new Socket();
+      this.port = port;
+      t = new Thread(this);
+          t.setDaemon(true);
+          t.start();
+    }catch(Exception e){
 
-        }
     }
+  }
 
   /**
    * Returns a satitically created instance of ServerNetwork. This 
@@ -128,8 +132,16 @@ public class ServerNetwork implements Runnable{
     server = null;
   }
 
-  public static boolean isRunning(){
+  public boolean isRunning(){
     return running;
+  }
+
+  public static int getPlayerNum(){
+    return playerNum;
+  }
+
+  public static int getNumPlayers(){
+    return numPlayers;
   }
 
   public void run(){
@@ -147,10 +159,12 @@ public class ServerNetwork implements Runnable{
         String tempIn = buffRead.readLine();
         if(tempIn.startsWith("GAME")){
           String[] toProcess = tempIn.split(" ");
-          playerNumber = Integer.parseInt(toProcess[1]);
+          playerNum = Integer.parseInt(toProcess[1]);
+          numPlayers = toProcess.length - 2;
+          running = true;
         }else{
           System.out.println("Error: Invalid player number!");
-	}
+        }
       }else{
         System.out.println("Error: Unexpected startup message recieved!");
       }
@@ -163,13 +177,6 @@ public class ServerNetwork implements Runnable{
         }
         if(buffRead.ready()){
           String tempIn = buffRead.readLine();
-          if(tempIn.startsWith("GOTE")){
-            if(Character.getNumericValue(tempIn.charAt(5)) == playerNumber){
-              this.close();
-            }
-          }else if(tempIn.startsWith("KIKASHI")){
-            this.close();
-          }
           recieved.add(buffRead.readLine());
         }
       }
@@ -178,11 +185,11 @@ public class ServerNetwork implements Runnable{
     }
   }
 
-    public String toString(){
-        String toReturn = new Integer(port).toString();
-        toReturn = toReturn + " " + IAM_MSG;
-        return toReturn;
-    }
+  public String toString(){
+    String toReturn = new Integer(port).toString();
+    toReturn = toReturn + " " + IAM_MSG;
+    return toReturn;
+  }
 
 
   /**
@@ -198,11 +205,13 @@ public class ServerNetwork implements Runnable{
     switch(testType){
       case TEST_SEND_MSG_QUEUE:
         toReturn = (String)toSend.remove();
+	break;
       case TEST_RECIEVE_MSG_QUEUE:
         for(int i = 0 ; i < 1000000000 && toReturn == null ; i++){
           toReturn = (String)recieved.poll();
           System.out.println("Ignore me");
         }
+        break;
     }   
     return toReturn;
   }
