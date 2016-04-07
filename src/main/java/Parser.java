@@ -8,8 +8,9 @@ public class Parser {
     
     String[] arrayCharles = strip.split(" ");
 
+    String noKey = null;
     if(strip.contains(" "))
-      String noKey = strip.substring(strip.indexOf(" " + 1));
+      noKey = strip.substring(strip.indexOf(" ") + 1);
 
     String opCode = arrayCharles[0];
 
@@ -45,9 +46,9 @@ public class Parser {
   public static String formatMove(String move){
     String[] spirit = move.split(" ");
     if(spirit.length == 2)
-      return "( " + spirit[0] + ", " + spirit[1] + ")";
+      return "(" + spirit[0] + ", " + spirit[1] + ")";
     else
-      return "[( " + spirit[0] + ", " + spirit[1] + "), " + spirit[2] + "]";
+      return "[(" + spirit[0] + ", " + spirit[1] + "), " + spirit[2] + "]";
   } 
 
   // Strips brackets and commas from move-string.
