@@ -4,7 +4,9 @@ public class Parser {
 
   public static String parse(String message) {
     
-    String[] arrayCharles = stripBrackets(message).split(" ");
+    String strip = stripBrackets(message);
+    
+    String[] arrayCharles = strip.split(" ");
 
     String opCode = arrayCharles[0];
 
@@ -18,7 +20,7 @@ public class Parser {
       case "MYOUSHU":
         //          handleMyoushu();
       case "TESUJI":
-        return handleTesuji(arrayCharles,message);
+        return strip;
       case "ATARI":
         //          handleAtari();
       case "GOTE":
@@ -29,6 +31,21 @@ public class Parser {
         return ("Error");
     }
   }
+
+  /**
+    * Handles converting from simple move String to protocol move String.
+    *
+    * @param move String of simple move String
+    *
+    * @return Protocol formatted move String
+    */
+  public static String formatMove(String move){
+    String[] spirit = move.split(" ");
+    if(spirit.length == 2)
+      return "( " + spirit[0] + ", " + spirit[1] + ")";
+    else
+      return "[( " + spirit[0] + ", " + spirit[1] + "), " + spirit[2] + "]";
+  } 
 
   // Strips brackets and commas from move-string.
   // Ex. Pawn movement (0, 3) --> 0 3
@@ -55,14 +72,6 @@ public class Parser {
 
   public void handleMyoushu() {
     // Client: Requests a move. Server should be expecting this.
-  }
-
-
-  // Currently determines if move is valid, without considering previous moves
-  // In future, will consider previous moves
-  // Currently returns input, this will be changed as protocol is implemented
-  public static String handleTesuji(String[] arr,String input) {
-    return input;
   }
 
   public void handleAtari() {
