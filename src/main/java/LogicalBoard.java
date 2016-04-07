@@ -71,19 +71,7 @@ public class LogicalBoard{
     public Set<Edge> edgeSet(){
         return board.edgeSet();
     }
-    /**
-     *  checkValid - returns boolean if move is valid or not and updates board
-     * 
-     * @param playerNum - player making the move
-     * @param move 
-     * @return if valid move
-     */
-    public boolean checkValid(int playerNum,String move){
-        if(move.length()>3)
-            return validWall(playerNum, move);
-        else 
-            return validMove(playerNum, move);
-    }
+
     
     /**
      *
@@ -141,52 +129,6 @@ public class LogicalBoard{
     // method takes in wall move and gets the set of edges to be removed
     // uses wall move protocol
 
-    /**
-     *  getEdgesToRemove - gets the edges to remove when placing a wall
-     * 
-     * @param wall
-     * @return
-     */
-    public Set<Edge> getEdgesToRemove(String wall){
-        Scanner sc = new Scanner(wall);
-        int pc = Integer.parseInt(sc.next());
-        int pr = Integer.parseInt(sc.next());
-        String d  = sc.next().toUpperCase();
-        // Source node
-        Vertex s  = getVertexByCoord(pc, pr);
-        // node to right of source node
-        Vertex r  = getVertexByCoord(pc+1, pr);
-        // node below source node
-        Vertex b  = getVertexByCoord(pc, pr+1);
-        // node below and to the right of source node
-        Vertex br = getVertexByCoord(pc+1, pr+1);
-        
-        Edge s2r = board.getEdge(s,r);
-        Edge b2br = board.getEdge(b,br);
-        Edge s2b = board.getEdge(s,b);
-        Edge r2br = board.getEdge(r,br);
-        
-        
-        Set <Edge> remove = new HashSet<Edge>();
-        
-        // adding edges to the set to be removed based on wall placement direction
-        if(d.equals("V")){
-            if(s2r==null || b2br ==null)
-                return null;
-            // edge from source to right
-            remove.add(board.getEdge(s, r));
-            // edge from node below source to node below and to the right
-            remove.add(board.getEdge(b, br));
-        }else{
-            if(s2b==null || r2br ==null)
-                return null;
-            // edge from source to node below the source
-            remove.add(board.getEdge(s,b));
-            // edge from node to the right of source to node below and to the right
-            remove.add(board.getEdge(r,br));
-        }
-        return remove;
-    }
 
     
     /**
@@ -220,6 +162,33 @@ public class LogicalBoard{
     }
 
     
+    
+    /**
+     *  checkValid - returns boolean if move is valid or not and updates board
+     * 
+     * @param playerNum - player making the move
+     * @param move 
+     * @return if valid move
+     */
+    public boolean checkValid(int playerNum,String move){
+        if(move.length()==3){
+            if(validMove(playerNum, move)){
+                //makeMove(playerNum,move);
+                return true;
+            }else{
+                //kick(playerNum);
+                return false;
+            }
+        }else 
+            if(validWall(playerNum, move)){
+                //makeMove(playerNum,move);
+                return true;
+            }else{
+                //kick(playerNum);
+                return false;
+            }
+    }
+    
     /**
      * makeMove - Puts a player in a given destination. This will make the move, always;
      * the given player and move combo should be passed into validMove() just 
@@ -243,21 +212,7 @@ public class LogicalBoard{
         player.setR(r);
     }
     
-    /**
-     * Places a wall. This wall must be validated by validWall() BEFORE being 
-     * placed. 
-     *
-     * @param player - player that is placing the wall
-     * @param wall The previously validated wall to be placed, as a string in
-     *             the protocol form.
-     */
-    public void placeWall(int playerNum, String wall){
-        Player player = players[playerNum-1];
-        Set<Edge> edgesToRemove = getEdgesToRemove(wall);
-        for(Edge e : edgesToRemove)
-            board.removeEdge(e);
-        player.decrementWall();
-    }      
+     
 
     /**
      *
@@ -319,6 +274,23 @@ public class LogicalBoard{
         }
         return isValidJump;
     }
+    
+    /**
+     * Places a wall. This wall must be validated by validWall() BEFORE being 
+     * placed. 
+     *
+     * @param player - player that is placing the wall
+     * @param wall The previously validated wall to be placed, as a string in
+     *             the protocol form.
+     */
+    public void placeWall(int playerNum, String wall){
+        Player player = players[playerNum-1];
+        Set<Edge> edgesToRemove = getEdgesToRemove(wall);
+        for(Edge e : edgesToRemove)
+            board.removeEdge(e);
+        player.decrementWall();
+    } 
+    
     /**
      *
      * @param playerNum - player placing wall 
@@ -342,11 +314,11 @@ public class LogicalBoard{
             return false;
         
         
-        
+        // need to add logic for criss crossing walls
         
         // there should always be two edges to remove!
         Set<Edge> EdgeSetToRemove = getEdgesToRemove(wall);
-        if(EdgeSetToRemove==null)
+        if(EdgeSetToRemove==null || EdgeSetToRemove.size()<2)
             return false;
         // Starting logic to test if winners path is blocked......
         for(Player p : players){
@@ -355,12 +327,22 @@ public class LogicalBoard{
             if(pathBlocked(getPlayerNum(p),EdgeSetToRemove))
                 return false;
         }
+        
+        if(direction.equals("V")){
+            if(getEdgesToRemove(sourceC + " " + sourceR + " H")!=null)
+                if(getEdgesToRemove(sourceC + " " + sourceR + " H").size()<1)
+                    return false;
+        }
+        if(direction.equals("H")){
+            if(getEdgesToRemove(sourceC + " " + sourceR + " v")!=null)
+                if(getEdgesToRemove(sourceC + " " + sourceR + " V").size()<1)
+                    return false;
+        }
+        
         // if we get here return true
         placeWall(playerNum, wall);
         return true;
     }
-    
-
     
     /**
      *
@@ -432,6 +414,54 @@ public class LogicalBoard{
         return blocked;
     }
        
+    
+    /**
+     *  getEdgesToRemove - gets the edges to remove when placing a wall
+     * 
+     * @param wall
+     * @return
+     */
+    public Set<Edge> getEdgesToRemove(String wall){
+        Scanner sc = new Scanner(wall);
+        int pc = Integer.parseInt(sc.next());
+        int pr = Integer.parseInt(sc.next());
+        String d  = sc.next().toUpperCase();
+        // Source node
+        Vertex s  = getVertexByCoord(pc, pr);
+        // node to right of source node
+        Vertex r  = getVertexByCoord(pc+1, pr);
+        // node below source node
+        Vertex b  = getVertexByCoord(pc, pr+1);
+        // node below and to the right of source node
+        Vertex br = getVertexByCoord(pc+1, pr+1);
+        
+        Edge s2r = board.getEdge(s,r);
+        Edge b2br = board.getEdge(b,br);
+        Edge s2b = board.getEdge(s,b);
+        Edge r2br = board.getEdge(r,br);
+        
+        
+        Set <Edge> remove = new HashSet<Edge>();
+        
+        // adding edges to the set to be removed based on wall placement direction
+        if(d.equals("V")){
+            if(s2r==null || b2br ==null)
+                return null;
+            // edge from source to right
+            remove.add(board.getEdge(s, r));
+            // edge from node below source to node below and to the right
+            remove.add(board.getEdge(b, br));
+        }else{
+            if(s2b==null || r2br ==null)
+                return null;
+            // edge from source to node below the source
+            remove.add(board.getEdge(s,b));
+            // edge from node to the right of source to node below and to the right
+            remove.add(board.getEdge(r,br));
+        }
+        return remove;
+    }
+    
     /**
      * Sets wall counts for all players depending on player count
      *

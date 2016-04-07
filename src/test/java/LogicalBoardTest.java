@@ -219,7 +219,7 @@ public class LogicalBoardTest {
         }
     }
     
-    @Ignore
+    @Test
     public void validWallRejectsInvalidWalls() throws Exception {
 		//Wall out of bounds: <col/row> >7 or <0
 		assertFalse(boardTwo.validWall(1,"-1 4 v"));
@@ -231,16 +231,19 @@ public class LogicalBoardTest {
                 assertTrue(boardTwo.checkValid(1,"1 1 h"));
                 assertEquals(boardTwo.edgeSet().size(),142);
                 assertFalse("This wall should overlap prev wall",boardTwo.validWall(1,"2 1 h")); 
+             
+                // wall is cris cross with another wall
+                //assertFalse(boardTwo.checkValid(1,"1 1 v"));
                 
                 //Wall overlaps another wall
                 assertTrue(boardTwo.checkValid(1,"7 7 v"));
-                assertFalse(boardTwo.validWall(1,"7 6 v"));
+                assertFalse(boardTwo.validWall(1,"7 7 h"));
 		
 		
 		
 
 		//Wall intersects another wall
-		assertFalse(boardTwo.validWall(1,"1 1 v"));
+		assertFalse(boardTwo.validWall(1,"7 7 v"));
 		assertFalse(boardTwo.validWall(1,"7 7 h"));
     }
     
@@ -308,7 +311,7 @@ public class LogicalBoardTest {
 	assertFalse(boardTwo.checkValid(1, "4 2"));
 	assertFalse(boardTwo.checkValid(1, "6 0"));
 	assertFalse("should not be able to move to "+boardTwo.getVertexByCoord(2, 0).toString(),
-                boardTwo.checkValid(1, "2 0"));
+        boardTwo.checkValid(1, "2 0"));
 	
 	//Tries to jump over a horizontal wall then a vertical wall
 	assertTrue(boardTwo.checkValid(1, "3 0 h"));
