@@ -171,22 +171,26 @@ public class LogicalBoard{
      * @return if valid move
      */
     public boolean checkValid(int playerNum,String move){
-        if(move.length()==3){
-            if(validMove(playerNum, move)){
-                //makeMove(playerNum,move);
-                return true;
-            }else{
-                //kick(playerNum);
-                return false;
+        if(move.equals("error"))
+            return false;
+        if(move.length()==3 || move.length()==5){
+            if(move.length()==3){
+                if(validMove(playerNum, move))
+                    //makeMove(playerNum,move);
+                    return true;
+                else
+                    //kick(playerNum);
+                    return false;
+            }else{ 
+                if(validWall(playerNum, move))
+                    //makeMove(playerNum,move);
+                    return true;
+                else
+                    //kick(playerNum);
+                    return false;
             }
-        }else 
-            if(validWall(playerNum, move)){
-                //makeMove(playerNum,move);
-                return true;
-            }else{
-                //kick(playerNum);
-                return false;
-            }
+        }
+        return false;
     }
     
     /**
