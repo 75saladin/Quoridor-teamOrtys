@@ -171,43 +171,43 @@ public class LogicalBoardTest {
     }
  
     @Test
-    public void getEdgesToRemoveForHorizontalWallShouldReturnTwoCorrectEdges() throws Exception {
-        Vertex src = boardTwo.getVertexByCoord(1,1);
-        Vertex below = boardTwo.getVertexByCoord(1,2);
-        Vertex right = boardTwo.getVertexByCoord(2,1);
-        Vertex belowRight = boardTwo.getVertexByCoord(2,2);
-        
-        Edge rightBelowRight = boardTwo.board.getEdge(right, belowRight);
-        Edge belowSrc = boardTwo.board.getEdge(below, src);
-        
-        Set<Edge> remove = boardTwo.getEdgesToRemove("1 1 h");
-        assertEquals("There should always be two edges to remove.", remove.size(), 2);
-        for (Edge e : remove) {
-            assertTrue(e==belowSrc||e==rightBelowRight);
-        }
-    }
+    public void getEdgesToRemoveShouldReturnTwoCorrectEdges() throws Exception {
+        Random r = new Random();
+        int randC;
+        int randR;
+        String dir;
     
-    @Test
-    public void getEdgesToRemoveForVerticalWallShouldReturnTwoCorrectEdges() throws Exception {
-        Vertex src = boardTwo.getVertexByCoord(1,1);
-        Vertex below = boardTwo.getVertexByCoord(1,2);
-        Vertex right = boardTwo.getVertexByCoord(2,1);
-        Vertex belowRight = boardTwo.getVertexByCoord(2,2);
-        
-        Edge srcRight = boardTwo.board.getEdge(src, right);
-        Edge belowRightBelow = boardTwo.board.getEdge(belowRight, below);
-        
-        Set<Edge> remove = boardTwo.getEdgesToRemove("1 1 v");
-        assertEquals("There should always be two edges to remove.", remove.size(), 2);
-        for (Edge e : remove) {
-            assertTrue(e==srcRight||e==belowRightBelow);
+        for (int i=0; i<20; i++) {
+            randC = r.nextInt(8);
+            randR = r.nextInt(8);
+            if (r.nextInt(2)==0)
+                dir = "v";
+            else
+                dir = "h";
+                
+            String wall = ""+randC+" "+randR+" "+dir;
+            
+            Vertex src = boardTwo.getVertexByCoord(randC,randR);
+            Vertex below = boardTwo.getVertexByCoord(randC,randR+1);
+            Vertex right = boardTwo.getVertexByCoord(randC+1,randR);
+            Vertex belowRight = boardTwo.getVertexByCoord(randC+1,randR+1);
+            
+            //Edges in question for horizontal wall:
+            Edge rightBelowRight = boardTwo.board.getEdge(right, belowRight);
+            Edge belowSrc = boardTwo.board.getEdge(below, src);
+            //Edges in question for vertical wall:
+            Edge srcRight = boardTwo.board.getEdge(src, right);
+            Edge belowRightBelow = boardTwo.board.getEdge(belowRight, below);
+
+            Set<Edge> remove = boardTwo.getEdgesToRemove(wall);
+            assertEquals("There should always be two edges to remove.", remove.size(), 2);
+            for (Edge e : remove) {
+                if (dir.equals("h"))
+                    assertTrue(e==belowSrc||e==rightBelowRight);
+                else
+                    assertTrue(e==srcRight||e==belowRightBelow);
+            }
         }
-        
-        assertTrue(boardTwo.checkValid(1,"1 1 h"));
-        
-        //Edges should be removed when a wall is placed!
-        assertNull(boardTwo.getEdgesToRemove("1 1 h"));
-        assertNull(boardTwo.getEdgesToRemove("2 1 h"));
     }
     
     @Test
