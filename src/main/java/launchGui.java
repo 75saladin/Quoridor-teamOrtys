@@ -1,8 +1,5 @@
 
 
-import java.awt.Point;
-import java.util.Scanner;
-
 /*
  * This is how you launch the application. 
  */
@@ -13,28 +10,12 @@ import java.util.Scanner;
  */
 public class launchGui {
     public static void main(String[] args) throws Exception {
-        /**
-         * How to launch the application thread in order to be
-         * able to update the player move
-         * 
-         */
-
-        Thread t = new Thread() {
-            @Override
-            public void run() {
-                javafx.application.Application.launch(GUI.class);
-            }
-        };
-        
-        t.setDaemon(true);
-        t.start();
+       
         /**
          * Called after launching the UI
          */
-        GUI gui = GUI.waitForGUIStartUpTest();
-        Controller player = new Controller(2);
-        gui.setPlayer(player);
-        
+        GUI gui=null;
+        gui = startGUI(2);
         RandomAI ai1 = new RandomAI(2, 1);
         RandomAI ai2 = new RandomAI(2, 2);
        
@@ -68,7 +49,7 @@ public class launchGui {
     *
     * @param pNum number of players in game
     */
-  public static void startGUI(int pNum){
+  public static GUI startGUI(int pNum){
     new Thread() {
       @Override
       public void run() {
@@ -76,7 +57,7 @@ public class launchGui {
       }
     }.start();
     GUI gui = GUI.waitForGUIStartUpTest();
-    if(pNum == 4)
-      gui.setPlayer(new Controller(pNum));
+    gui.setPlayer(new Controller(pNum));
+    return gui;
   }
 }
