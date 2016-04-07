@@ -588,5 +588,53 @@ public class LogicalBoard{
         }
         return graph;
     }
+    
+    
+    /**
+     *  getShortestWinningPath - gets the shortest path for that player to win
+     * 
+     * @param playerNum - players shortest Winning path to get
+     * @return 
+     */
+    public DijkstraShortestPath<Vertex,Edge> getShortestWinningPath(int playerNum){
+        Vertex source = getVertexByCoord(getPlayer(playerNum).getC(), getPlayer(playerNum).getR());
+        Vertex destination = null;
+        DijkstraShortestPath<Vertex,Edge> temp = null;
+        DijkstraShortestPath<Vertex,Edge> Dijkstra = null;
+        int length = 1000;
+        if(playerNum==1){
+            for(int i = 0;i<9;i++)
+                destination = getVertexByCoord(i, 8);
+                temp = new DijkstraShortestPath<Vertex,Edge>(this.board,source,destination);
+                if(temp != null)
+                    if(temp.getPathLength()< length)
+                        Dijkstra = temp;
+                
+        }else if(playerNum==2){
+            for(int i = 0;i<9;i++)
+                destination = getVertexByCoord(i, 0);
+                temp = new DijkstraShortestPath<Vertex,Edge>(this.board,source,destination);
+                if(temp != null)
+                    if(temp.getPathLength()< length)
+                        Dijkstra = temp;            
+        }else if(playerNum==3){
+            for(int i = 0;i<9;i++)
+                destination = getVertexByCoord(8, i);
+                temp = new DijkstraShortestPath<Vertex,Edge>(this.board,source,destination);
+                if(temp != null)
+                    if(temp.getPathLength()< length)
+                        Dijkstra = temp;            
+        }else{
+            for(int i = 0;i<9;i++)
+                destination = getVertexByCoord(0, i);
+                temp = new DijkstraShortestPath<Vertex,Edge>(this.board,source,destination);
+                if(temp != null)
+                    if(temp.getPathLength()< length)
+                        Dijkstra = temp;            
+        }
+        
+        return Dijkstra;
+    }
+    
        
 }
