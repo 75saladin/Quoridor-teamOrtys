@@ -212,17 +212,35 @@ public class LogicalBoardTest {
     
     @Test
     public void validWallAcceptsValidWalls() throws Exception {
-        Random r = new Random();
+        Random rand = new Random();
         String direction;
         String wallString;
-        for (int i=0; i<10; i++) {
-            if (r.nextInt(2)==0)
+        for (int i=0; i<20; i++) {
+            if (rand.nextInt(2)==0)
                 direction = "h";
             else
                 direction = "v";  
-            wallString = ""+r.nextInt(8)+" "+r.nextInt(8)+" "+direction;
-            assertTrue("Wall "+wallString+" was judged invalid on iteration "+i, boardTwo.validWall(1,wallString));
-	    boardTwo.removeWall(wallString);
+            wallString = ""+rand.nextInt(8)+" "+rand.nextInt(8)+" "+direction;
+            assertTrue("Wall "+wallString+" was judged invalid on iteration "+i, boardTwo.validWall(0,wallString));
+	    boardTwo.removeWall(wallString); //removing the wall on the same board makes this fail ALWAYS ON ITERATION 10
+        }
+        
+        //testing filling board with horizontal walls (except rightmost column)
+        for (int c=0; c<8; c+=2) {
+            for (int r=0; r<8; r++) {
+                wallString = ""+c+" "+r+" "+"h";
+                assertTrue("Wall "+wallString+" was judged invalid", boardTwo.validWall(0,wallString));
+            }
+        }
+        
+        this.setUp(); //freshen up that board
+        
+        //testing filling board with vertical walls (except bottommost row)
+        for (int r=0; r<8; r+=2) {
+            for (int c=0; c<8; c++) {
+                wallString = ""+c+" "+r+" "+"v";
+                assertTrue("Wall "+wallString+" was judged invalid", boardTwo.validWall(0,wallString));
+            }
         }
     }
     

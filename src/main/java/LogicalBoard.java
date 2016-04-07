@@ -277,36 +277,50 @@ public class LogicalBoard{
     
     /**
      * Places a wall. This wall must be validated by validWall() BEFORE being 
-     * placed. 
+     * placed.
      *
-     * @param player - player that is placing the wall
+     * @param player - player that is placing the wall. 0 can be used for 
+     *                 testing; in that case, no player's wall count will be 
+     *                 decremented.
      * @param wall The previously validated wall to be placed, as a string in
      *             the protocol form.
      */
     public void placeWall(int playerNum, String wall){
-        Player player = players[playerNum-1];
+        Player player;
+        
+        if (playerNum==0)
+            player = null;
+        else
+            player = players[playerNum-1];
+        
         Set<Edge> edgesToRemove = getEdgesToRemove(wall);
         for(Edge e : edgesToRemove)
             board.removeEdge(e);
-        player.decrementWall();
+        if (player!=null)
+            player.decrementWall();
     } 
     
     /**
      *
-     * @param playerNum - player placing wall 
+     * @param playerNum - player placing wall. 0 can be passed for testing; it 
+     *                    will succeed but not decrement any player's wall count. 
      * @param wall - wall position ( "C R Direction" )
      * @return
      */
     public boolean validWall(int playerNum, String wall){
         // cannot leave if one thing is true, must check all
         // but if one thing is false we return
-        Player player = getPlayer(playerNum);
+        Player player;
+        if (playerNum!=0)
+            player = getPlayer(playerNum);
+        else
+            player = null;
         Scanner sc = new Scanner(wall);
         int sourceC = Integer.parseInt(sc.next());
         int sourceR = Integer.parseInt(sc.next());
         String direction = sc.next().toUpperCase();
         
-        if(player.getWalls() <= 0)
+        if(player != null && player.getWalls() <= 0)
             return false;
         
         //wall must be on board and not in the 8th row or col
