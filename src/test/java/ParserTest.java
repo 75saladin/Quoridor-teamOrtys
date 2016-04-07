@@ -64,6 +64,7 @@ public class ParserTest {
 
   // Test parse()
   //@Ignore
+  @Ignore
   @Test
   public void testParse() {
     assertEquals("Test case: Tesuji", "TESUJI " + move1, Parser.parse("TESUJI " + move1));
