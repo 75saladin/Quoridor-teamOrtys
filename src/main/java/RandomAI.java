@@ -2,7 +2,7 @@
 import java.awt.Point;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
+import java.util.Scanner;
 import org.jgrapht.alg.DijkstraShortestPath;
 
 /*
@@ -25,17 +25,40 @@ public class RandomAI {
     public RandomAI(GUI g) {
         this.gui = g;
     }
+    /**
+     * 
+     * @param playerCount
+     * @param playerNum 
+     */
     public RandomAI(int playerCount, int playerNum){
         board = new LogicalBoard(playerCount);
         this.playerCount = playerCount;
         this.playerNum = playerNum;
     }
-    
-    public void update(int playerNum,String move){
-        if(move.length()==3)
-            board.makeMove(playerNum, move);
-        else 
+    /**
+     * 
+     * @param player 
+     */
+    public void kick(int player){
+        board.kick(player);
+    }
+
+    /**
+     * 
+     * @param playerNum
+     * @param move 
+     */
+    public void update(String move){
+        Scanner sc = new Scanner(move);
+        int playerNum = sc.nextInt();
+        String temp = "";
+        temp = sc.next()+" ";
+        temp = sc.next();
+        if(sc.hasNext()){
+            temp = " " + sc.next();
             board.placeWall(playerNum, move);
+        }else 
+            board.makeMove(playerNum, move);
     }
                             
     /**
@@ -49,6 +72,7 @@ public class RandomAI {
         else
             return getMove4P();
     }
+    
     
     /**
      * get a player move in a 2 player game
@@ -140,14 +164,14 @@ public class RandomAI {
         // if this players path is shorter, move player position to here
         if(this.playerNum==1)
             if(playerOnePathLength<playerTwoPathLength)
-                return player1BestMove.c + " " + player1BestMove.r;
+                return player1BestMove.c + " " + player1BestMove.r + " 0";
         else
             if(playerOnePathLength>playerTwoPathLength)
-                return player2BestMove.c + " " + player2BestMove.r;
+                return player2BestMove.c + " " + player2BestMove.r + " ";
 
         // START LOGIC FOR CORRECT WALL PLACEMENT IF Opponent has a shorter path
         
-        
+        //when returning wall placement - "<int col> <int row> (1(Vertical) 2(Horizontal)) 
         
 
         return "";
