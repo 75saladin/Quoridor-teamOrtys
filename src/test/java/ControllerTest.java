@@ -84,7 +84,6 @@ public class ControllerTest {
     /**
      * Test set controller turn and get controller turn
      */
-    @Ignore
     @Test
     public void testSetPlayerTurn_getPlayerTurn() {
         int one = 1;
@@ -102,11 +101,11 @@ public class ControllerTest {
         
         assertEquals("Test controller turn: ", controller2.getPlayerTurn(), one);
         controller2.setPlayerTurn();
+        assertEquals("Test controller turn: ", controller2.getPlayerTurn(), four);
+        controller2.setPlayerTurn();
         assertEquals("Test controller turn: ", controller2.getPlayerTurn(), two);
         controller2.setPlayerTurn();
         assertEquals("Test controller turn: ", controller2.getPlayerTurn(), three);
-        controller2.setPlayerTurn();
-        assertEquals("Test controller turn: ", controller2.getPlayerTurn(), four);
         controller2.setPlayerTurn();
         assertEquals("Test controller turn: ", controller2.getPlayerTurn(), one);
         controller2.setPlayerTurn();
