@@ -15,14 +15,10 @@ public class Parser {
     String opCode = arrayCharles[0];
 
     switch(opCode) {
-      case "HELLO":
-          return handleHello();
       case "IAM":
         return arrayCharles[1];
       case "GAME":
         //          handleGame();
-      case "MYOUSHU":
-        handleMyoushu();
       case "TESUJI":
         return noKey;
       case "ATARI":
@@ -59,13 +55,6 @@ public class Parser {
     return s;
   }
 
-  public String handleHello() {
-    // Server: Send "IAM" to client
-    // No useful information to be gathered from parsing this
-    // Does it need to exist?
-    return "IAM ORT";
-
-  }
 
   public String[] handleGame(String[] arr,String input) {
     // Client: Game is ready to start. First argument is player number
@@ -74,10 +63,6 @@ public class Parser {
     return arr;
   }
 
-  public String handleMyoushu() {
-    // Client: Requests a move. Server should be expecting this.
-    return "MYOUSHU";
-  }
 
   public void handleAtari() {
     // Client: First arg is player's number. Second is move-string.
