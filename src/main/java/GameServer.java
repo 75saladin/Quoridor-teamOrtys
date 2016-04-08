@@ -59,7 +59,12 @@ public class GameServer extends Server {
 			System.out.println("Sending TESUJI " + move);
 			out.println("TESUJI " + move);
 		} else if(msg.startsWith("ATARI")) {
-			// update the AI
+                    // only for reading move moves will not handle wall placement
+                        msg = Parser.parse(msg);
+                        Scanner temp = new Scanner(msg);
+			int player = temp.nextInt();
+                        String move = temp.next() +" "+ temp.next();
+                        AI.update(player,move);
 			System.out.println("Saw ATARI");
 		} else if(msg.startsWith("KIKASHI")) { // game is over guy won
 			try {

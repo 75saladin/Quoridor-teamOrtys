@@ -34,6 +34,7 @@ public class Player {
                 this.c = 8;
                 this.r = 4;
             }
+            this.playerNum = playerNum;
     }
   
 

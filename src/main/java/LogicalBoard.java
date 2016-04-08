@@ -641,104 +641,119 @@ public class LogicalBoard{
                 // below
                 vertex = getVertexByCoord(c,r+1);
                 if(vertex!=null){
-                    if(vertex.isHere()){
-                        tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
-                        for(Vertex v : tempVertexSet)
-                            if(validMove(playerNum,v.c+" "+v.r))
-                                validVertices.add(v);
-                    }else
-                        if(validMove(playerNum,vertex.c+" "+vertex.r))
-                                validVertices.add(vertex);
+                    if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){                                        
+                        if(vertex.isHere()){
+                            tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
+                            for(Vertex v : tempVertexSet)
+                                if(validMove(playerNum,v.c+" "+v.r))
+                                    validVertices.add(v);
+                        }else
+                            if(validMove(playerNum,vertex.c+" "+vertex.r))
+                                    validVertices.add(vertex);
+                    }
                 }
                 // to the right
                 vertex = getVertexByCoord(c+1,r);
                 if(vertex!=null){
-                    if(vertex.isHere()){
-                        tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
-                        for(Vertex v : tempVertexSet)
-                            if(validMove(playerNum,v.c+" "+v.r))
-                                validVertices.add(v);
-                    }else
-                        if(validMove(playerNum,vertex.c+" "+vertex.r))
-                                validVertices.add(vertex);
+                    if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){                                        
+                        if(vertex.isHere()){
+                            tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
+                            for(Vertex v : tempVertexSet)
+                                if(validMove(playerNum,v.c+" "+v.r))
+                                    validVertices.add(v);
+                        }else
+                            if(validMove(playerNum,vertex.c+" "+vertex.r))
+                                    validVertices.add(vertex);
+                    }
                 }
                 // to the left
                 vertex = getVertexByCoord(c-1,r);
                 if(vertex!=null){
-                    if(vertex.isHere()){
-                        tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
-                        for(Vertex v : tempVertexSet)
-                            if(validMove(playerNum,v.c+" "+v.r))
-                                validVertices.add(v);
-                    }else
-                        if(validMove(playerNum,vertex.c+" "+vertex.r))
-                                validVertices.add(vertex);                
+                    if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){                                        
+                        if(vertex.isHere()){
+                            tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
+                            for(Vertex v : tempVertexSet)
+                                if(validMove(playerNum,v.c+" "+v.r))
+                                    validVertices.add(v);
+                        }else
+                            if(validMove(playerNum,vertex.c+" "+vertex.r))
+                                    validVertices.add(vertex);
+                    }
                 }
-
                 // above
                 vertex = getVertexByCoord(c,r-1);
                 if(vertex!=null){
-                    if(vertex.isHere()){
-                        tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
-                        for(Vertex v : tempVertexSet)
-                            if(validMove(playerNum,v.c+" "+v.r))
-                                validVertices.add(v);
-                    }else
-                        if(validMove(playerNum,vertex.c+" "+vertex.r))
-                                validVertices.add(vertex);                
+                    if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){                                        
+                        if(vertex.isHere()){
+                            tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
+                            for(Vertex v : tempVertexSet)
+                                if(validMove(playerNum,v.c+" "+v.r))
+                                    validVertices.add(v);
+                        }else
+                            if(validMove(playerNum,vertex.c+" "+vertex.r))
+                                    validVertices.add(vertex);
+                    }
                 }
                 break;
             case 2:
                 // above
                 vertex = getVertexByCoord(c,r-1);
                 if(vertex!=null){
-                    if(vertex.isHere()){
-                        tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
-                        for(Vertex v : tempVertexSet)
-                            if(validMove(playerNum,v.c+" "+v.r))
-                                validVertices.add(v);
-                    }else
-                        if(validMove(playerNum,vertex.c+" "+vertex.r))
-                                validVertices.add(vertex);                
+                    if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){                                        
+                        if(vertex.isHere()){
+                            tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
+                            for(Vertex v : tempVertexSet)
+                                if(validMove(playerNum,v.c+" "+v.r))
+                                    validVertices.add(v);
+                        }else
+                            if(validMove(playerNum,vertex.c+" "+vertex.r))
+                                    validVertices.add(vertex);
+                    }
                 }
                 // to the right
-                vertex = getVertexByCoord(c+1,r);
                 if(vertex!=null){
-                    if(vertex.isHere()){
-                        tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
-                        for(Vertex v : tempVertexSet)
-                            if(validMove(playerNum,v.c+" "+v.r))
-                                validVertices.add(v);
-                    }else
-                        if(validMove(playerNum,vertex.c+" "+vertex.r))
-                                validVertices.add(vertex);
+                    if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){                                        
+                        if(vertex.isHere()){
+                            tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
+                            for(Vertex v : tempVertexSet)
+                                if(validMove(playerNum,v.c+" "+v.r))
+                                    validVertices.add(v);
+                        }else
+                            if(validMove(playerNum,vertex.c+" "+vertex.r))
+                                    validVertices.add(vertex);
+                    }
                 }
                 // to the left
                 vertex = getVertexByCoord(c-1,r);
                 if(vertex!=null){
-                    if(vertex.isHere()){
-                        tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
-                        for(Vertex v : tempVertexSet)
-                            if(validMove(playerNum,v.c+" "+v.r))
-                                validVertices.add(v);
-                    }else
-                        if(validMove(playerNum,vertex.c+" "+vertex.r))
-                                validVertices.add(vertex);                
+                    if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){                                        
+                        if(vertex.isHere()){
+                            tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
+                            for(Vertex v : tempVertexSet)
+                                if(validMove(playerNum,v.c+" "+v.r))
+                                    validVertices.add(v);
+                        }else
+                            if(validMove(playerNum,vertex.c+" "+vertex.r))
+                                    validVertices.add(vertex);
+                    }
                 }
                 // below
                 vertex = getVertexByCoord(c,r+1);
                 if(vertex!=null){
-                    if(vertex.isHere()){
-                        tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
-                        for(Vertex v : tempVertexSet)
-                            if(validMove(playerNum,v.c+" "+v.r))
-                                validVertices.add(v);
-                    }else
-                        if(validMove(playerNum,vertex.c+" "+vertex.r))
-                                validVertices.add(vertex);
+                    if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){                                        
+                        if(vertex.isHere()){
+                            tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
+                            for(Vertex v : tempVertexSet)
+                                if(validMove(playerNum,v.c+" "+v.r))
+                                    validVertices.add(v);
+                        }else
+                            if(validMove(playerNum,vertex.c+" "+vertex.r))
+                                    validVertices.add(vertex);
+                    }
                 }
 
                 break;
+                // fix case where vertex.isHere is the player that is getting the valid moves 4 also
             case 3:
                 // to the right
                 vertex = getVertexByCoord(c+1,r);

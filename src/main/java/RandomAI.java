@@ -51,9 +51,9 @@ public class RandomAI {
      */
     public void update(int playerNum,String move){
         if(move.length()==3){
-            board.placeWall(playerNum, move);
-        }else 
             board.makeMove(playerNum, move);
+        }else 
+            board.placeWall(playerNum, move);
     }
                             
     /**
