@@ -15,22 +15,8 @@ public class Parser {
     String opCode = arrayCharles[0];
 
     switch(opCode) {
-      case "HELLO":
-        //          handleHello();
-      case "IAM":
-        return arrayCharles[1];
-      case "GAME":
-        //          handleGame();
-      case "MYOUSHU":
-        //          handleMyoushu();
       case "TESUJI":
         return noKey;
-      case "ATARI":
-        //          handleAtari();
-      case "GOTE":
-        //          handleGote();
-      case "KIKASHI":
-        //          handleKikashi();
       default:
         return ("Error");
     }
@@ -59,60 +45,5 @@ public class Parser {
     return s;
   }
 
-  public void handleHello() {
-    // Server: Send "IAM" to client
-    // No useful information to be gathered from parsing this
-    // Does it need to exist?
-  }
-
-  public String handleGame(String[] arr,String input) {
-    // Client: Game is ready to start. First argument is player number
-    // for the server receiving the message. 
-    if (!((arr.length == 4) || (arr.length == 6))) {
-      return "Invalid message";
-    }   
-    return input;
-  }
-
-  public void handleMyoushu() {
-    // Client: Requests a move. Server should be expecting this.
-  }
-
-  public void handleAtari() {
-    // Client: First arg is player's number. Second is move-string.
-    // Communicates player's move to all players.
-  }
-
-  public void handleGote() {
-    // First arg is a player's number. Message sent by client to all move-servers
-    // informing them that <p> made an illegal move and has been removed from the game.
-    // This will be the last message sent to the offending server.
-  }
-
-  public void handleKikashi() {
-    // Message sent by client to all servers. First arg is player number.
-    // Informs all servers that game is over and <p> won.
-    // This is last message sent to any server.
-  }
-
-  /*    
-        public static void main(String[] args) {
-        String move1 = "(0, 0)";
-        String invalidMove1 = "(-1, 1)";
-        String wall1 = "[(0, 0), H]";
-        System.out.println(Parser.stripBrackets(wall1));
-
-        String invalidWall1 = "[(8, 0), V]";
-        Parser p = new Parser("TESUJI " + move1);
-        System.out.println(p.stripBrackets(invalidMove1));
-        System.out.println(p.handle());
-        p = new Parser("TESUJI " + invalidMove1);
-        System.out.println(p.handle());
-        p = new Parser("TESUJI " + wall1);
-        System.out.println(p.handle());
-        p = new Parser("TESUJI " + invalidWall1);
-        System.out.println(p.handle());
-        }
-   */
 }
 
