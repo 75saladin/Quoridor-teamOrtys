@@ -32,6 +32,7 @@ public class GameServer extends Server {
 	}
 
 	public void handleMessage(String msg, PrintWriter out, Socket socket) {
+		Scanner sc = new Scanner(System.in);
 		msg = Parser.stripBrackets(msg);
 		String [] s = msg.split(" ");
 		if(msg.startsWith("HELLO")) {
@@ -48,9 +49,16 @@ public class GameServer extends Server {
 			return;
 			
 		} else if(msg.startsWith("MYOUSHU")) {
-			String move = AI.getMove();
-			move = "(4, 1)";
-			out.println("TESUJU " + move);
+			try{	
+
+				Thread.sleep(2000);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+
+			String move = sc.next();
+			System.out.println("Sending TESUJI " + move);
+			out.println("TESUJI " + move);
 		} else if(msg.startsWith("ATARI")) {
 			// update the AI
 			return;
