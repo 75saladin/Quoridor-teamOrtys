@@ -7,10 +7,12 @@ public class GameServer extends Server {
 
 	int playerNum;
 	RandomAI AI;
+	String name;
 	
-	public GameServer(int port) {
+	public GameServer(int port, String name) {
 		super(port);
-                System.out.println("In the constructor");
+		this.name = name;
+        System.out.println("In the constructor");
 		
 	}	
 
@@ -33,7 +35,7 @@ public class GameServer extends Server {
 		msg = Parser.stripBrackets(msg);
 		String [] s = msg.split(" ");
 		if(msg.startsWith("HELLO")) {
-			out.println("IAM ORT");
+			out.println("IAM " + name);
 		} else if(msg.startsWith("GAME")) {
 			if(s.length == 4) {
 				playerNum = Integer.parseInt(s[1]);
@@ -46,6 +48,7 @@ public class GameServer extends Server {
 			
 		} else if(msg.startsWith("MYOUSHU")) {
 			String move = AI.getMove();
+			move = "(4, 1)";
 			out.println("TESUJU " + move);
 		} else if(msg.startsWith("ATARI")) {
 			// update the AI
@@ -67,14 +70,16 @@ public class GameServer extends Server {
 
 	public static void main(String[] args) {
 		int port = 6969;
+		String name = "";
 		Scanner sc = new Scanner(System.in);
+		name = sc.next();
 		for(int i = 1; i < args.length; i++) {
 			if(args[i-1].equals("--port")){
 				port = Integer.parseInt(args[i]);
 			}
 		}
                 
-		GameServer s = new GameServer(port);
+		GameServer s = new GameServer(port, name);
 		s.connect();
 	}
 }

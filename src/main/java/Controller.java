@@ -64,11 +64,26 @@ public class  Controller{
     // pre: none
     // post: sets the player turn based off of the number of players. 
     public void setPlayerTurn(){
-        if(playerTurn == playerCount) {
-            playerTurn = 1;
-        }else {
-            playerTurn++;
+        if(playerCount == 4) {
+            switch(playerTurn) {
+                case 1: 
+                    playerTurn = 4;
+                case 2: 
+                    playerTurn = 3;
+                case 3: 
+                    playerTurn = 1;
+                case 4:
+                    playerTurn = 2;
+            }
+        } else {
+            switch(playerTurn) {
+                case 1:
+                    playerTurn = 2;
+                case 2: 
+                    playerTurn = 1;
+            }
         }
+
     }
 
     // pre: none

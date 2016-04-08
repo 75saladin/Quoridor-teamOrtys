@@ -14,6 +14,7 @@ import static org.junit.Assert.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
+import org.junit.Ignore;
 
 /**
  *
@@ -83,6 +84,7 @@ public class ControllerTest {
     /**
      * Test set controller turn and get controller turn
      */
+    @Ignore
     @Test
     public void testSetPlayerTurn_getPlayerTurn() {
         int one = 1;
