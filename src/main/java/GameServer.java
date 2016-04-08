@@ -35,6 +35,7 @@ public class GameServer extends Server {
 		msg = Parser.stripBrackets(msg);
 		String [] s = msg.split(" ");
 		if(msg.startsWith("HELLO")) {
+			System.out.println("Sending IAM " + name + "to client");
 			out.println("IAM " + name);
 		} else if(msg.startsWith("GAME")) {
 			if(s.length == 4) {

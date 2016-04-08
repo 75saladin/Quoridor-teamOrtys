@@ -64,7 +64,7 @@ public class  Controller{
     // pre: none
     // post: sets the player turn based off of the number of players. 
     public void setPlayerTurn(){
-        if(playerCount == 4) {
+        if(playerCount > 2) {
             switch(playerTurn) {
                 case 1: 
                     playerTurn = 4;
@@ -181,6 +181,17 @@ public class  Controller{
             position4 = new Point(8, 4);
         }
         
+    }
+
+    public static void main(String[] args) {
+        Controller c = new Controller(4);
+        System.out.println(c.getPlayerTurn());
+        c.setPlayerTurn();
+        System.out.println(c.getPlayerTurn());
+        c.setPlayerTurn();
+        System.out.println(c.getPlayerTurn());
+        c.setPlayerTurn();
+        System.out.println(c.getPlayerTurn());
     }
    
 }
