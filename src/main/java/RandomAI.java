@@ -132,8 +132,8 @@ public class RandomAI {
             if(!p1ValidMoves.contains(v))
                 p1InvalidWinningMoves.add(v);
         // remove the invalid moves from the valid moves set
-        for(Vertex v: p1InvalidWinningMoves)
-            if(p1ValidMoves.contains(v))
+        for(Vertex v: p1WinningVertexPath)
+            if(p1InvalidWinningMoves.contains(v))
                 p1ValidMoves.remove(v);
             
         

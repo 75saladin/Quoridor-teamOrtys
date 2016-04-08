@@ -1,6 +1,7 @@
 import org.junit.*;
 import java.util.Random;
 import java.util.Set;
+import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.graph.SimpleGraph;
@@ -488,5 +489,18 @@ public class LogicalBoardTest {
         assertFalse(boardFour.hasWon(3));
         boardFour.kick(3);
         assertTrue(boardFour.hasWon(4));
+    }
+    
+    @Test
+    public void testGetShortestPath() throws Exception{
+        GraphPath<Vertex,Edge> p1Path = boardTwo.getShortestWinningPath(1).getPath();
+        GraphPath<Vertex,Edge> p2Path = boardTwo.getShortestWinningPath(2).getPath();
+        assertEquals("should be the same length",(int)p1Path.getWeight(), (int)p2Path.getWeight());
+        boardTwo.checkValid(1,"4 7 h");
+        boardTwo.checkValid(1,"2 7");
+        boardTwo.checkValid(1, "5 7 V");
+        boardTwo.checkValid(1, "0 6");
+        p2Path = boardTwo.getShortestWinningPath(2).getPath();
+        assertNotEquals("should be the same length",(int)p1Path.getWeight(), (int)p2Path.getWeight());
     }
 }
