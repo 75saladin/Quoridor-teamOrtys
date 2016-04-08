@@ -10,6 +10,7 @@ public class GameServer extends Server {
 	
 	public GameServer(int port) {
 		super(port);
+                System.out.println("In the constructor");
 		
 	}	
 
@@ -19,6 +20,7 @@ public class GameServer extends Server {
 		BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 		String msg = "";
+                System.out.println("In handle");
 		while(true) {
 			msg = in.readLine();
 			System.out.println("Message from client " + msg);
@@ -66,13 +68,12 @@ public class GameServer extends Server {
 	public static void main(String[] args) {
 		int port = 6969;
 		Scanner sc = new Scanner(System.in);
-		String in = sc.next();
-		String[] arr = in.split(" ");
-		for(int i = 1; i < arr.length; i++) {
-			if(arr[i-1].equals("--port")){
-				port = Integer.parseInt(arr[i]);
+		for(int i = 1; i < args.length; i++) {
+			if(args[i-1].equals("--port")){
+				port = Integer.parseInt(args[i]);
 			}
 		}
+                
 		GameServer s = new GameServer(port);
 		s.connect();
 	}
