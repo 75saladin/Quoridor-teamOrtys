@@ -277,9 +277,9 @@ public class GUI extends Application implements GUIInterface {
         } 
         
         // default is 2 players, add the other two if there are more
- 
+
         gp.add(player.getPlayerNode(1), 8, 0);
-        gp.add(player.getPlayerNode(2), 16, 16);
+        gp.add(player.getPlayerNode(2), 8, 16);
         if(numOfPlayers == 4) {
             gp.add(player.getPlayerNode(3), 0, 8);
             gp.add(player.getPlayerNode(4), 16, 8);
