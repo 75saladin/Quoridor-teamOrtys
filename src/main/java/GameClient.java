@@ -48,7 +48,8 @@ public class GameClient{
         gui.update(move);
       }
       else{
-        kickPlayer(players,pNum);
+        System.out.println("INDEX: " + index);
+        kickPlayer(players,pNum,index);
         gameBoard.kick(pNum);
       }
       winner = checkWinner(gameBoard,players.length);
@@ -58,7 +59,7 @@ public class GameClient{
         running = false;
       }
       if(players.length == 2){
-        index ^= 0;
+        index ^= 1;
         pNum = (pNum % 2) + 1;
       }
       else{
@@ -373,14 +374,14 @@ public class GameClient{
     * @param players Array of players
     * @param pNum number of player kicked
     */
-  public static void kickPlayer(Socket[] players,int pNum){
+  public static void kickPlayer(Socket[] players,int pNum,int index){
     for(int i = 0; i < players.length; i++){
       //System.out.println("PLAYER " + i + " CLOSED: " + players[i].isClosed());
       if(!players[i].isClosed())
         getOut(players[i]).println(PLAYER_KICKED + " " + pNum);
     }
     try{
-      players[pNum-1].close();
+      players[index].close();
     }
     catch(IOException ioe){
       System.out.println("IOException: " + ioe);
