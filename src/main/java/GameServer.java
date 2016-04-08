@@ -57,7 +57,7 @@ public class GameServer extends Server {
      * @param socket: The socket to close upon a certain message.
      * Handle the specific protocol messages. Denoted by capital words. 
      */
-    public void handleMessage(String msg, PrintWriter out, Socket socket) {
+    private void handleMessage(String msg, PrintWriter out, Socket socket) {
 	Scanner sc = new Scanner(System.in);
         msg = Parser.stripBrackets(msg); // strip the brackets from the message
 	String [] s = msg.split(" "); // splits the string by spaces
