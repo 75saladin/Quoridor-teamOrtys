@@ -21,6 +21,7 @@ public class RandomAI {
     private LogicalBoard board;
     private int playerCount;
     private int playerNum;
+    private Random rand = new Random();
     
     public RandomAI(GUI g) {
         this.gui = g;
@@ -68,20 +69,21 @@ public class RandomAI {
     }
     
     public String getRandomMove(){
-        Random rand = new Random();
         // example player1 is at 4, 0
         // player 1 can move to (4, 1), (3, 0), or (5, 0)
         // same column + or - 1 row or same row + or - one column
-        int move = rand.nextInt(4);
+        int move = 0;
         int temp = 0;
+        System.out.println("PLAYERNUMBER: "+this.playerNum);
         Set<Vertex> validVertices = board.getValidMoves(this.playerNum);
         int size = validVertices.size();
-        while(move>size)
-            move--;
-        for(Vertex v : validVertices)
+        for(int i = 100; i>0; i--)
+            move =(rand.nextInt()%size);
+        for(Vertex v : validVertices){
             if(temp==move)
                 return Parser.formatMove(v.c +" "+v.r);
             temp++;
+        }
         return "";
     }
     
