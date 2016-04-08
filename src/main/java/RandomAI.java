@@ -48,14 +48,8 @@ public class RandomAI {
      * @param playerNum
      * @param move 
      */
-    public void update(String move){
-        Scanner sc = new Scanner(move);
-        int playerNum = sc.nextInt();
-        String temp = "";
-        temp = sc.next()+" ";
-        temp = sc.next();
-        if(sc.hasNext()){
-            temp = " " + sc.next();
+    public void update(int playerNum,String move){
+        if(move.length()==3){
             board.placeWall(playerNum, move);
         }else 
             board.makeMove(playerNum, move);
