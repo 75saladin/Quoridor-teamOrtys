@@ -69,22 +69,15 @@ public class RandomAI {
     }
     
     public String getRandomMove(){
+        Vertex MOVE = new Vertex();
         // example player1 is at 4, 0
         // player 1 can move to (4, 1), (3, 0), or (5, 0)
         // same column + or - 1 row or same row + or - one column
-        int move = 0;
-        int temp = 0;
-        System.out.println("PLAYERNUMBER: "+this.playerNum);
         Set<Vertex> validVertices = board.getValidMoves(this.playerNum);
-        int size = validVertices.size();
-        for(int i = 100; i>0; i--)
-            move =(rand.nextInt()%size);
-        for(Vertex v : validVertices){
-            if(temp==move)
-                return Parser.formatMove(v.c +" "+v.r);
-            temp++;
-        }
-        return "";
+        for(Vertex v : validVertices)
+                 MOVE = v;
+        return Parser.formatMove(MOVE.c +" "+MOVE.r);
+        
     }
     
     public String getMove4P(){

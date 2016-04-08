@@ -63,6 +63,7 @@ public class LogicalBoard{
             }
         }
         setWalls(playerCount);
+        this.playerCount = playerCount;
     }
     
     public Set<Vertex> vertexSet(){
@@ -594,7 +595,7 @@ public class LogicalBoard{
         Vertex destination = null;
         DijkstraShortestPath<Vertex,Edge> temp = null;
         DijkstraShortestPath<Vertex,Edge> Dijkstra = null;
-        int length = 1000;
+        int length = 89;
         if(playerNum==1){
             for(int i = 0;i<9;i++)
                 destination = getVertexByCoord(i, 8);
@@ -628,232 +629,261 @@ public class LogicalBoard{
         
         return Dijkstra;
     }
-    
     public Set<Vertex> getValidMoves(int playerNum){
+        return getValidMoves(playerNum, this.playerCount);
+    }
+    
+    private Set<Vertex> getValidMoves(int playerNum,int depth){
         Set<Vertex> validVertices = new HashSet<>();
         Player p = getPlayer(playerNum);
-        Set<Vertex> tempVertexSet=null;
+        Set<Vertex> tempVertexSet;
         Vertex vertex;
+        if(depth==1)
+            return null;
         int c = p.getC();
         int r = p.getR();
-        switch(playerNum){
-            case 1:
+        
+            if(playerNum==1){
                 // below
                 vertex = getVertexByCoord(c,r+1);
                 if(vertex!=null){
-                    if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){                                        
-                        if(vertex.isHere()){
-                            tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
-                            for(Vertex v : tempVertexSet)
+                                                      
+                    if(vertex.isHere()){
+                        
+                            tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum(),depth-1);
+                            for(Vertex v : tempVertexSet){
                                 if(validMove(playerNum,v.c+" "+v.r))
                                     validVertices.add(v);
-                        }else
-                            if(validMove(playerNum,vertex.c+" "+vertex.r))
-                                    validVertices.add(vertex);
-                    }
+                        }
+                    }else
+                        if(validMove(playerNum,vertex.c+" "+vertex.r))
+                                validVertices.add(vertex);
                 }
                 // to the right
                 vertex = getVertexByCoord(c+1,r);
                 if(vertex!=null){
-                    if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){                                        
+                                                      
                         if(vertex.isHere()){
-                            tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
-                            for(Vertex v : tempVertexSet)
-                                if(validMove(playerNum,v.c+" "+v.r))
-                                    validVertices.add(v);
+                            if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){      
+                                tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum(),depth-1);
+                                for(Vertex v : tempVertexSet)
+                                    if(validMove(playerNum,v.c+" "+v.r))
+                                        validVertices.add(v);
+                            }
                         }else
                             if(validMove(playerNum,vertex.c+" "+vertex.r))
                                     validVertices.add(vertex);
-                    }
                 }
                 // to the left
                 vertex = getVertexByCoord(c-1,r);
                 if(vertex!=null){
-                    if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){                                        
+                                                      
                         if(vertex.isHere()){
-                            tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
-                            for(Vertex v : tempVertexSet)
-                                if(validMove(playerNum,v.c+" "+v.r))
-                                    validVertices.add(v);
+                            if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){      
+                                tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum(),depth-1);
+                                for(Vertex v : tempVertexSet)
+                                    if(validMove(playerNum,v.c+" "+v.r))
+                                        validVertices.add(v);
+                            }
                         }else
                             if(validMove(playerNum,vertex.c+" "+vertex.r))
                                     validVertices.add(vertex);
-                    }
                 }
                 // above
                 vertex = getVertexByCoord(c,r-1);
                 if(vertex!=null){
-                    if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){                                        
+                                                      
                         if(vertex.isHere()){
-                            tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
-                            for(Vertex v : tempVertexSet)
-                                if(validMove(playerNum,v.c+" "+v.r))
-                                    validVertices.add(v);
+                            if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){      
+                                tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum(),depth-1);
+                                for(Vertex v : tempVertexSet)
+                                    if(validMove(playerNum,v.c+" "+v.r))
+                                        validVertices.add(v);
+                            }
                         }else
                             if(validMove(playerNum,vertex.c+" "+vertex.r))
                                     validVertices.add(vertex);
-                    }
                 }
-                break;
-            case 2:
+            }else if(playerNum==2){
                 // above
                 vertex = getVertexByCoord(c,r-1);
                 if(vertex!=null){
-                    if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){                                        
+                                                      
                         if(vertex.isHere()){
-                            tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
-                            for(Vertex v : tempVertexSet)
-                                if(validMove(playerNum,v.c+" "+v.r))
-                                    validVertices.add(v);
+                            if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){      
+                                tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum(),depth-1);
+                                for(Vertex v : tempVertexSet)
+                                    if(validMove(playerNum,v.c+" "+v.r))
+                                        validVertices.add(v);
+                            }
                         }else
                             if(validMove(playerNum,vertex.c+" "+vertex.r))
                                     validVertices.add(vertex);
-                    }
                 }
                 // to the right
                 if(vertex!=null){
-                    if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){                                        
+                                                      
                         if(vertex.isHere()){
-                            tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
-                            for(Vertex v : tempVertexSet)
-                                if(validMove(playerNum,v.c+" "+v.r))
-                                    validVertices.add(v);
+                            if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){      
+                                tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum(),depth-1);
+                                for(Vertex v : tempVertexSet)
+                                    if(validMove(playerNum,v.c+" "+v.r))
+                                        validVertices.add(v);
+                            }
                         }else
                             if(validMove(playerNum,vertex.c+" "+vertex.r))
                                     validVertices.add(vertex);
-                    }
                 }
                 // to the left
                 vertex = getVertexByCoord(c-1,r);
                 if(vertex!=null){
-                    if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){                                        
+                                                      
                         if(vertex.isHere()){
-                            tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
-                            for(Vertex v : tempVertexSet)
-                                if(validMove(playerNum,v.c+" "+v.r))
-                                    validVertices.add(v);
+                            if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){      
+                                tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum(),depth-1);
+                                for(Vertex v : tempVertexSet)
+                                    if(validMove(playerNum,v.c+" "+v.r))
+                                        validVertices.add(v);
+                            }
                         }else
                             if(validMove(playerNum,vertex.c+" "+vertex.r))
                                     validVertices.add(vertex);
-                    }
                 }
                 // below
                 vertex = getVertexByCoord(c,r+1);
                 if(vertex!=null){
-                    if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){                                        
+                                                      
                         if(vertex.isHere()){
-                            tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
-                            for(Vertex v : tempVertexSet)
-                                if(validMove(playerNum,v.c+" "+v.r))
-                                    validVertices.add(v);
+                            if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){      
+                                tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum(),depth-1);
+                                for(Vertex v : tempVertexSet)
+                                    if(validMove(playerNum,v.c+" "+v.r))
+                                        validVertices.add(v);
+                            }
                         }else
                             if(validMove(playerNum,vertex.c+" "+vertex.r))
                                     validVertices.add(vertex);
-                    }
                 }
-
-                break;
                 // fix case where vertex.isHere is the player that is getting the valid moves 4 also
-            case 3:
+            }else if(playerNum==3){
                 // to the right
                 vertex = getVertexByCoord(c+1,r);
                 if(vertex!=null){
-                    if(vertex.isHere()){
-                        tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
-                        for(Vertex v : tempVertexSet)
-                            if(validMove(playerNum,v.c+" "+v.r))
-                                validVertices.add(v);
-                    }else
-                        if(validMove(playerNum,vertex.c+" "+vertex.r))
-                                validVertices.add(vertex);
+                                                      
+                        if(vertex.isHere()){
+                            if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){      
+                                tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum(),depth-1);
+                                for(Vertex v : tempVertexSet)
+                                    if(validMove(playerNum,v.c+" "+v.r))
+                                        validVertices.add(v);
+                            }
+                        }else
+                            if(validMove(playerNum,vertex.c+" "+vertex.r))
+                                    validVertices.add(vertex);
                 }
                 // to the left
                 vertex = getVertexByCoord(c-1,r);
                 if(vertex!=null){
-                    if(vertex.isHere()){
-                        tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
-                        for(Vertex v : tempVertexSet)
-                            if(validMove(playerNum,v.c+" "+v.r))
-                                validVertices.add(v);
-                    }else
-                        if(validMove(playerNum,vertex.c+" "+vertex.r))
-                                validVertices.add(vertex);                
+                                                      
+                        if(vertex.isHere()){
+                            if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){      
+                                tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum(),depth-1);
+                                for(Vertex v : tempVertexSet)
+                                    if(validMove(playerNum,v.c+" "+v.r))
+                                        validVertices.add(v);
+                            }
+                        }else
+                            if(validMove(playerNum,vertex.c+" "+vertex.r))
+                                    validVertices.add(vertex);
                 }
                 // below
                 vertex = getVertexByCoord(c,r+1);
                 if(vertex!=null){
-                    if(vertex.isHere()){
-                        tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
-                        for(Vertex v : tempVertexSet)
-                            if(validMove(playerNum,v.c+" "+v.r))
-                                validVertices.add(v);
-                    }else
-                        if(validMove(playerNum,vertex.c+" "+vertex.r))
-                                validVertices.add(vertex);
+                                                      
+                        if(vertex.isHere()){
+                            if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){      
+                                tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum(),depth-1);
+                                for(Vertex v : tempVertexSet)
+                                    if(validMove(playerNum,v.c+" "+v.r))
+                                        validVertices.add(v);
+                            }
+                        }else
+                            if(validMove(playerNum,vertex.c+" "+vertex.r))
+                                    validVertices.add(vertex);
                 }
                 // above
                 vertex = getVertexByCoord(c,r-1);
                 if(vertex!=null){
-                    if(vertex.isHere()){
-                        tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
-                        for(Vertex v : tempVertexSet)
-                            if(validMove(playerNum,v.c+" "+v.r))
-                                validVertices.add(v);
-                    }else
-                        if(validMove(playerNum,vertex.c+" "+vertex.r))
-                                validVertices.add(vertex);                
+                                                      
+                        if(vertex.isHere()){
+                            if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){      
+                                tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum(),depth-1);
+                                for(Vertex v : tempVertexSet)
+                                    if(validMove(playerNum,v.c+" "+v.r))
+                                        validVertices.add(v);
+                            }
+                        }else
+                            if(validMove(playerNum,vertex.c+" "+vertex.r))
+                                    validVertices.add(vertex);
                 }
-                break;
-            case 4:
+            }else{
                 // to the right
                 vertex = getVertexByCoord(c+1,r);
                 if(vertex!=null){
-                    if(vertex.isHere()){
-                        tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
-                        for(Vertex v : tempVertexSet)
-                            if(validMove(playerNum,v.c+" "+v.r))
-                                validVertices.add(v);
-                    }else
-                        if(validMove(playerNum,vertex.c+" "+vertex.r))
-                                validVertices.add(vertex);
+                                                      
+                        if(vertex.isHere()){
+                            if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){      
+                                tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum(),depth-1);
+                                for(Vertex v : tempVertexSet)
+                                    if(validMove(playerNum,v.c+" "+v.r))
+                                        validVertices.add(v);
+                            }
+                        }else
+                            if(validMove(playerNum,vertex.c+" "+vertex.r))
+                                    validVertices.add(vertex);
                 }
                 // to the left
                 vertex = getVertexByCoord(c-1,r);
                 if(vertex!=null){
-                    if(vertex.isHere()){
-                        tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
-                        for(Vertex v : tempVertexSet)
-                            if(validMove(playerNum,v.c+" "+v.r))
-                                validVertices.add(v);
-                    }else
-                        if(validMove(playerNum,vertex.c+" "+vertex.r))
-                                validVertices.add(vertex);                
+                        if(vertex.isHere()){
+                            if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){      
+                                tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum(),depth-1);
+                                for(Vertex v : tempVertexSet)
+                                    if(validMove(playerNum,v.c+" "+v.r))
+                                        validVertices.add(v);
+                            }
+                        }else
+                            if(validMove(playerNum,vertex.c+" "+vertex.r))
+                                    validVertices.add(vertex);
                 }
                 // below
                 vertex = getVertexByCoord(c,r+1);
                 if(vertex!=null){
-                    if(vertex.isHere()){
-                        tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
-                        for(Vertex v : tempVertexSet)
-                            if(validMove(playerNum,v.c+" "+v.r))
-                                validVertices.add(v);
-                    }else
-                        if(validMove(playerNum,vertex.c+" "+vertex.r))
-                                validVertices.add(vertex);
+                        if(vertex.isHere()){
+                            if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){      
+                                tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum(),depth-1);
+                                for(Vertex v : tempVertexSet)
+                                    if(validMove(playerNum,v.c+" "+v.r))
+                                        validVertices.add(v);
+                            }
+                        }else
+                            if(validMove(playerNum,vertex.c+" "+vertex.r))
+                                    validVertices.add(vertex);
                 }
                 // above
                 vertex = getVertexByCoord(c,r-1);
                 if(vertex!=null){
-                    if(vertex.isHere()){
-                        tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum());
-                        for(Vertex v : tempVertexSet)
-                            if(validMove(playerNum,v.c+" "+v.r))
-                                validVertices.add(v);
-                    }else
-                        if(validMove(playerNum,vertex.c+" "+vertex.r))
-                                validVertices.add(vertex);                
+                        if(vertex.isHere()){
+                            if(getPlayerByCoord(vertex.c, vertex.r).getPlayerNum()!=playerNum){      
+                                tempVertexSet = getValidMoves(getPlayerByCoord(vertex.c,vertex.r).getPlayerNum(),depth-1);
+                                for(Vertex v : tempVertexSet)
+                                    if(validMove(playerNum,v.c+" "+v.r))
+                                        validVertices.add(v);
+                            }
+                        }else
+                            if(validMove(playerNum,vertex.c+" "+vertex.r))
+                                    validVertices.add(vertex);
                 }
-                break;
         }
         return validVertices;
     }
