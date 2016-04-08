@@ -80,7 +80,7 @@ public class GameServer extends Server {
             } catch(Exception e) {
 		e.printStackTrace();
             }
-            String move = AI.getRandomMove(); // get a random move from the AI
+            String move = AI.getMove(); // get a random move from the AI
             System.out.println("Sending TESUJI " + move);
             out.println("TESUJI " + move);
 	} else if(msg.startsWith("ATARI")) {

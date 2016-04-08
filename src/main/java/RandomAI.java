@@ -1,5 +1,6 @@
 
 import java.awt.Point;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -65,7 +66,7 @@ public class RandomAI {
      */
     public String getMove() {
         if (playerCount == 2) {
-            return getRandomMove();
+            return getMove2P();
         } else {
             return getMove4P();
         }
@@ -93,14 +94,7 @@ public class RandomAI {
      * @param playerNum - player requesting move
      * @return
      */
-    private String getMove2PBROKEN() {
-        //Players in game
-        Player player1 = board.getPlayer(1);
-        Player player2 = board.getPlayer(2);
-
-        // current position of players
-        Vertex player1Source = board.getVertexByCoord(player1.getC(), player1.getR());
-        Vertex player2Source = board.getVertexByCoord(player2.getC(), player2.getR());
+    private String getMove2P() {
 
         // position of players best next move
         Vertex player1BestMove = null;
@@ -118,77 +112,66 @@ public class RandomAI {
         List<Edge> player1EdgeList = player1Path.getPathEdgeList();
         List<Edge> player2EdgeList = player2Path.getPathEdgeList();
 
-        // logic to get next best move for player1
-        Vertex EdgeSource = null;
-        Vertex EdgeTarget = null;
 
-        // getting next node on path next to the player1 position
+        Set<Vertex> p1WinningVertexPath = new HashSet<>();
+        Set<Vertex> p2WinningVertexPath = new HashSet<>();
+        
+        Set<Vertex> p1ValidMoves = board.getValidMoves(1);
+        Set<Vertex> p2ValidMoves = board.getValidMoves(2);
+        
+        Set<Vertex> p1InvalidWinningMoves = new HashSet<>();
+        Set<Vertex> p2InvalidWinningMoves = new HashSet<>();
+        
+        // getting nodes on winning path P1
         for (Edge e : player1EdgeList) {
-            EdgeTarget = e.getTarget();
-            EdgeSource = e.getSource();
-            // if the source of this edge is the location of the player
-            // the next best move will be the target Vertex of this edge
-            if (EdgeSource.equals(player1Source)) {
-                player1BestMove = EdgeTarget;
-            }
+            p1WinningVertexPath.add(e.getTarget());
+            p1WinningVertexPath.add(e.getSource());
         }
-
-        // if we need to make a jump of any kind
-        // this second iteration out of the first is so that we get
-        // the next position based off of best move
-        while (player1BestMove.isHere()) {
-            for (Edge e : player1EdgeList) {
-                EdgeTarget = e.getTarget();
-                EdgeSource = e.getSource();
-                // if the source of this edge is the location of the player
-                // the next best move will be the target Vertex of this edge
-                if (EdgeSource.equals(player1BestMove)) {
-                    player1BestMove = EdgeTarget;
-                }
-            }
-        }
-        //
-        //
-        // getting next node on path next to the player2 position
-        //
-        //
+        // get the invalid moves
+        for(Vertex v:p1WinningVertexPath)
+            if(!p1ValidMoves.contains(v))
+                p1InvalidWinningMoves.add(v);
+        // remove the invalid moves from the valid moves set
+        for(Vertex v: p1InvalidWinningMoves)
+            if(p1ValidMoves.contains(v))
+                p1ValidMoves.remove(v);
+            
+        
+        
+        // getting next node on path next to the player1 position
         for (Edge e : player2EdgeList) {
-            EdgeTarget = e.getTarget();
-            EdgeSource = e.getSource();
-            // if the source of this edge is the location of the player
-            // the next best move will be the target Vertex of this edge
-            if (EdgeSource.equals(player2Source)) {
-                player2BestMove = EdgeTarget;
-            }
+            p2WinningVertexPath.add(e.getTarget());
+            p2WinningVertexPath.add(e.getSource());
         }
-
-        // if we need to make a jump of any kind
-        // this second iteration out of the first is so that we get
-        // the next position based off of best move
-        while (player2BestMove.isHere()) {
-            for (Edge e : player2EdgeList) {
-                EdgeTarget = e.getTarget();
-                EdgeSource = e.getSource();
-                // if the source of this edge is the location of the player
-                // the next best move will be the target Vertex of this edge
-                if (EdgeSource.equals(player2BestMove)) {
-                    player2BestMove = EdgeTarget;
-                }
-            }
-        }
-
+        // get the invalid moves
+        for(Vertex v:p1WinningVertexPath)
+            if(!p2ValidMoves.contains(v))
+                p2InvalidWinningMoves.add(v);
+        // remove the invalid moves from the valid moves set
+        for(Vertex v: p2InvalidWinningMoves)
+            if(p2ValidMoves.contains(v))
+                p2ValidMoves.remove(v);
+            
+        
+        for(Vertex v: p1ValidMoves)
+            player1BestMove = v;
+        
+        for(Vertex v: p2ValidMoves)
+            player2BestMove = v;
+        
         // if this players path is shorter, move player position to here
-        if (this.playerNum == 1) //    if(playerOnePathLength<playerTwoPathLength)
-        {
-            return player1BestMove.c + " " + player1BestMove.r + " 0";
-        } else //   if(playerOnePathLength>playerTwoPathLength)
-        {
-            return player2BestMove.c + " " + player2BestMove.r + " ";
+        if (this.playerNum == 1){
+            if(playerOnePathLength<=playerTwoPathLength)
+                return player1BestMove.c + " " + player1BestMove.r;
+            else
+                return player1BestMove.c + " " + player1BestMove.r + " H"; 
+        } else{
+            if(playerOnePathLength>=playerTwoPathLength)
+                return player2BestMove.c + " " + player2BestMove.r;
+            else
+                return player1BestMove.c + " " + player1BestMove.r + " H";
         }
 
-        // START LOGIC FOR CORRECT WALL PLACEMENT IF Opponent has a shorter path
-        //when returning wall placement - "<int col> <int row> (1(Vertical) 2(Horizontal)) 
-        //return "";
     }
 
     private String getMove4PBROKEN() {
