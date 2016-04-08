@@ -72,6 +72,7 @@ public class GameClient{
     catch(InterruptedException ie){
       ie.printStackTrace();
     }
+    gui.stopApplication();
   }
 
   /**
@@ -260,19 +261,19 @@ public class GameClient{
 
     p1out.println(HELLO);
     String p1Name = Parser.parse(p1in.nextLine());
-    System.out.println("Player 1 Name: " + p1Name);
+    //System.out.println("Player 1 Name: " + p1Name);
     p2out.println(HELLO);
     String p2Name = Parser.parse(p2in.nextLine());
-    System.out.println("Player 2 Name: " + p2Name);
+    //System.out.println("Player 2 Name: " + p2Name);
     String p3Name = null;
     String p4Name = null;
     if(players.length == 4){
       p3out.println(HELLO);
       p3Name = Parser.parse(p3in.nextLine());
-      System.out.println("Player 3 Name: " + p3Name);
+      //System.out.println("Player 3 Name: " + p3Name);
       p4out.println(HELLO);
       p4Name = Parser.parse(p4in.nextLine());
-      System.out.println("Player 4 Name: " + p4Name);
+      //System.out.println("Player 4 Name: " + p4Name);
     }
     if(players.length == 2){
       p1out.println(GAME + " 1 " + p1Name + " " + p2Name);
