@@ -23,6 +23,11 @@ public class Vertex {
         this.c = -1;
         here = false;
     }
+    public Vertex(int c, int r){
+        this.c = c;
+        this.r = r;
+        this.here = false;
+    }
     
     public boolean isHere(){
         if(here)
