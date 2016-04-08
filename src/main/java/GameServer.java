@@ -36,12 +36,12 @@ public class GameServer extends Server {
 		msg = Parser.stripBrackets(msg);
 		String [] s = msg.split(" ");
 		if(msg.startsWith("HELLO")) {
-			System.out.println("Sending IAM " + name + "to client");
+			System.out.println("Sending IAM " + name + " to client");
 			out.println("IAM " + name);
 		} else if(msg.startsWith("GAME")) {
 			if(s.length == 4) {
 				playerNum = Integer.parseInt(s[1]);
-				AI = new RandomAI(2, playerNum);
+				AI = new RandomAI(4, playerNum);
 			} else {
 				playerNum = Integer.parseInt(s[1]);
 				AI = new RandomAI(2, playerNum);
@@ -51,11 +51,10 @@ public class GameServer extends Server {
 		} else if(msg.startsWith("MYOUSHU")) {
 
 			String move = sc.nextLine();
-			System.out.println("Sending TESUJI " + move);
 			out.println("TESUJI " + move);
 		} else if(msg.startsWith("ATARI")) {
 			// update the AI
-			return;
+			System.out.println("Saw ATARI");
 		} else if(msg.startsWith("KIKASHI")) { // game is over guy won
 			try {
 				out.close();
@@ -66,6 +65,7 @@ public class GameServer extends Server {
 			}
 		} else if(msg.startsWith("GOTE")) {
 			// update AI with kicked player
+			System.out.println("Person kicked");
 		} else {
 			return;
 		}

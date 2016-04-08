@@ -151,6 +151,8 @@ public class GUI extends Application implements GUIInterface {
         }
 
     }
+
+    
     
 
     public Point getPlayerPosition(int num) {
@@ -179,8 +181,8 @@ public class GUI extends Application implements GUIInterface {
                     grid.add(new Rectangle(50, 7.0, Color.WHITE), c, r + 1);
                     grid.add(new Rectangle(50, 7.0, Color.WHITE), c+2, r +1);
                 }
-                //output.appendText("Player " + player.getPlayerTurn() + " moved to " +
-                              //"Column " + col + " Row " + nrow + "\n\n");
+                output.appendText("Player " + player.getPlayerTurn() + " moved to " +
+                              "Column " + column + " Row " + row + "\n\n");
                 player.setPlayerTurn();
             }
         });
@@ -211,6 +213,17 @@ public class GUI extends Application implements GUIInterface {
             }
         });
           
+    }
+
+    public void removePlayer(int num) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                grid.getChildren().remove(player.getPlayerNode(num));
+                output.appendText("Kicked player " + num + "\n\n");
+                player.setPlayerTurn();
+            }
+        });
     }
     
     public Controller getController() {
