@@ -662,6 +662,16 @@ public class LogicalBoard {
         int r = v.r;
         Set<Vertex> tempVertexSet;
         Set<Vertex> validVertices = new HashSet<>();
+        // this is for jumping over a wall
+        // originally i was thinking of using the players source position to 
+        // check to see if there was an edge but that doesnt make sense because
+        // we could be a couple of iterations away from the player asking for 
+        // valid moves.  So then i tried to do it with the parameter v.  
+        // sadly that just never ends and i do not know why
+        
+        // to see what im talking about run - runlogicalboard.java
+        // then uncomment the if and comment the one above it out in all four cases
+        //
         Vertex Source = getVertexByCoord(p.getC(),p.getR());
         // vertices to check for validity
         Vertex right = getVertexByCoord(c + 1, r);
@@ -670,7 +680,9 @@ public class LogicalBoard {
         Vertex above = getVertexByCoord(c, r - 1);
 
         if (above != null) {
-            if(board.containsEdge(above, Source)){
+            System.out.println(above);
+            if(board.containsEdge(Source,above)){
+            //if(hasEdge(above,v)){
                 if (above.isHere()) {
                     tempVertexSet = getValidMoves(above, p);
                     if (tempVertexSet != null) {
@@ -685,7 +697,9 @@ public class LogicalBoard {
             }
         }
         if (below != null) {
-            if(board.containsEdge(below, Source)){
+            System.out.println(below);
+            if(board.containsEdge(Source,below)){
+            //if(hasEdge(below,v)){
                 if (below.isHere()) {
                     tempVertexSet = getValidMoves(below, p);
                     if (tempVertexSet != null) {
@@ -701,7 +715,9 @@ public class LogicalBoard {
             }
         }
         if (right != null) {
-            if(board.containsEdge(right, Source)){
+            System.out.println(right);
+            if(board.containsEdge(Source,right)){
+            //if(hasEdge(right,v)){
                 if (right.isHere()) {
                     tempVertexSet = getValidMoves(right, p);
                     if (tempVertexSet != null) {
@@ -717,14 +733,16 @@ public class LogicalBoard {
             }
         }
         if (left != null) {
-            if(board.containsEdge(left, Source)){
+            System.out.println(left);
+            if(board.containsEdge(Source,left)){
+            //if(hasEdge(left,v)){
                 if (left.isHere()) {
                     tempVertexSet = getValidMoves(left, p);
                     if (tempVertexSet != null) {
                         for (Vertex temp : tempVertexSet) {
-                                if (validMove(p, temp.c + " " + temp.r)) {
-                                    validVertices.add(temp);
-                                }
+                            if (validMove(p, temp.c + " " + temp.r)) {
+                                validVertices.add(temp);
+                            }
                         }
                     }
                 } else if (validMove(p, left.c + " " + left.r)) {
@@ -759,5 +777,12 @@ public class LogicalBoard {
         }
         return false;
 
+    }
+    private boolean hasEdge(Vertex destination,Vertex Source){
+        Edge temp = board.getEdge(Source,destination);
+        for(Edge e : board.edgeSet())
+            if(temp.equals(e))
+                return true;
+        return false;
     }
 }

@@ -27,4 +27,7 @@ public class Edge extends DefaultEdge{
     @Override public String toString(){
            return "("+this.getSource().toString() + ":" + this.getTarget().toString()+ ")\n";
     }
+    public boolean equals(Edge e){
+        return this.getSource().equals(e.getSource())&&this.getTarget().equals(e.getTarget());
+    }
 }
