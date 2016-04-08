@@ -185,7 +185,7 @@ public class ServerWrapper implements Runnable{
     }else if(in.startsWith("KIKASHI")){
       this.close();
     }else if(in.startsWith("ATARI")){
-      AI.update(Parser.parse(in));
+      //AI.update(Parser.parse(in));
     }
   }
 

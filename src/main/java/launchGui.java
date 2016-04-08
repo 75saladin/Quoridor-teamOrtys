@@ -27,8 +27,8 @@ public class launchGui {
             int two = Integer.parseInt(s[1]);
             gui.movePlayer(one, two);
             
-            ai1.update("1 "+move1);
-            ai2.update("1 "+move1);
+            ai1.update(1,move1);
+            ai2.update(1,move1);
             
             Thread.sleep(2000);
             
@@ -39,8 +39,8 @@ public class launchGui {
             
             gui.movePlayer(one, two);
             
-            ai1.update("2 "+ move2);
-            ai2.update("2 "+ move2);          
+            ai1.update(2,move2);
+            ai2.update(2,move2);          
         }   
     }
       /**

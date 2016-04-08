@@ -281,10 +281,10 @@ public class GameClient{
       p2out.println(GAME + " 2 " + p1Name + " " + p2Name);
     }
     else{
-      p1out.println(GAME + " 1 " + p1Name + " " + p2Name + " " + p3Name + " " + p4Name); 
-      p2out.println(GAME + " 2 " + p1Name + " " + p2Name + " " + p3Name + " " + p4Name); 
-      p3out.println(GAME + " 3 " + p1Name + " " + p2Name + " " + p3Name + " " + p4Name); 
-      p4out.println(GAME + " 4 " + p1Name + " " + p2Name + " " + p3Name + " " + p4Name); 
+      p1out.println(GAME + " 1 " + p1Name + " " + p3Name + " " + p4Name + " " + p2Name); 
+      p2out.println(GAME + " 4 " + p1Name + " " + p3Name + " " + p4Name + " " + p2Name); 
+      p3out.println(GAME + " 2 " + p1Name + " " + p3Name + " " + p4Name + " " + p2Name); 
+      p4out.println(GAME + " 3 " + p1Name + " " + p3Name + " " + p4Name + " " + p2Name); 
     }
   }
 
