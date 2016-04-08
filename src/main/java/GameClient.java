@@ -19,31 +19,58 @@ public class GameClient{
   private static final String GAME = "GAME";
   private static final String MOVE_REQUEST = "MYOUSHU";
   private static final String MOVE_MADE = "ATARI";
-  private static final String GAME_WON = "KIKASHI";
+  private static final String PLAYER_WON = "KIKASHI";
   private static final String PLAYER_KICKED = "GOTE";
 
   /**
     * Start the game logic.
     * Goes through the initial contact, then executes turn order game.
     *
-    * @param pNum number of players and number to mod turn counter by to get player
     * @param players array of Socket open to servers 
     */
   public static void runGame(Socket[] players){
     contactServers(players);
-    startGUI(players.length); 
+    GUI gui = startGUI(players.length); 
     LogicalBoard gameBoard = new LogicalBoard(players.length); 
     // Start asking for moves
     boolean running = true;
-    int pNum = 0;
+    int index = 0;
+    int pNum = 1;
+    int winner = 0;
     while(running){
-      System.out.println("REQUESTING MOVE: Player " + (pNum+1));
-      String move = requestMove(players[pNum]);
-      if(move.equals("Error")){
-        kickPlayer(players,pNum+1);
-      }
+      if(players[index].isClosed())
+        continue;
+      System.out.println("REQUESTING MOVE: Player " + (pNum));
+      String move = requestMove(players[index]);
       System.out.println("GOT MOVE: " + move);
-      //TODO: Broadcast move to players and check for winner
+      if(gameBoard.checkValid(pNum,move)){
+        broadcastMove(players,pNum,move);
+        gui.update(move);
+      }
+      else{
+        kickPlayer(players,pNum);
+        gameBoard.kick(pNum);
+      }
+      winner = checkWinner(gameBoard,players.length);
+      if(winner != 0){
+        System.out.println("WINNER: " + winner);
+        broadcastWinner(players,winner);
+        running = false;
+      }
+      if(players.length == 2){
+        index ^= 0;
+        pNum = (pNum % 2) + 1;
+      }
+      else{
+        index = (index + 1) % 4;
+        pNum = updateNumber(pNum);
+      }
+    }
+    try{
+      Thread.sleep(5000);
+    }
+    catch(InterruptedException ie){
+      ie.printStackTrace();
     }
   }
 
@@ -86,7 +113,64 @@ public class GameClient{
     */
   // Currently not implemented
   public static void setup4Player(String[] pairs){
-    //TODO: this
+    String machine1 = pairs[0];
+    String machine2 = pairs[2];
+    String machine3 = pairs[4];
+    String machine4 = pairs[6];
+    int port1 = 0;
+    int port2 = 0;
+    int port3 = 0;
+    int port4 = 0;
+    try{
+      port1 = Integer.parseInt(pairs[1]);
+      port2 = Integer.parseInt(pairs[3]);
+      port3 = Integer.parseInt(pairs[5]);
+      port4 = Integer.parseInt(pairs[7]);
+    }
+    catch(NumberFormatException nfe){
+      System.out.println("Error: Invalid port number found.\nCroaking...");
+      System.exit(1);
+    }
+
+    Socket[] players = new Socket[4];
+
+    players[0] = socketSetup(machine1,port1);
+    players[1] = socketSetup(machine4,port4);
+    players[2] = socketSetup(machine2,port2);
+    players[3] = socketSetup(machine3,port3);
+
+    runGame(players);
+
+    closeConnection(players);
+  }
+
+  /**
+    * Handles the broadcasting of valid moves to players.
+    *
+    * @param players Array of Sockets open to servers/players.
+    * @param pNum Number of player that made the move.
+    * @param move String of the move made
+    */
+  public static void broadcastMove(Socket[] players, int pNum, String move){
+    for(int i = 0; i < players.length; i++){
+      String fMove = Parser.formatMove(move);
+      //System.out.println("FORMAT TEST: " + fMove);
+      if(!players[i].isClosed())
+        getOut(players[i]).println(MOVE_MADE + " " + pNum + " " + fMove);
+    }
+  }
+
+  /**
+    * Handles broadcasting winner to all players.
+    *
+    * @param players Array of sockets
+    * @param winner Number of player winner
+    */
+  public static void broadcastWinner(Socket[] players, int winner){
+    for(int i = 0; i < players.length; i++){
+      if(!players[i].isClosed())
+        getOut(players[i]).println(PLAYER_WON + " " + winner);
+    }
   }
 
   /**
@@ -99,8 +183,27 @@ public class GameClient{
     */
   public static String requestMove(Socket player){
     getOut(player).println(MOVE_REQUEST);
-    String move = Parser.parse(getIn(player).nextLine());
-    return move;
+    String mesg = getIn(player).nextLine();
+    if(mesg.startsWith("TESUJI"))
+      return Parser.parse(mesg);
+    return "Error";
+  }
+
+  /**
+    * Handles checking for a winner.
+    *
+    * @param board LogicalGameBoard
+    * @param players number of player in game
+    *
+    * @return number of the winning player, 0 if none.
+    */
+  public static int checkWinner(LogicalBoard board, int players){
+    int win = 0;
+    for(int i = 1; i <= players; i++){
+      if(board.hasWon(i))
+        win = i;
+    }
+    return win;
   }
 
   /**
@@ -109,16 +212,25 @@ public class GameClient{
     *
     * @param pNum number of players in game
     */
-  public static void startGUI(int pNum){
-    new Thread() {
+  public static GUI startGUI(int pNum){
+    Thread t = new Thread() {
       @Override
       public void run() {
         javafx.application.Application.launch(GUI.class);
       }
-    }.start();
+    };
+
+    t.setDaemon(true);
+    t.start();
+        
     GUI gui = GUI.waitForGUIStartUpTest();
-    if(pNum == 4)
-      gui.setPlayer(new Controller(4));
+    Controller player = null;
+    if(pNum == 2)
+      player = new Controller(2);
+    else
+      player = new Controller(4);
+    gui.setPlayer(player);
+    return gui;
   }
 
   /**
@@ -148,19 +260,19 @@ public class GameClient{
 
     p1out.println(HELLO);
     String p1Name = Parser.parse(p1in.nextLine());
-    System.out.println("TEST: P1Name: " + p1Name);
+    System.out.println("Player 1 Name: " + p1Name);
     p2out.println(HELLO);
     String p2Name = Parser.parse(p2in.nextLine());
-    System.out.println("TEST: P2Name: " + p2Name);
+    System.out.println("Player 2 Name: " + p2Name);
     String p3Name = null;
     String p4Name = null;
     if(players.length == 4){
       p3out.println(HELLO);
       p3Name = Parser.parse(p3in.nextLine());
-      System.out.println("TEST: P3Name: " + p3Name);
+      System.out.println("Player 3 Name: " + p3Name);
       p4out.println(HELLO);
       p4Name = Parser.parse(p4in.nextLine());
-      System.out.println("TEST: P4Name: " + p4Name);
+      System.out.println("Player 4 Name: " + p4Name);
     }
     if(players.length == 2){
       p1out.println(GAME + " 1 " + p1Name + " " + p2Name);
@@ -243,8 +355,8 @@ public class GameClient{
   public static void closeConnection(Socket[] players){
     for(int i = 0; i < players.length; i++){
       try{
-        getOut(players[i]).println(GAME_WON + " " + (i+1));
-        players[i].close();
+        if(!players[i].isClosed())
+          players[i].close();
       }
       catch(IOException ioe){
         System.out.println("IOException: " + ioe);
@@ -261,9 +373,11 @@ public class GameClient{
     * @param pNum number of player kicked
     */
   public static void kickPlayer(Socket[] players,int pNum){
-    for(int i = 0; i < players.length; i++)
-      getOut(players[i]).println(PLAYER_KICKED + " " + pNum);
-    
+    for(int i = 0; i < players.length; i++){
+      //System.out.println("PLAYER " + i + " CLOSED: " + players[i].isClosed());
+      if(!players[i].isClosed())
+        getOut(players[i]).println(PLAYER_KICKED + " " + pNum);
+    }
     try{
       players[pNum-1].close();
     }
@@ -271,6 +385,27 @@ public class GameClient{
       System.out.println("IOException: " + ioe);
       ioe.printStackTrace();
     }
+  }
+
+  /**
+    * Updates player number.
+    *
+    * @param p Current player number
+    *
+    * @return new player number
+    */
+  public static int updateNumber(int p){
+    switch(p){
+      case 1:
+        return 4;
+      case 2:
+        return 3;
+      case 3:
+        return 1;
+      case 4:
+        return 2;
+    }
+    return 0;
   }
 
   /**
@@ -294,7 +429,7 @@ public class GameClient{
       data[index] = pair[0];
       data[index+1] = pair[1];
       index += 2;
-      System.out.println(Arrays.toString(data)); 
+      //System.out.println(Arrays.toString(data)); 
     }
     return data;
   }
