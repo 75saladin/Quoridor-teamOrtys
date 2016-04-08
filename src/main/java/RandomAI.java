@@ -2,7 +2,7 @@
 import java.awt.Point;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
+import java.util.Set;
 import org.jgrapht.alg.DijkstraShortestPath;
 
 /*
@@ -62,19 +62,41 @@ public class RandomAI {
      */
     public String getMove(){
         if(playerCount==2)
-            return getMove2P();
+            return getRandomMove();
         else
             return getMove4P();
     }
     
+    public String getRandomMove(){
+        Random rand = new Random();
+        // example player1 is at 4, 0
+        // player 1 can move to (4, 1), (3, 0), or (5, 0)
+        // same column + or - 1 row or same row + or - one column
+        int move = rand.nextInt(4);
+        int temp = 0;
+        Set<Vertex> validVertices = board.getValidMoves(this.playerNum);
+        int size = validVertices.size();
+        while(move>size)
+            move--;
+        for(Vertex v : validVertices)
+            if(temp==move)
+                return Parser.formatMove(v.c +" "+v.r);
+            temp++;
+        return "";
+    }
+    
+    public String getMove4P(){
+        return "";
+    }
+    
     
     /**
-     * get a player move in a 2 player game
+     * get a player move in a 2 player game  NOT WORKING
      * 
      * @param playerNum - player requesting move
      * @return 
      */
-    private String getMove2P(){
+    private String getMove2PBROKEN(){
         //Players in game
         Player player1 = board.getPlayer(1);
         Player player2 = board.getPlayer(2);
@@ -176,7 +198,7 @@ public class RandomAI {
     
     
     
-    private String getMove4P(){
+    private String getMove4PBROKEN(){
         
         DijkstraShortestPath <Vertex,Edge> player1 = board.getShortestWinningPath(1);
         DijkstraShortestPath <Vertex,Edge> player2 = board.getShortestWinningPath(2);

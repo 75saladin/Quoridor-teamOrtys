@@ -9,6 +9,7 @@ public class Player {
     private int c;
     private int r;
     private int walls;
+    private int playerNum;
     
     
 
@@ -71,6 +72,9 @@ public class Player {
     @Override
     public String toString() {
         return "Player{" + "c=" + c + ", r=" + r + ", walls=" + walls + '}';
+    }
+    public int getPlayerNum(){
+        return playerNum;
     }
 
 }

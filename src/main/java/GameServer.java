@@ -56,7 +56,7 @@ public class GameServer extends Server {
 				e.printStackTrace();
 			}
 
-			String move = sc.next();
+			String move = AI.getRandomMove();
 			System.out.println("Sending TESUJI " + move);
 			out.println("TESUJI " + move);
 		} else if(msg.startsWith("ATARI")) {
