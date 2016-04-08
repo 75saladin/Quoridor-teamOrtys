@@ -178,22 +178,21 @@ public class LogicalBoard {
         }
         if (move.length() == 3 || move.length() == 5) {
             if (move.length() == 3) {
-                if (validMove(playerNum, move)) //makeMove(playerNum,move);
-                {
+                if (validMove(playerNum, move)){
+                    makeMove(playerNum,move);
                     return true;
-                } else //kick(playerNum);
-                {
+                } else{
                     return false;
                 }
-            } else if (validWall(playerNum, move)) //makeMove(playerNum,move);
-            {
+            } else if (validWall(playerNum, move)){
+                placeWall(playerNum,move);
                 return true;
-            } else //kick(playerNum);
-            {
+            } else{
                 return false;
             }
+        }else{
+            return false;
         }
-        return false;
     }
 
     /**
@@ -205,7 +204,7 @@ public class LogicalBoard {
      * @param move The destination to move the player to
      */
     public void makeMove(int playerNum, String move) {
-        Player player = players[playerNum - 1];
+        Player player = getPlayer(playerNum);
         Scanner sc = new Scanner(move);
         int c = Integer.parseInt(sc.next());
         int r = Integer.parseInt(sc.next());
@@ -226,48 +225,21 @@ public class LogicalBoard {
      * @return whether or not it is a valid move
      */
     public boolean validMove(int playerNum, String move) {
-        Player player = getPlayer(playerNum);
-
-        // if the player doesnt exist invalid move
-        if (player == null) {
-            return false;
-        }
-
         Scanner sc = new Scanner(move);
         int c = Integer.parseInt(sc.next());
         int r = Integer.parseInt(sc.next());
-
-        if (c < 0 || c > 8 || r < 0 || r > 8) {
-            return false;
-        }
-        Vertex Destination = getVertexByCoord(c, r);  // Destination of move
-        Vertex Source = getVertexByCoord(player.getC(), player.getR()); // location of player
-        DijkstraShortestPath<Vertex, Edge> dijkstra = new DijkstraShortestPath<>(board, Source, Destination);
-        //if the path doesnt exist - false
-        if (dijkstra.getPath() == null) {
-            return false;
-        }
-        // if there is a player in this location
-        if (Destination.here) {
-            return false;
-        }
-        if (Destination.equals(Source)) {
-            return false;
-        }
-        if (dijkstra.getPathEdgeList().size() > 1) {
-            if (!jump(Source, Destination, dijkstra)) {
-                return false;
+        Vertex Destination = getVertexByCoord(c, r);
+        Set<Vertex> validMoves = getValidMoves(playerNum);
+        for(Vertex v : validMoves){
+            if(v.equals(Destination)){
+                return true;
             }
         }
-
-        // if there is no edge or Destination or there is a player
-        // on the destination or the source and destination are the same
-        // the player cannot be a move here and needs to be kicked from the game
-        //makeMove(playerNum, move);
-        return true;
+        return false;
     }
 
-    public boolean jump(Vertex Source, Vertex Destination, DijkstraShortestPath dijkstra) {
+    public boolean validJump(Vertex Source, Vertex Destination) {
+        DijkstraShortestPath<Vertex,Edge> dijkstra = new DijkstraShortestPath<>(board,Source,Destination);
         boolean isValidJump = false;
         List<Edge> edgeList = dijkstra.getPathEdgeList();
         Set<Vertex> vertexOnPath = new HashSet<>();
@@ -300,17 +272,16 @@ public class LogicalBoard {
     public void placeWall(int playerNum, String wall) {
         Player player;
 
-        if (playerNum == 0) {
-            player = null;
-        } else {
-            player = players[playerNum - 1];
-        }
-
-        Set<Edge> edgesToRemove = getEdgesToRemove(wall);
-        for (Edge e : edgesToRemove) {
-            board.removeEdge(e);
-        }
+        if (playerNum == 0)
+            player=null;
+        else
+            player = getPlayer(playerNum);
+        
         if (player != null) {
+            Set<Edge> edgesToRemove = getEdgesToRemove(wall);
+            for (Edge e : edgesToRemove) {
+                board.removeEdge(e);
+            }
             player.decrementWall();
         }
     }
@@ -329,7 +300,7 @@ public class LogicalBoard {
         if (playerNum != 0) {
             player = getPlayer(playerNum);
         } else {
-            player = null;
+            return false;
         }
         Scanner sc = new Scanner(wall);
         int sourceC = Integer.parseInt(sc.next());
@@ -371,7 +342,6 @@ public class LogicalBoard {
         }
 
         // if we get here return true
-        placeWall(playerNum, wall);
         return true;
     }
 
@@ -525,7 +495,8 @@ public class LogicalBoard {
      *
      * @param wall
      */
-    public void removeWall(String wall) {
+    public void removeWall(int playerNum,String wall) {
+        Player p = getPlayer(playerNum);
         Scanner sc = new Scanner(wall);
         int cB = Integer.parseInt(sc.next()); // Column of beginning Vertex
         int rB = Integer.parseInt(sc.next()); // Row of beginning Vertex
@@ -544,6 +515,7 @@ public class LogicalBoard {
             board.addEdge(sourceV, belowV);
             board.addEdge(rightV, belowRV);
         }
+        p.incrementWall();
     }
 
     /**
@@ -690,7 +662,7 @@ public class LogicalBoard {
         int r = v.r;
         Set<Vertex> tempVertexSet;
         Set<Vertex> validVertices = new HashSet<>();
-
+        Vertex Source = getVertexByCoord(p.getC(),p.getR());
         // vertices to check for validity
         Vertex right = getVertexByCoord(c + 1, r);
         Vertex left = getVertexByCoord(c - 1, r);
@@ -698,78 +670,94 @@ public class LogicalBoard {
         Vertex above = getVertexByCoord(c, r - 1);
 
         if (above != null) {
-            System.out.println(above);
-            if (above.isHere()) {
-                tempVertexSet = getValidMoves(above, p);
-                if (tempVertexSet != null) {
-                    for (Vertex temp : tempVertexSet) {
-                        //if(p!=null)
-                            if (validMove(p.getPlayerNum(), temp.c + " " + temp.r)) {
-                                validVertices.add(temp);
-                            }
+            if(board.containsEdge(above, Source)){
+                if (above.isHere()) {
+                    tempVertexSet = getValidMoves(above, p);
+                    if (tempVertexSet != null) {
+                        for (Vertex temp : tempVertexSet) {
+                                if (validMove(p, temp.c + " " + temp.r)) 
+                                    validVertices.add(temp);
+                        }
                     }
+                } else if (validMove(p, above.c + " " + above.r)) {
+                    validVertices.add(above);
                 }
-            } else if (validMove(p.getPlayerNum(), above.c + " " + above.r)) {
-                validVertices.add(above);
             }
         }
         if (below != null) {
-            System.out.println(below);
-            if (below.isHere()) {
-                tempVertexSet = getValidMoves(below, p);
-                if (tempVertexSet != null) {
-                    for (Vertex temp : tempVertexSet) {
-                        //if(p!=null)
-                            if (validMove(p.getPlayerNum(), temp.c + " " + temp.r)) {
-                                validVertices.add(temp);
-                            }
+            if(board.containsEdge(below, Source)){
+                if (below.isHere()) {
+                    tempVertexSet = getValidMoves(below, p);
+                    if (tempVertexSet != null) {
+                        for (Vertex temp : tempVertexSet) {
+                                if (validMove(p, temp.c + " " + temp.r)) {
+                                    validVertices.add(temp);
+                                }
+                        }
                     }
+                } else if (validMove(p, below.c + " " + below.r)) {
+                    validVertices.add(below);
                 }
-            } else if (validMove(p.getPlayerNum(), below.c + " " + below.r)) {
-                validVertices.add(below);
             }
         }
         if (right != null) {
-            System.out.println(right);
-            if (right.isHere()) {
-                tempVertexSet = getValidMoves(right, p);
-                if (tempVertexSet != null) {
-                    for (Vertex temp : tempVertexSet) {
-                        //if(p!=null)
-                            if (validMove(p.getPlayerNum(), temp.c + " " + temp.r)) {
-                                validVertices.add(temp);
-                            }
+            if(board.containsEdge(right, Source)){
+                if (right.isHere()) {
+                    tempVertexSet = getValidMoves(right, p);
+                    if (tempVertexSet != null) {
+                        for (Vertex temp : tempVertexSet) {
+                            if (validMove(p, temp.c + " " + temp.r)) {
+                                    validVertices.add(temp);
+                                }
+                        }
                     }
+                } else if (validMove(p, right.c + " " + right.r)) {
+                    validVertices.add(right);
                 }
-            } else if (validMove(p.getPlayerNum(), right.c + " " + right.r)) {
-                validVertices.add(right);
             }
         }
         if (left != null) {
-            System.out.println(left);
-            if (left.isHere()) {
-                tempVertexSet = getValidMoves(left, p);
-                if (tempVertexSet != null) {
-                    for (Vertex temp : tempVertexSet) {
-                        //if(p!=null)
-                            if (validMove(p.getPlayerNum(), temp.c + " " + temp.r)) {
-                                validVertices.add(temp);
-                            }
+            if(board.containsEdge(left, Source)){
+                if (left.isHere()) {
+                    tempVertexSet = getValidMoves(left, p);
+                    if (tempVertexSet != null) {
+                        for (Vertex temp : tempVertexSet) {
+                                if (validMove(p, temp.c + " " + temp.r)) {
+                                    validVertices.add(temp);
+                                }
+                        }
                     }
+                } else if (validMove(p, left.c + " " + left.r)) {
+                    validVertices.add(left);
                 }
-            } else if (validMove(p.getPlayerNum(), left.c + " " + left.r)) {
-                validVertices.add(left);
             }
         }
         return validVertices;
     }
-
-    private Player getPlayerByCoord(int c, int r) {
-        for (Player p : players) {
-            if (p.getC() == c && p.getR() == r) {
-                return p;
+    /**
+     * valid move - checks if player can move to this location
+     * 
+     * @param p - Player that is making a move
+     * @param move - move that p is making
+     * @return 
+     */
+    private boolean validMove(Player p, String move) {
+        int r = p.getR();
+        int c = p.getC();
+        Vertex source = getVertexByCoord(c, r);
+        Scanner sc = new Scanner(move);
+        c = sc.nextInt();
+        r = sc.nextInt();
+        Vertex destination = getVertexByCoord(c,r);
+        if(destination!=null){
+            if(!destination.equals(source)){
+                if(destination.isHere())
+                    return false;
+                else
+                    return true;
             }
         }
-        return null;
+        return false;
+
     }
 }

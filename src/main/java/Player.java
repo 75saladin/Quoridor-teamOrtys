@@ -59,7 +59,10 @@ public class Player {
     }
     
     public void decrementWall(){
-        this.walls = this.walls - 1;
+        this.walls--;
+    }
+    public void incrementWall(){
+        this.walls++;
     }
     
     public void setWalls(int walls) {
