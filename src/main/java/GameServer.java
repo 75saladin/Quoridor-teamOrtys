@@ -49,14 +49,8 @@ public class GameServer extends Server {
 			return;
 			
 		} else if(msg.startsWith("MYOUSHU")) {
-			try{	
 
-				Thread.sleep(2000);
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-
-			String move = sc.next();
+			String move = sc.nextLine();
 			System.out.println("Sending TESUJI " + move);
 			out.println("TESUJI " + move);
 		} else if(msg.startsWith("ATARI")) {

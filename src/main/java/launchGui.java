@@ -15,7 +15,7 @@ public class launchGui {
          * Called after launching the UI
          */
         GUI gui=null;
-        gui = startGUI(2);
+        gui = startGUI(4);
         RandomAI ai1 = new RandomAI(2, 1);
         RandomAI ai2 = new RandomAI(2, 2);
        
