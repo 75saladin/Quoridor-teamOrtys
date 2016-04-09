@@ -501,6 +501,6 @@ public class LogicalBoardTest {
         boardTwo.checkValid(1, "5 7 V");
         boardTwo.checkValid(1, "0 6");
         p2Path = boardTwo.getShortestWinningPath(2).getPath();
-        assertNotEquals("should be the same length",(int)p1Path.getWeight(), (int)p2Path.getWeight());
+        assertNotEquals("should Not be the same length",(int)p1Path.getWeight(), (int)p2Path.getWeight());
     }
 }

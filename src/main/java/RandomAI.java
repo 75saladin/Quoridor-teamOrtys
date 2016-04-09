@@ -132,19 +132,19 @@ public class RandomAI {
             if(!p1ValidMoves.contains(v))
                 p1InvalidWinningMoves.add(v);
         // remove the invalid moves from the valid moves set
-        for(Vertex v: p1WinningVertexPath)
-            if(p1InvalidWinningMoves.contains(v))
+        for(Vertex v: p1InvalidWinningMoves)
+            if(p1ValidMoves.contains(v))
                 p1ValidMoves.remove(v);
             
         
         
-        // getting next node on path next to the player1 position
+        // getting next node on path next to the player2 position
         for (Edge e : player2EdgeList) {
             p2WinningVertexPath.add(e.getTarget());
             p2WinningVertexPath.add(e.getSource());
         }
         // get the invalid moves
-        for(Vertex v:p1WinningVertexPath)
+        for(Vertex v:p2WinningVertexPath)
             if(!p2ValidMoves.contains(v))
                 p2InvalidWinningMoves.add(v);
         // remove the invalid moves from the valid moves set
@@ -155,6 +155,7 @@ public class RandomAI {
         
         for(Vertex v: p1ValidMoves)
             player1BestMove = v;
+            
         
         for(Vertex v: p2ValidMoves)
             player2BestMove = v;
@@ -164,7 +165,7 @@ public class RandomAI {
             if(playerOnePathLength<=playerTwoPathLength)
                 return player1BestMove.c + " " + player1BestMove.r;
             else
-                return player1BestMove.c + " " + player1BestMove.r + " H"; 
+                return player2BestMove.c + " " + player2BestMove.r + " H"; 
         } else{
             if(playerOnePathLength>=playerTwoPathLength)
                 return player2BestMove.c + " " + player2BestMove.r;
