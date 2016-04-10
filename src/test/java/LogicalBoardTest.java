@@ -422,49 +422,209 @@ public class LogicalBoardTest {
 	assertFalse(boardTwo.checkValid(1, "4 8"));
     }
     
-    @Ignore
-    public void jumping() throws Exception {
+    @Test
+    public void twoPlayerJump() throws Exception {
 	boardTwo.makeMove(1, "4 4");
 	boardTwo.makeMove(2, "4 5");
         assertTrue(boardTwo.getVertexByCoord(4, 5).here);
         assertTrue(boardTwo.getVertexByCoord(4, 4).here);
-        System.out.println(boardTwo.getValidMoves(1));
 	assertTrue(boardTwo.checkValid(1, "4 6"));
 	boardTwo.makeMove(1, "4 4");
-	//assertTrue(boardTwo.checkValid(1, "5 5"));
+	assertTrue(boardTwo.checkValid(1, "5 5"));
 	boardTwo.makeMove(1, "4 4");
-	//assertTrue(boardTwo.checkValid(1, "3 5"));
+	assertTrue(boardTwo.checkValid(1, "3 5"));
+	
+	//Corner case: only one valid jump
+	boardTwo.makeMove(1, "0 0");
+        boardTwo.makeMove(2, "0 1");
+        assertTrue(boardTwo.checkValid(2, "1 0"));
     }
     
     @Test
-    public void jumpingOverAWallIsInvalid() throws Exception {
+    public void twoPlayerJumpWithWalls() throws Exception {
 	boardTwo.makeMove(1, "4 4");
 	boardTwo.makeMove(2, "4 5");
-	assertTrue(boardTwo.checkValid(1, "4 4 h"));// will not allow wall placement
-	assertFalse(boardTwo.checkValid(1, "4 6"));
-    }
-    
-    @Ignore
-    public void theMegaJump() throws Exception {
-	boardFour.makeMove(1, "4 3");
-	boardFour.makeMove(2, "4 4");
-	boardFour.makeMove(3, "4 5");
-	boardFour.makeMove(4, "4 6");
 	
-	assertTrue(boardFour.checkValid(1, "4 7"));
+	//wall between the players
+	assertTrue(boardTwo.checkValid(1, "4 4 h"));
+        assertFalse(boardTwo.checkValid(1, "4 6"));
+        assertFalse(boardTwo.checkValid(1, "5 5"));
+        assertFalse(boardTwo.checkValid(1, "3 5"));
+        boardTwo.removeWall(1, "4 4 h");
+
+	//walls around jumpee except one
+	assertTrue(boardTwo.checkValid(1, "4 4 v"));
+	assertTrue(boardTwo.checkValid(1, "3 4 v"));
+        assertFalse(boardTwo.checkValid(1, "5 5"));
+        assertFalse(boardTwo.checkValid(1, "3 5"));
+        assertTrue(boardTwo.checkValid(1, "4 6"));
+        boardTwo.makeMove(1, "4 4");
 	
+	//walls all around jumpee
+	assertTrue(boardTwo.checkValid(2, "4 5 h"));
+	assertFalse(boardTwo.checkValid(1, "5 5"));
+        assertFalse(boardTwo.checkValid(1, "3 5"));
+        assertFalse(boardTwo.checkValid(1, "4 6"));
     }
     
     @Test
-    public void megaJumpingOverAWallIsInvalid() throws Exception {
+    public void fourPlayerJump() throws Exception {
+	//ASCII diagrams: top left is always "4 3"
+	
+	// O
+	// O
+	// O
+	// O
 	boardFour.makeMove(1, "4 3");
 	boardFour.makeMove(2, "4 4");
 	boardFour.makeMove(3, "4 5");
 	boardFour.makeMove(4, "4 6");
-	boardFour.checkValid(1, "4 4 h");
+	assertTrue(boardFour.validMove(1, "3 3"));
+	assertTrue(boardFour.validMove(1, "3 4"));
+	assertTrue(boardFour.validMove(1, "3 5"));
+	assertTrue(boardFour.validMove(1, "3 6"));
+	assertTrue(boardFour.validMove(1, "4 7"));
+	assertTrue(boardFour.validMove(1, "5 6"));
+	assertTrue(boardFour.validMove(1, "5 5"));
+	assertTrue(boardFour.validMove(1, "5 4"));
+        assertTrue(boardFour.validMove(1, "5 3"));
 	
-	assertFalse(boardFour.checkValid(1, "4 7"));
+        // OO
+        // O
+        // O
+	boardFour.makeMove(1, "4 3");
+        boardFour.makeMove(2, "5 3");
+        boardFour.makeMove(3, "4 4");
+        boardFour.makeMove(4, "4 5");
+        assertTrue(boardFour.validMove(1, "5 2"));
+        assertTrue(boardFour.validMove(1, "6 3"));
+        assertTrue(boardFour.validMove(1, "5 4"));
+        assertTrue(boardFour.validMove(1, "5 5"));
+        assertTrue(boardFour.validMove(1, "4 6"));
+        assertTrue(boardFour.validMove(1, "3 5"));
+        assertTrue(boardFour.validMove(1, "3 4"));
+
+	// O
+        // OO
+        //  O
+	boardFour.makeMove(1, "4 3");
+        boardFour.makeMove(2, "4 4");
+        boardFour.makeMove(3, "5 4");
+        boardFour.makeMove(4, "5 5");
+        assertTrue(boardFour.validMove(1, "5 3"));
+        assertTrue(boardFour.validMove(1, "6 4"));
+        assertTrue(boardFour.validMove(1, "6 5"));
+        assertTrue(boardFour.validMove(1, "5 6"));
+        assertTrue(boardFour.validMove(1, "4 5"));
+        assertTrue(boardFour.validMove(1, "3 4"));
 	
+	// OOO
+	//  O
+	boardFour.makeMove(1, "4 3");
+        boardFour.makeMove(2, "5 3");
+        boardFour.makeMove(3, "6 3");
+        boardFour.makeMove(4, "5 4");
+        assertTrue(boardFour.validMove(1, "5 2"));
+        assertTrue(boardFour.validMove(1, "6 2"));
+        assertTrue(boardFour.validMove(1, "7 3"));
+        assertTrue(boardFour.validMove(1, "6 4"));
+        assertTrue(boardFour.validMove(1, "5 5"));
+        assertTrue(boardFour.validMove(1, "4 4"));        
+	
+	// OO
+	// OO
+	boardFour.makeMove(1, "4 3");
+        boardFour.makeMove(2, "5 3");
+        boardFour.makeMove(3, "4 4");
+        boardFour.makeMove(4, "5 4");
+        assertTrue(boardFour.validMove(1, "5 2"));
+        assertTrue(boardFour.validMove(1, "6 3"));
+        assertTrue(boardFour.validMove(1, "6 4"));
+        assertTrue(boardFour.validMove(1, "5 5"));
+        assertTrue(boardFour.validMove(1, "4 5"));
+        assertTrue(boardFour.validMove(1, "3 4"));
+    }
+    
+    @Test
+    public void fourPlayerJumpWithWalls() throws Exception {
+	//ASCII diagrams: top left is always "4 3"
+	
+	assertTrue(boardFour.checkValid(1, "4 4 v"));
+	        
+        // O
+        // O
+        // O
+        // O
+        boardFour.makeMove(1, "4 3");
+        boardFour.makeMove(2, "4 4");
+        boardFour.makeMove(3, "4 5");
+        boardFour.makeMove(4, "4 6");
+        assertTrue(boardFour.validMove(1, "3 3"));
+        assertTrue(boardFour.validMove(1, "3 4"));
+        assertTrue(boardFour.validMove(1, "3 5"));
+        assertTrue(boardFour.validMove(1, "3 6"));
+        assertTrue(boardFour.validMove(1, "4 7"));
+        assertTrue(boardFour.validMove(1, "5 6"));
+        assertFalse(boardFour.validMove(1, "5 5"));
+        assertFalse(boardFour.validMove(1, "5 4"));
+        assertTrue(boardFour.validMove(1, "5 3"));
+        
+        // OO
+        // O
+        // O
+        boardFour.makeMove(1, "4 3");
+        boardFour.makeMove(2, "5 3");
+        boardFour.makeMove(3, "4 4");
+        boardFour.makeMove(4, "4 5");
+        assertTrue(boardFour.validMove(1, "5 2"));
+        assertTrue(boardFour.validMove(1, "6 3"));
+        assertTrue(boardFour.validMove(1, "5 4"));
+        assertFalse(boardFour.validMove(1, "5 5"));
+        assertTrue(boardFour.validMove(1, "4 6"));
+        assertTrue(boardFour.validMove(1, "3 5"));
+        assertTrue(boardFour.validMove(1, "3 4"));
+
+        // O
+        // OO
+        //  O
+        boardFour.makeMove(1, "4 3");
+        boardFour.makeMove(2, "4 4");
+        boardFour.makeMove(3, "5 4");
+        boardFour.makeMove(4, "5 5");
+        assertTrue(boardFour.validMove(1, "5 3"));
+        assertFalse(boardFour.validMove(1, "6 4"));
+        assertFalse(boardFour.validMove(1, "6 5"));
+        assertFalse(boardFour.validMove(1, "5 6"));
+        assertTrue(boardFour.validMove(1, "4 5"));
+        assertTrue(boardFour.validMove(1, "3 4"));
+        
+        assertTrue(boardFour.checkValid(1, "5 3 h"));
+        
+        // OOO
+        //  O
+        boardFour.makeMove(1, "4 3");
+        boardFour.makeMove(2, "5 3");
+        boardFour.makeMove(3, "6 3");
+        boardFour.makeMove(4, "5 4");
+        assertTrue(boardFour.validMove(1, "5 2"));
+        assertTrue(boardFour.validMove(1, "6 2"));
+        assertTrue(boardFour.validMove(1, "7 3"));
+        assertFalse(boardFour.validMove(1, "6 4"));
+        assertFalse(boardFour.validMove(1, "5 5"));
+        assertTrue(boardFour.validMove(1, "4 4"));        
+        
+        // OO
+        // OO
+        boardFour.makeMove(1, "4 3");
+        boardFour.makeMove(2, "5 3");
+        boardFour.makeMove(3, "4 4");
+        boardFour.makeMove(4, "5 4");
+        assertTrue(boardFour.validMove(1, "5 2"));
+        assertTrue(boardFour.validMove(1, "6 3"));
+        assertFalse(boardFour.validMove(1, "6 4"));
+        assertFalse(boardFour.validMove(1, "5 5"));
+        assertTrue(boardFour.validMove(1, "4 5"));
+        assertTrue(boardFour.validMove(1, "3 4"));
     }
     @Test
     public void testKick() throws Exception{

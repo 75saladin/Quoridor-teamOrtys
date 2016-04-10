@@ -815,10 +815,8 @@ public class LogicalBoard {
 
     }
     private boolean hasEdge(Vertex destination,Vertex Source){
-        Edge temp = board.getEdge(Source,destination);
-        for(Edge e : board.edgeSet())
-            if(temp.equals(e))
-                return true;
+        if (board.containsEdge(Source, destination))
+            return true;
         return false;
     }
 }
