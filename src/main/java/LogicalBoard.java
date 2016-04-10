@@ -83,6 +83,19 @@ public class LogicalBoard {
     public Player getPlayer(int playerNum) {
         return players[playerNum - 1];
     }
+    
+    /**
+     *
+     * @param v - vertex in question
+     * @return Player on that vertex
+     */
+    public Player getPlayer(Vertex v) {
+        for (Player p : players)
+            if (p.getC()==v.c && p.getR()==v.r)
+                return p;
+        return null;
+        
+    }
 
     public int getPlayerNum(Player p) {
         for (int i = 0; i < 4; i++) {
@@ -631,10 +644,47 @@ public class LogicalBoard {
 
     public Set<Vertex> getValidMoves(int playerNum) {
         Player p = getPlayer(playerNum);
+        return validMovesOf(p, new HashSet<Player>());
+        
+        /*Player p = getPlayer(playerNum);
         int c = p.getC();
         int r = p.getR();
         Vertex Source = getVertexByCoord(c, r);
-        return getValidMoves(Source, p);
+        return getValidMoves(Source, p);*/
+    }
+    
+    public Set<Vertex> validMovesOf(Player p, Set<Player> ignoreJump) {
+        Set<Vertex> valid = new HashSet<Vertex>();
+        Set<Vertex> surrounding = new HashSet<Vertex>();
+        Vertex cur = getVertexByCoord(p.getC(), p.getR());
+        
+        // Can't add directly to surrounding b/c vertex may be null
+        Set<Vertex> temp = new HashSet<Vertex>();
+        temp.add(getVertexByCoord(cur.c+1, cur.r)); //right
+        temp.add(getVertexByCoord(cur.c-1, cur.r)); //left
+        temp.add(getVertexByCoord(cur.c, cur.r+1)); //below
+        temp.add(getVertexByCoord(cur.c, cur.r-1)); //above
+        
+        for (Vertex v : temp)
+            if (v != null)
+                surrounding.add(v);
+        
+        //recursive calls must ignore all previous players
+        ignoreJump.add(p);
+        
+        Player vp;
+        for (Vertex v : surrounding) {
+            if (hasEdge(cur, v)) {  //if there's not a blocking wall
+                vp = getPlayer(v);
+                if (vp==null)    //no player there means it's valid
+                    valid.add(v);
+                else if (!ignoreJump.contains(vp))
+                    //ignore list not containing vp means that player's valid moves are valid
+                    valid.addAll(validMovesOf(vp, ignoreJump));
+            }
+        }
+        
+        return valid;
     }
 
     /**
