@@ -653,7 +653,7 @@ public class LogicalBoard {
         return getValidMoves(Source, p);*/
     }
     
-    public Set<Vertex> validMovesOf(Player p, Set<Player> ignoreJump) {
+    private Set<Vertex> validMovesOf(Player p, Set<Player> ignoreJump) {
         Set<Vertex> valid = new HashSet<Vertex>();
         Set<Vertex> surrounding = new HashSet<Vertex>();
         Vertex cur = getVertexByCoord(p.getC(), p.getR());
