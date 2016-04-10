@@ -241,7 +241,7 @@ public class LogicalBoardTest {
                 direction = "v";  
             wallString = ""+rand.nextInt(8)+" "+rand.nextInt(8)+" "+direction;
             assertTrue("Wall "+wallString+" was judged invalid on iteration "+i, boardTwo.checkValid(1,wallString));
-	    boardTwo.removeWall(1,wallString); //removing the wall on the same board makes this fail ALWAYS ON ITERATION 10
+	    boardTwo.removeWall(1,wallString);
         }
         
         //testing filling board with horizontal walls (except rightmost column)

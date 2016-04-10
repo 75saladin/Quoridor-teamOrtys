@@ -270,20 +270,14 @@ public class LogicalBoard {
      * the protocol form.
      */
     public void placeWall(int playerNum, String wall) {
-        Player player;
-
-        if (playerNum == 0)
-            player=null;
-        else
-            player = getPlayer(playerNum);
+        Player player = getPlayer(playerNum);
         
-        if (player != null) {
-            Set<Edge> edgesToRemove = getEdgesToRemove(wall);
-            for (Edge e : edgesToRemove) {
-                board.removeEdge(e);
-            }
+        Set<Edge> edgesToRemove = getEdgesToRemove(wall);
+        for (Edge e : edgesToRemove)
+            board.removeEdge(e);
+        
+        if (player != null)
             player.decrementWall();
-        }
     }
 
     /**
@@ -296,52 +290,44 @@ public class LogicalBoard {
     public boolean validWall(int playerNum, String wall) {
         // cannot leave if one thing is true, must check all
         // but if one thing is false we return
-        Player player;
-        if (playerNum != 0) {
-            player = getPlayer(playerNum);
-        } else {
-            return false;
-        }
+        Player player = getPlayer(playerNum);
+
         Scanner sc = new Scanner(wall);
         int sourceC = Integer.parseInt(sc.next());
         int sourceR = Integer.parseInt(sc.next());
         String direction = sc.next().toUpperCase();
-
-        if (player != null && player.getWalls() <= 0) {
+        
+        
+        // wall must be on board and not in the 8th row or col
+        if (sourceC > 7 || sourceR > 7 || sourceC < 0 || sourceR < 0)
             return false;
-        }
-
-        //wall must be on board and not in the 8th row or col
-        if (sourceC > 7 || sourceR > 7 || sourceC < 0 || sourceR < 0) {
+        
+        // if the player has no walls left, it's an invalid wall
+        if (player != null && player.getWalls() <= 0)
             return false;
-        }
 
-        // there should always be two edges to remove!
+        // Fewer than 2 edges to remove means there's a conflicting wall
         Set<Edge> EdgeSetToRemove = getEdgesToRemove(wall);
-        if (EdgeSetToRemove == null || EdgeSetToRemove.size() < 2) {
+        if (EdgeSetToRemove == null || EdgeSetToRemove.size() < 2)
             return false;
-        }
+        
+        // if 0 edges to remove for opposite wall, this wall is a crisscross
+        if (direction.equals("V") && 
+                getEdgesToRemove(sourceC + " " + sourceR + " H").size() == 0)
+            return false;            
+        else if (direction.equals("H") && 
+                getEdgesToRemove(sourceC + " " + sourceR + " v").size() == 0)
+            return false;        
+        
         // Starting logic to test if winners path is blocked......
         for (Player p : players) {
             // vertex that contains this Player p
             // if path is blocked return false
-            if (pathBlocked(getPlayerNum(p), EdgeSetToRemove)) {
+            if (pathBlocked(getPlayerNum(p), EdgeSetToRemove))
                 return false;
-            }
         }
-
-        if (direction.equals("V")) {
-            if (getEdgesToRemove(sourceC + " " + sourceR + " H").size() == 0) {
-                return false;
-            }
-        }
-        if (direction.equals("H")) {
-            if (getEdgesToRemove(sourceC + " " + sourceR + " v").size() == 0) {
-                return false;
-            }
-        }
-
-        // if we get here return true
+        
+        // if we get here it's a valid wall
         return true;
     }
 
@@ -495,7 +481,7 @@ public class LogicalBoard {
      *
      * @param wall
      */
-    public void removeWall(int playerNum,String wall) {
+    public void removeWall(int playerNum, String wall) {
         Player p = getPlayer(playerNum);
         Scanner sc = new Scanner(wall);
         int cB = Integer.parseInt(sc.next()); // Column of beginning Vertex
