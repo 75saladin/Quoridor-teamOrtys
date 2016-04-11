@@ -216,7 +216,7 @@ public class LogicalBoard {
      * move.
      *
      * @param playerNum - player to check
-     * @param move - A string representing the move: "<c> <r>"
+     * @param move - A string representing the move: "[c] [r]"
      * @return whether or not it is a valid move
      */
     public boolean validMove(int playerNum, String move) {
@@ -238,8 +238,8 @@ public class LogicalBoard {
      * always; the given player and move combo should be passed into validMove()
      * just before makeMove().
      *
-     * @param player The player to move
-     * @param move The destination to move the player to
+     * @param playerNum - The player to move
+     * @param move - The destination to move the player to
      */
     public void makeMove(int playerNum, String move) {
         Player player = getPlayer(playerNum);
@@ -260,7 +260,7 @@ public class LogicalBoard {
      * validWall - checks whether or not a given player can place a given wall
      *
      * @param playerNum - player placing wall
-     * @param wall - A string representing the wall: "<c> <r> <d>"
+     * @param wall - A string representing the wall: "[c] [r] [d]"
      * @return - whether or not the wall placement is valid
      */
     public boolean validWall(int playerNum, String wall) {
@@ -311,8 +311,8 @@ public class LogicalBoard {
      * Places a wall. This wall must be validated by validWall() BEFORE being
      * placed.
      *
-     * @param player - player that is placing the wall.
-     * @param wall - A string representing the wall: "<c> <r> <d>"
+     * @param playerNum - player that is placing the wall.
+     * @param wall - A string representing the wall: "[c] [r] [d]"
      */
     public void placeWall(int playerNum, String wall) {
         Player player = getPlayer(playerNum);
@@ -620,7 +620,7 @@ public class LogicalBoard {
     /**
      * getEdgesToRemove - gets the edges to remove when placing a wall
      *
-     * @param wall - The wall as a string: "<c> <r> <d>"
+     * @param wall - The wall as a string: "[c] [r] [d]"
      * @return - the set of edges to remove from the board to place that wall
      */
     public Set<Edge> getEdgesToRemove(String wall) {
