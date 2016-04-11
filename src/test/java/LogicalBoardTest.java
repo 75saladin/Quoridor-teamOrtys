@@ -559,6 +559,10 @@ public class LogicalBoardTest {
         boardFour.makeMove(2, "4 4");
         boardFour.makeMove(3, "4 5");
         boardFour.makeMove(4, "4 6");
+        Set<Vertex> validMoves1 = boardFour.getValidMoves(1);
+        Set<Vertex> validMoves2 =boardFour.getValidMoves(1);
+        Set<Vertex> validMoves3 =boardFour.getValidMoves(1);
+        Set<Vertex> validMoves4 =boardFour.getValidMoves(1);
         assertTrue(boardFour.validMove(1, "3 3"));
         assertTrue(boardFour.validMove(1, "3 4"));
         assertTrue(boardFour.validMove(1, "3 5"));

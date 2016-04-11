@@ -18,7 +18,7 @@ public class Parser {
       case "IAM":
         return arrayCharles[1];
       case "GAME":
-        //          handleGame();
+        return noKey;
       case "TESUJI":
         return noKey;
       case "ATARI":

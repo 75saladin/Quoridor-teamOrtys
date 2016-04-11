@@ -251,28 +251,6 @@ public class LogicalBoard {
         return false;
     }
 
-    public boolean validJump(Vertex Source, Vertex Destination) {
-        DijkstraShortestPath<Vertex,Edge> dijkstra = new DijkstraShortestPath<>(board,Source,Destination);
-        boolean isValidJump = false;
-        List<Edge> edgeList = dijkstra.getPathEdgeList();
-        Set<Vertex> vertexOnPath = new HashSet<>();
-        for (Edge e : edgeList) {
-            vertexOnPath.add(e.getTarget());
-            vertexOnPath.add(e.getSource());
-        }
-
-        for (Vertex v : vertexOnPath) {
-            if (v.isHere() && !v.equals(Destination) || !v.isHere() && v.equals(Destination)) {
-                isValidJump = true;
-            }
-            if (v.isHere() && v.equals(Destination) || !v.isHere() && !v.equals(Destination)) {
-                return false;
-            }
-
-        }
-        return isValidJump;
-    }
-
     /**
      * Places a wall. This wall must be validated by validWall() BEFORE being
      * placed.
@@ -454,19 +432,15 @@ public class LogicalBoard {
 
         // adding edges to the set to be removed based on wall placement direction
         if (d.equals("V")) {
-            if (s2r != null) {
+            if (s2r != null) 
                 remove.add(board.getEdge(s, r));
-            }
-            if (b2br != null) {
+            if (b2br != null) 
                 remove.add(board.getEdge(b, br));
-            }
         } else {
-            if (s2b != null) {
+            if (s2b != null) 
                 remove.add(board.getEdge(s, b));
-            }
-            if (r2br != null) {
+            if (r2br != null) 
                 remove.add(board.getEdge(r, br));
-            }
         }
         return remove;
     }
@@ -645,12 +619,6 @@ public class LogicalBoard {
     public Set<Vertex> getValidMoves(int playerNum) {
         Player p = getPlayer(playerNum);
         return validMovesOf(p, new HashSet<Player>());
-        
-        /*Player p = getPlayer(playerNum);
-        int c = p.getC();
-        int r = p.getR();
-        Vertex Source = getVertexByCoord(c, r);
-        return getValidMoves(Source, p);*/
     }
     
     private Set<Vertex> validMovesOf(Player p, Set<Player> ignoreJump) {
@@ -687,133 +655,6 @@ public class LogicalBoard {
         return valid;
     }
 
-    /**
-     * getValidMoves - second attempt
-     *
-     * @param v position of player
-     * @return set of vertices that are valid
-     */
-    private Set<Vertex> getValidMoves(Vertex v, Player p) {
-        int c = v.c;
-        int r = v.r;
-        Set<Vertex> tempVertexSet;
-        Set<Vertex> validVertices = new HashSet<>();
-        // this is for jumping over a wall
-        // originally i was thinking of using the players source position to 
-        // check to see if there was an edge but that doesnt make sense because
-        // we could be a couple of iterations away from the player asking for 
-        // valid moves.  So then i tried to do it with the parameter v.  
-        // sadly that just never ends and i do not know why
-        
-        // to see what im talking about run - runlogicalboard.java
-        // then uncomment the if and comment the one above it out in all four cases
-        //
-        Vertex Source = getVertexByCoord(p.getC(),p.getR());
-        // vertices to check for validity
-        Vertex right = getVertexByCoord(c + 1, r);
-        Vertex left = getVertexByCoord(c - 1, r);
-        Vertex below = getVertexByCoord(c, r + 1);
-        Vertex above = getVertexByCoord(c, r - 1);
-
-        if (above != null) {
-            System.out.println(above);
-            if(board.containsEdge(Source,above)){
-            //if(hasEdge(above,v)){
-                if (above.isHere()) {
-                    tempVertexSet = getValidMoves(above, p);
-                    if (tempVertexSet != null) {
-                        for (Vertex temp : tempVertexSet) {
-                                if (validMove(p, temp.c + " " + temp.r)) 
-                                    validVertices.add(temp);
-                        }
-                    }
-                } else if (validMove(p, above.c + " " + above.r)) {
-                    validVertices.add(above);
-                }
-            }
-        }
-        if (below != null) {
-            System.out.println(below);
-            if(board.containsEdge(Source,below)){
-            //if(hasEdge(below,v)){
-                if (below.isHere()) {
-                    tempVertexSet = getValidMoves(below, p);
-                    if (tempVertexSet != null) {
-                        for (Vertex temp : tempVertexSet) {
-                                if (validMove(p, temp.c + " " + temp.r)) {
-                                    validVertices.add(temp);
-                                }
-                        }
-                    }
-                } else if (validMove(p, below.c + " " + below.r)) {
-                    validVertices.add(below);
-                }
-            }
-        }
-        if (right != null) {
-            System.out.println(right);
-            if(board.containsEdge(Source,right)){
-            //if(hasEdge(right,v)){
-                if (right.isHere()) {
-                    tempVertexSet = getValidMoves(right, p);
-                    if (tempVertexSet != null) {
-                        for (Vertex temp : tempVertexSet) {
-                            if (validMove(p, temp.c + " " + temp.r)) {
-                                    validVertices.add(temp);
-                                }
-                        }
-                    }
-                } else if (validMove(p, right.c + " " + right.r)) {
-                    validVertices.add(right);
-                }
-            }
-        }
-        if (left != null) {
-            System.out.println(left);
-            if(board.containsEdge(Source,left)){
-            //if(hasEdge(left,v)){
-                if (left.isHere()) {
-                    tempVertexSet = getValidMoves(left, p);
-                    if (tempVertexSet != null) {
-                        for (Vertex temp : tempVertexSet) {
-                            if (validMove(p, temp.c + " " + temp.r)) {
-                                validVertices.add(temp);
-                            }
-                        }
-                    }
-                } else if (validMove(p, left.c + " " + left.r)) {
-                    validVertices.add(left);
-                }
-            }
-        }
-        return validVertices;
-    }
-    /**
-     * valid move - checks if player can move to this location
-     * 
-     * @param p - Player that is making a move
-     * @param move - move that p is making
-     * @return 
-     */
-    private boolean validMove(Player p, String move) {
-        int r = p.getR();
-        int c = p.getC();
-        Vertex source = getVertexByCoord(c, r);
-        Scanner sc = new Scanner(move);
-        c = sc.nextInt();
-        r = sc.nextInt();
-        Vertex destination = getVertexByCoord(c,r);
-        if(destination!=null){
-            if(!destination.equals(source)){
-                if(destination.isHere())
-                    return false;
-                else
-                    return true;
-            }
-        }
-        return false;
-
-    }
     private boolean hasEdge(Vertex destination,Vertex Source){
         if (board.containsEdge(Source, destination))
             return true;

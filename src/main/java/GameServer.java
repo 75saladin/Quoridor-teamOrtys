@@ -66,7 +66,9 @@ public class GameServer extends Server {
             System.out.println("Sending IAM " + name + " to client");
             out.println("IAM " + name);
 	} else if(msg.startsWith("GAME")) { // get the game message from client
-            if(s.length == 4) {
+            String[] temp = msg.split(" ");
+            this.playerNum = Integer.parseInt(temp[1]);
+            if(temp.length == 4) {
 		playerNum = Integer.parseInt(s[1]);
                 AI = new RandomAI(2, playerNum); // set the random AI
             } else {
@@ -89,6 +91,10 @@ public class GameServer extends Server {
             Scanner temp = new Scanner(msg);
             int player = temp.nextInt();
             String move = temp.next() +" "+ temp.next();
+            if(temp.hasNext()){
+                System.out.println("here");
+                move = move + " " + temp.next();
+            }
             AI.update(player,move);
             System.out.println("Saw ATARI");
 	} else if(msg.startsWith("KIKASHI")) { // game is over guy won
