@@ -335,7 +335,7 @@ public class GUI extends Application implements GUIInterface {
         stackPane.setAlignment(Pos.CENTER);
         stackPane.getChildren().add(text);
         // set the max width 
-        stackPane.setMinHeight(100);
+        stackPane.setMinHeight(135);
         stackPane.getStylesheets().addAll(this.getClass().getResource("Layout.css").toExternalForm());
         stackPane.setId("title");
         return stackPane;
@@ -371,7 +371,7 @@ public class GUI extends Application implements GUIInterface {
      * @return The bottom label of the game
      */
     private Region setBottomRegion() {
-        Label text = new Label("Team Morties");
+        Label text = new Label("Team Or Tees");
         text.setFont(Font.font("Arial", FontWeight.BOLD, 40));
         StackPane stackPane = new StackPane();
         Insets inset = new Insets(20, 20, 20, 20);
