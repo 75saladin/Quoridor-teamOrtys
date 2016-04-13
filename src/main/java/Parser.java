@@ -22,7 +22,7 @@ public class Parser {
       case "TESUJI":
         return noKey;
       case "ATARI":
-          return noKey;
+         // return noKey;
       case "GOTE":
         //          handleGote();
       case "KIKASHI":
