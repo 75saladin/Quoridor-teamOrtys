@@ -45,9 +45,8 @@ public class GameServer extends Server {
 	while(true) {
             msg = in.readLine();
             System.out.println("Message from client " + msg);
-            handleMessage(msg, out, socket);
+            handleMessage(msg, out, socket,in);
 	}
-
     }
 
     /**
@@ -57,7 +56,7 @@ public class GameServer extends Server {
      * @param socket: The socket to close upon a certain message.
      * Handle the specific protocol messages. Denoted by capital words. 
      */
-    private void handleMessage(String msg, PrintWriter out, Socket socket) {
+    private void handleMessage(String msg, PrintWriter out, Socket socket,BufferedReader in) {
 	Scanner sc = new Scanner(System.in);
         msg = Parser.stripBrackets(msg); // strip the brackets from the message
 	String [] s = msg.split(" "); // splits the string by spaces
@@ -67,14 +66,11 @@ public class GameServer extends Server {
             out.println("IAM " + name);
 	} else if(msg.startsWith("GAME")) { // get the game message from client
             String[] temp = msg.split(" ");
-            this.playerNum = Integer.parseInt(temp[1]);
-            if(temp.length == 4) {
-		playerNum = Integer.parseInt(temp[1]);
+            this.playerNum = Integer.parseInt(s[1]);
+            if(temp.length == 4) 
                 AI = new RandomAI(2, playerNum); // set the random AI
-            } else {
-                playerNum = Integer.parseInt(temp[1]);
+            else 
                 AI = new RandomAI(4, playerNum);
-            }
             return;
         } else if(msg.startsWith("MYOUSHU")) { // get a move
             try{
@@ -87,7 +83,6 @@ public class GameServer extends Server {
             out.println("TESUJI " + move);
 	} else if(msg.startsWith("ATARI")) {
             // only for reading move moves will not handle wall placement
-            
             String temp[] = msg.split(" ");
             int player = Integer.parseInt(temp[1]);
             String move = temp[2] +" "+ temp[3];
@@ -101,16 +96,16 @@ public class GameServer extends Server {
             try {
 		out.close();
 		socket.close();
+                in.close();
 		AI = null;
             }catch(IOException e) {
 		e.printStackTrace();
             }
 	} else if(msg.startsWith("GOTE")) {
-            // update AI with kicked player
             System.out.println("Person kicked");
-	} else {
+            AI.kick(Integer.parseInt(s[1]));
+	} else 
             return;
-	}
     }
 
 	public static void main(String[] args) {
