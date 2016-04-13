@@ -13,7 +13,8 @@ public class GameServer extends Server {
 
     private int playerNum; // player Number given to this server by the client
     private RandomAI AI; // The AI to get a move from.
-    private String name; // The name of the player. 
+    private String name = "ORT"; // The name of the player. 
+    private static String usage = "java GameServer --port <port number> [--name <team name>]";
     
 	
     /**
@@ -24,7 +25,7 @@ public class GameServer extends Server {
      */
     public GameServer(int port, String name) {
         super(port);
-	this.name = name;
+	    this.name = name;
         System.out.println("In the constructor");
 		
     }	
@@ -109,14 +110,16 @@ public class GameServer extends Server {
     }
 
 	public static void main(String[] args) {
+        System.out.println(usage);
 		int port = 6969;
 		String name = "";
-		Scanner sc = new Scanner(System.in);
-		name = sc.next();
+
 		for(int i = 1; i < args.length; i++) {
 			if(args[i-1].equals("--port")){
 				port = Integer.parseInt(args[i]);
-			}
+			} else if(args[i-1].equals("--name")){
+                name = args[i];
+            }
 		}
                 
 		GameServer s = new GameServer(port, name);
