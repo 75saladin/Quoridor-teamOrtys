@@ -17,15 +17,11 @@ import org.jgrapht.alg.DijkstraShortestPath;
  */
 public class RandomAI {
 
-    private GUI gui;
     private LogicalBoard board;
     private int playerCount;
     private int playerNum;
     private Random rand = new Random();
 
-    public RandomAI(GUI g) {
-        this.gui = g;
-    }
 
     /**
      *
@@ -60,145 +56,167 @@ public class RandomAI {
     }
 
     /**
-     * getMove - gets the best move for THIS player
-     *
-     * @return String move or wall depending on best move circumstances
-     */
-    public String getMove() {
-        return getMove2P(playerNum);
-    }
-
-    /**
      * get a player move in a 2Player Game
      *
      * @param playerNum - player requesting move
      * @return
      */
-    private String getMove2P(int playerNum) {
-
-        int playerOnePathLength = (int) board.getShortestWinningPath(1).getPathLength();
-        int playerTwoPathLength = (int) board.getShortestWinningPath(2).getPathLength();
+    public String getMove() {
+        //player 1
+        boolean P1hasWalls = board.getPlayer(1).hasWalls();
+        Vertex p1BestMove = getBestMove(1);
+        int playerOnePathLength = (int) board.getShortestWinningPath(1,board.board).getPathLength();
+        // player 2
+        boolean P2hasWalls = board.getPlayer(2).hasWalls();
+        Vertex p2BestMove = getBestMove(2);
+        int playerTwoPathLength = (int) board.getShortestWinningPath(2,board.board).getPathLength();
+        //player 3
+        boolean P3hasWalls = false;
+        Vertex p3BestMove=null;
+        int playerThreePathLength = 0;
+        // player 4
+        boolean P4hasWalls = false;
+        Vertex p4BestMove=null;
+        int playerFourPathLength = 0;
         
-        Vertex p1BestMove = getBestMove1();
-        Vertex p2BestMove = getBestMove2();
 
-        Player p1 = board.getPlayer(1);
-        Player p2 = board.getPlayer(2);
         
-        // if this players path is shorter, move player position to here
-        if (this.playerNum == 1){
-            if(playerOnePathLength<=playerTwoPathLength || !board.validWall(1,p2.getC()+" "+(p2.getR()-1)+" H"))
-                return p1BestMove.c + " " + p1BestMove.r;
-            else
-                return getBestWall2P(this.playerNum); 
-        } else{
-            if(playerOnePathLength>=playerTwoPathLength || !board.checkValid(2,p1.getC()+" "+p1.getR()+" H"))
-                return p2BestMove.c + " " + p2BestMove.r;
-            else
-                return getBestWall2P(this.playerNum);
+        
+        // if 2p no need to initialize
+        if(playerCount>2){
+            P3hasWalls = board.getPlayer(3).hasWalls();
+            p3BestMove = getBestMove(3);
+            playerThreePathLength = (int) board.getShortestWinningPath(3,board.board).getPathLength();
+            p4BestMove = getBestMove(4);
+            playerFourPathLength = (int) board.getShortestWinningPath(4,board.board).getPathLength();
+            P4hasWalls = board.getPlayer(4).hasWalls();
         }
+        
+        if(playerCount==2){
+            // if this players path is shorter, move player position to here
+            if (this.playerNum == 1) {
+                if (playerOnePathLength <= playerTwoPathLength)
+                    return p1BestMove.c + " " + p1BestMove.r;
+                return getBestWall(1);
+            }else{
+                if (playerOnePathLength <= playerTwoPathLength)
+                    return p2BestMove.c + " " + p2BestMove.r;
+                return getBestWall(2);
+            }
+        }else{
+            if (this.playerNum == 1) {
+                if (playerOnePathLength <= playerTwoPathLength && playerOnePathLength<=playerThreePathLength && playerOnePathLength<=playerFourPathLength)
+                    return p1BestMove.c + " " + p1BestMove.r;
+                else if(P1hasWalls)
+                    return getBestWall(1);
+                else return p1BestMove.c + " " + p1BestMove.r;
+            }else if (this.playerNum == 2){
+                if (playerTwoPathLength <= playerOnePathLength && playerTwoPathLength<=playerThreePathLength && playerTwoPathLength<=playerFourPathLength)
+                    return p2BestMove.c + " " + p2BestMove.r;
+                else if(P2hasWalls)
+                    return getBestWall(2);
+                else 
+                    return p2BestMove.c + " " + p2BestMove.r;
+            }else if (this.playerNum == 3){
+                if (playerThreePathLength <= playerOnePathLength && playerThreePathLength<=playerTwoPathLength && playerThreePathLength<=playerFourPathLength)
+                    return p3BestMove.c + " " + p3BestMove.r;
+                else if(P3hasWalls)
+                    return getBestWall(3);
+                else
+                    return p3BestMove.c + " " + p3BestMove.r;
+            }else{
+                if (playerFourPathLength <= playerOnePathLength && playerFourPathLength<=playerTwoPathLength && playerFourPathLength<=playerThreePathLength)
+                    return p4BestMove.c + " " + p4BestMove.r;
+                else if(P4hasWalls)
+                    return getBestWall(4);
+                else 
+                    return p4BestMove.c + " " + p4BestMove.r;
+            }
+            
+        }
+            
     }
 
-    public Vertex getBestMove1(){
-        Player p = board.getPlayer(1);
-        DijkstraShortestPath<Vertex,Edge> shortest = board.getShortestWinningPath(1);
+    private Vertex getBestMove(int playerNum) {
+        DijkstraShortestPath<Vertex, Edge> shortest = board.getShortestWinningPath(playerNum,board.board);
         List<Edge> winningEdges = shortest.getPathEdgeList();
         Set<Vertex> winningVertices = new HashSet<>();
-        for(Edge e : winningEdges){
+        for (Edge e : winningEdges) {
             winningVertices.add(e.getTarget());
             winningVertices.add(e.getSource());
         }
-        Set<Vertex> validVertices = board.getValidMoves(1);
-        Vertex vUP = board.getVertexByCoord(p.getC(),p.getR()-1);
-        Vertex vRIGHT = board.getVertexByCoord(p.getC()+1,p.getR());
-        Vertex vLEFT = board.getVertexByCoord(p.getC()-1,p.getR());
-        Vertex vBELOW = board.getVertexByCoord(p.getC(),p.getR()+1);
-        if(validVertices.contains(vBELOW) && winningVertices.contains(vBELOW))
-            return vBELOW;
-        else if(validVertices.contains(vRIGHT)&& winningVertices.contains(vRIGHT))
-            return vRIGHT;
-        else if(validVertices.contains(vLEFT)&& winningVertices.contains(vLEFT))
-            return vLEFT;
-        else
-            return vUP;
+        Set<Vertex> validVertices = board.getValidMoves(playerNum);
+        for(Vertex v : validVertices)
+            if(winningVertices.contains(v))
+                return v;
+        return null;
     }
-    
-    public Vertex getBestMove2(){
-        Player p = board.getPlayer(2);
-        DijkstraShortestPath<Vertex,Edge> shortest = board.getShortestWinningPath(2);
-        List<Edge> winningEdges = shortest.getPathEdgeList();
-        Set<Vertex> winningVertices = new HashSet<>();
-        for(Edge e : winningEdges){
-            winningVertices.add(e.getTarget());
-            winningVertices.add(e.getSource());
+
+    /**
+     *  getBestWall - gets the best wall for a player to place whether
+     *                it is 2 or 4 player game
+     * @param player - player requesting wall
+     * @return Wall String to be sent to server
+     */
+    private String getBestWall(int player) {
+        String bestWall = "";
+        String tempWallH = "";
+        String tempWallV = "";
+        int currentPathLengthP1 = (int) board.getShortestWinningPath(1,board.board).getPathLength();
+        int currentPathLengthP2 = (int) board.getShortestWinningPath(2,board.board).getPathLength();
+        int currentPathLengthP3 = 0;
+        int currentPathLengthP4 = 0;
+        if(playerCount>2){
+            currentPathLengthP3 = (int) board.getShortestWinningPath(3,board.board).getPathLength();
+            currentPathLengthP4 = (int) board.getShortestWinningPath(4,board.board).getPathLength();
         }
-        Set<Vertex> validVertices = board.getValidMoves(2);
-        Vertex vUP = board.getVertexByCoord(p.getC(),p.getR()-1);
-        Vertex vRIGHT = board.getVertexByCoord(p.getC()+1,p.getR());
-        Vertex vLEFT = board.getVertexByCoord(p.getC()-1,p.getR());
-        Vertex vBELOW = board.getVertexByCoord(p.getC(),p.getR()+1);
-        if(validVertices.contains(vUP) && winningVertices.contains(vUP))
-            return vUP;
-        else if(validVertices.contains(vRIGHT)&& winningVertices.contains(vRIGHT))
-            return vRIGHT;
-        else if(validVertices.contains(vLEFT)&& winningVertices.contains(vLEFT))
-            return vLEFT;
-        else
-            return vBELOW;
-    }
-    public Vertex getBestMove3(){
-        Player p = board.getPlayer(3);
-        DijkstraShortestPath<Vertex,Edge> shortest = board.getShortestWinningPath(3);
-        List<Edge> winningEdges = shortest.getPathEdgeList();
-        Set<Vertex> winningVertices = new HashSet<>();
-        for(Edge e : winningEdges){
-            winningVertices.add(e.getTarget());
-            winningVertices.add(e.getSource());
+        // Current Column
+        for (int c = 0; c < 8; c++) {
+            // Current Row
+            for (int r = 0; r < 8; r++) {
+                tempWallH = c + " " + r + " H";
+                tempWallV = c + " " + r + " V";
+                //Player 1
+                if(player!=1){
+                    if (board.validWall(player, tempWallH)) 
+                        if (currentPathLengthP1 < board.pathLengthAfterWall(1, tempWallH)) 
+                            bestWall = tempWallH;
+                    if (board.validWall(player, tempWallV)) 
+                        if (currentPathLengthP1 < board.pathLengthAfterWall(1, tempWallV)) 
+                            bestWall = tempWallV;
+            }        
+                // Player 2
+                if(player!=2){
+                    if (board.validWall(player, tempWallH)) 
+                        if (currentPathLengthP2 < board.pathLengthAfterWall(2, tempWallH)) 
+                            bestWall = tempWallH;
+                    if (board.validWall(player, tempWallV)) 
+                        if (currentPathLengthP2 < board.pathLengthAfterWall(2, tempWallV)) 
+                            bestWall = tempWallV;
+                }
+                // Fpur Players
+                if (this.playerCount > 2) {
+                    //Player 3
+                    if(player!=3){
+                        if (board.validWall(player, tempWallH)) 
+                            if (currentPathLengthP3 < board.pathLengthAfterWall(3, tempWallH)) 
+                                    bestWall = tempWallH;
+                        if (board.validWall(player, tempWallV)) 
+                            if (currentPathLengthP3 < board.pathLengthAfterWall(3, tempWallV)) 
+                                    bestWall = tempWallV;
+                    }
+                    // Player Four
+                    if(player!=4){
+                        if (board.validWall(player, tempWallH)) 
+                            if (currentPathLengthP4 < board.pathLengthAfterWall(4, tempWallH)) 
+                                    bestWall = tempWallH;
+                        if (board.validWall(player, tempWallV)) 
+                            if (currentPathLengthP4 < board.pathLengthAfterWall(4, tempWallV)) 
+                                    bestWall = tempWallV;    
+                    }
+                }
+            }
         }
-        Set<Vertex> validVertices = board.getValidMoves(3);
-        Vertex vUP = board.getVertexByCoord(p.getC(),p.getR()-1);
-        Vertex vRIGHT = board.getVertexByCoord(p.getC()+1,p.getR());
-        Vertex vLEFT = board.getVertexByCoord(p.getC()-1,p.getR());
-        Vertex vBELOW = board.getVertexByCoord(p.getC(),p.getR()+1);
-        if(validVertices.contains(vRIGHT) && winningVertices.contains(vRIGHT))
-            return vRIGHT;
-        else if(validVertices.contains(vUP)&& winningVertices.contains(vUP))
-            return vUP;
-        else if(validVertices.contains(vBELOW)&& winningVertices.contains(vBELOW))
-            return vBELOW;
-        else
-            return vLEFT;
-    }
-    public Vertex getBestMove4(){
-        Player p = board.getPlayer(4);
-        DijkstraShortestPath<Vertex,Edge> shortest = board.getShortestWinningPath(4);
-        List<Edge> winningEdges = shortest.getPathEdgeList();
-        Set<Vertex> winningVertices = new HashSet<>();
-        for(Edge e : winningEdges){
-            winningVertices.add(e.getTarget());
-            winningVertices.add(e.getSource());
-        }
-        Set<Vertex> validVertices = board.getValidMoves(4);
-        Vertex vUP = board.getVertexByCoord(p.getC(),p.getR()-1);
-        Vertex vRIGHT = board.getVertexByCoord(p.getC()+1,p.getR());
-        Vertex vLEFT = board.getVertexByCoord(p.getC()-1,p.getR());
-        Vertex vBELOW = board.getVertexByCoord(p.getC(),p.getR()+1);
-        if(validVertices.contains(vLEFT) && winningVertices.contains(vLEFT))
-            return vLEFT;
-        else if(validVertices.contains(vUP)&& winningVertices.contains(vUP))
-            return vUP;
-        else if(validVertices.contains(vBELOW)&& winningVertices.contains(vBELOW))
-            return vBELOW;
-        else
-            return vRIGHT;
-    }
-    public String getBestWall2P(int playerNum){
-        Player p1 = board.getPlayer(1);
-        Player p2 = board.getPlayer(2);
-        
-        if(playerNum==1)
-            return p2.getC()+" "+(p2.getR()-1)+" H";
-        else
-            return p1.getC()+" "+p1.getR()+" H";
+        return bestWall;
     }
 }

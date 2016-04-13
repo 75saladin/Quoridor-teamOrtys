@@ -69,10 +69,10 @@ public class GameServer extends Server {
             String[] temp = msg.split(" ");
             this.playerNum = Integer.parseInt(temp[1]);
             if(temp.length == 4) {
-		playerNum = Integer.parseInt(s[1]);
+		playerNum = Integer.parseInt(temp[1]);
                 AI = new RandomAI(2, playerNum); // set the random AI
             } else {
-                playerNum = Integer.parseInt(s[1]);
+                playerNum = Integer.parseInt(temp[1]);
                 AI = new RandomAI(4, playerNum);
             }
             return;
@@ -87,13 +87,13 @@ public class GameServer extends Server {
             out.println("TESUJI " + move);
 	} else if(msg.startsWith("ATARI")) {
             // only for reading move moves will not handle wall placement
-            msg = Parser.parse(msg);
-            Scanner temp = new Scanner(msg);
-            int player = temp.nextInt();
-            String move = temp.next() +" "+ temp.next();
-            if(temp.hasNext()){
+            
+            String temp[] = msg.split(" ");
+            int player = Integer.parseInt(temp[1]);
+            String move = temp[2] +" "+ temp[3];
+            if(temp.length==5){
                 System.out.println("here");
-                move = move + " " + temp.next();
+                move = move + " " + temp[4];
             }
             AI.update(player,move);
             System.out.println("Saw ATARI");

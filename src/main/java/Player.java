@@ -80,5 +80,11 @@ public class Player {
     public int getPlayerNum(){
         return playerNum;
     }
+    
+    public boolean hasWalls(){
+        if(walls==0)
+            return false;
+        return true;
+    }
 
 }

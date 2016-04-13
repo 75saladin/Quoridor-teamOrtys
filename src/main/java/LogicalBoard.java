@@ -120,7 +120,7 @@ public class LogicalBoard {
      * @param playerNum - player to check
      * @return - DijkstraShortestPath of player's shortest winning path
      */
-    public DijkstraShortestPath<Vertex, Edge> getShortestWinningPath(int playerNum) {
+    public DijkstraShortestPath<Vertex, Edge> getShortestWinningPath(int playerNum,UndirectedGraph<Vertex,Edge> board) {
         Vertex source = getVertexByCoord(getPlayer(playerNum).getC(), getPlayer(playerNum).getR());
         Vertex destination = null;
         DijkstraShortestPath<Vertex, Edge> temp = null;
@@ -129,7 +129,7 @@ public class LogicalBoard {
         if (playerNum == 1) {
             for (int i = 0; i < 9; i++) {
                 destination = getVertexByCoord(i, 8);
-                temp = new DijkstraShortestPath<Vertex, Edge>(this.board, source, destination);
+                temp = new DijkstraShortestPath<Vertex, Edge>(board, source, destination);
                 if (temp != null) {
                     if (temp.getPathLength() < length) {
                         Dijkstra = temp;
@@ -140,7 +140,7 @@ public class LogicalBoard {
         } else if (playerNum == 2) {
             for (int i = 0; i < 9; i++) {
                 destination = getVertexByCoord(i, 0);
-                temp = new DijkstraShortestPath<Vertex, Edge>(this.board, source, destination);
+                temp = new DijkstraShortestPath<Vertex, Edge>(board, source, destination);
                 if (temp != null) {
                     if (temp.getPathLength() < length) {
                         Dijkstra = temp;
@@ -151,7 +151,7 @@ public class LogicalBoard {
         } else if (playerNum == 3) {
             for (int i = 0; i < 9; i++) {
                 destination = getVertexByCoord(8, i);
-                temp = new DijkstraShortestPath<Vertex, Edge>(this.board, source, destination);
+                temp = new DijkstraShortestPath<Vertex, Edge>(board, source, destination);
                 if (temp != null) {
                     if (temp.getPathLength() < length) {
                         Dijkstra = temp;
@@ -162,7 +162,7 @@ public class LogicalBoard {
         } else {
             for (int i = 0; i < 9; i++) {
                 destination = getVertexByCoord(0, i);
-                temp = new DijkstraShortestPath<Vertex, Edge>(this.board, source, destination);
+                temp = new DijkstraShortestPath<Vertex, Edge>(board, source, destination);
                 if (temp != null) {
                     if (temp.getPathLength() < length) {
                         Dijkstra = temp;
@@ -728,4 +728,92 @@ public class LogicalBoard {
         }
         p.incrementWall();
     }
+
+    /**
+     *
+     * pathLengthAfterWall - returns the length of the players path if a wall is placed
+     *
+     *
+     * @param playerNum - the player to check
+     * @param wall - wall to be place to see if it will be best
+     * @return - whether or not edgeSet blocks playerNum from winning
+     */
+    public int pathLengthAfterWall(int playerNum, String wall){
+        // Duplicate board SETUP
+        UndirectedGraph<Vertex, Edge> boardCopy = new SimpleGraph<Vertex, Edge>(Edge.class);
+        Graphs.addGraph(boardCopy, this.board);
+        // builds the graph with correct C R Vertex Positions
+        boardCopy = buildGraph(boardCopy);
+        // puts each player on the board in the correct position
+        placeWall(wall,boardCopy);
+        return (int)getShortestWinningPath(playerNum,boardCopy).getPathLength();
+    }
+    
+     /**
+     * Places a wall. This wall must be validated by validWall() BEFORE being
+     * placed. ## Modified for pathLengthAfterWall
+     *
+     * @param playerNum - player that is placing the wall.
+     * @param wall - A string representing the wall: "[c] [r] [d]"
+     */
+    public void placeWall(String wall,UndirectedGraph<Vertex,Edge> boardCopy) {
+        Set<Edge> edgesToRemove = getEdgesToRemove(wall,boardCopy);
+        for (Edge e : edgesToRemove) {
+            boardCopy.removeEdge(e);
+        }
+    }
+    /**
+     * getEdgesToRemove - gets the edges to remove when placing a wall
+     * ## Modified for pathLengthAfterWall
+     * @param wall - The wall as a string: "[c] [r] [d]"
+     * @return - the set of edges to remove from the board to place that wall
+     */
+    public Set<Edge> getEdgesToRemove(String wall,UndirectedGraph<Vertex,Edge> boardCopy) {
+        Scanner sc = new Scanner(wall);
+        int pc = Integer.parseInt(sc.next());
+        int pr = Integer.parseInt(sc.next());
+        String d = sc.next().toUpperCase();
+        // Source node
+        Vertex s = getVertexByCoord(pc, pr);
+        // node to right of source node
+        Vertex r = getVertexByCoord(pc + 1, pr);
+        // node below source node
+        Vertex b = getVertexByCoord(pc, pr + 1);
+        // node below and to the right of source node
+        Vertex br = getVertexByCoord(pc + 1, pr + 1);
+
+        Edge s2r = boardCopy.getEdge(s, r);
+        Edge b2br = boardCopy.getEdge(b, br);
+        Edge s2b = boardCopy.getEdge(s, b);
+        Edge r2br = boardCopy.getEdge(r, br);
+
+        Set<Edge> remove = new HashSet<Edge>();
+
+        // adding edges to the set to be removed based on wall placement direction
+        if (d.equals("V")) {
+            if (s2r != null) {
+                remove.add(boardCopy.getEdge(s, r));
+            }
+            if (b2br != null) {
+                remove.add(boardCopy.getEdge(b, br));
+            }
+        } else {
+            if (s2b != null) {
+                remove.add(boardCopy.getEdge(s, b));
+            }
+            if (r2br != null) {
+                remove.add(boardCopy.getEdge(r, br));
+            }
+        }
+        return remove;
+    }
+
+
+
+
 }
+
+
+
+
+

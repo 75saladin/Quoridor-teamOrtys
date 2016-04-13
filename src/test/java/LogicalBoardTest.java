@@ -657,14 +657,22 @@ public class LogicalBoardTest {
     
     @Test
     public void testGetShortestPath() throws Exception{
-        GraphPath<Vertex,Edge> p1Path = boardTwo.getShortestWinningPath(1).getPath();
-        GraphPath<Vertex,Edge> p2Path = boardTwo.getShortestWinningPath(2).getPath();
+        GraphPath<Vertex,Edge> p1Path = boardTwo.getShortestWinningPath(1,boardTwo.board).getPath();
+        GraphPath<Vertex,Edge> p2Path = boardTwo.getShortestWinningPath(2,boardTwo.board).getPath();
         assertEquals("should be the same length",(int)p1Path.getWeight(), (int)p2Path.getWeight());
         boardTwo.checkValid(1,"4 7 h");
         boardTwo.checkValid(1,"2 7");
         boardTwo.checkValid(1, "5 7 V");
         boardTwo.checkValid(1, "0 6");
-        p2Path = boardTwo.getShortestWinningPath(2).getPath();
+        p2Path = boardTwo.getShortestWinningPath(2,boardTwo.board).getPath();
         assertNotEquals("should Not be the same length",(int)p1Path.getWeight(), (int)p2Path.getWeight());
+    }
+    
+    @Test
+    public void testPathLengthAfterWall() throws Exception{
+        int pathLength = (int)boardTwo.getShortestWinningPath(1,boardTwo.board).getPathLength();
+        int pathLengthAfterWall = boardTwo.pathLengthAfterWall(1, "4 0 H");
+        assertNotEquals(pathLength,pathLengthAfterWall);
+        
     }
 }
