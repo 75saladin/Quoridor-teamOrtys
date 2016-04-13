@@ -95,13 +95,17 @@ public class RandomAI {
         if(playerCount==2){
             // if this players path is shorter, move player position to here
             if (this.playerNum == 1) {
-                if (playerOnePathLength <= playerTwoPathLength)
+                if (playerOnePathLength < playerTwoPathLength)
                     return p1BestMove.c + " " + p1BestMove.r;
-                return getBestWall(1);
+                else if(P1hasWalls)
+                    return getBestWall(1);
+                return p1BestMove.c + " " + p1BestMove.r;
             }else{
-                if (playerOnePathLength <= playerTwoPathLength)
+                if (playerOnePathLength < playerTwoPathLength)
                     return p2BestMove.c + " " + p2BestMove.r;
-                return getBestWall(2);
+                else if(P2hasWalls)
+                    return getBestWall(2);
+                return p2BestMove.c + " " + p2BestMove.r;
             }
         }else{
             if (this.playerNum == 1) {
