@@ -68,19 +68,22 @@ public class  Controller{
         
         if(playerCount > 2) {
             switch(playerTurn) {
-
                 case 1: 
                     System.out.println("Player turn = " + playerTurn);
                     playerTurn = 4;
+                    if(player4 == null) setPlayerTurn();
                     break;
                 case 2: 
                     playerTurn = 3;
+                    if(player3 == null) setPlayerTurn();
                     break;
                 case 3: 
                     playerTurn = 1;
+                    if(player1 == null) setPlayerTurn();
                     break;
                 case 4:
                     playerTurn = 2;
+                    if(player1 == null) setPlayerTurn();
                     break;
             }
         } else {
@@ -94,6 +97,33 @@ public class  Controller{
             }
         }
 
+    }
+
+
+    public void removePlayer(int n) {
+        playerCount--;
+        switch(n) {
+            case 1:
+                position1 = null;
+                player1 = null;
+                circle1 = null;
+                break;
+            case 2:
+                position2 = null;
+                player2 = null;
+                circle2 = null;
+                break;
+            case 3:
+                position3 = null;
+                player3 = null;
+                circle3 = null;
+                break;
+            case 4:
+                position4 = null;
+                player4 = null;
+                circle4 = null;
+                break;
+        }
     }
 
     // pre: none
@@ -195,11 +225,16 @@ public class  Controller{
 
     public static void main(String[] args) {
         Controller c = new Controller(4);
-        System.out.println(c.getPlayerTurn());
-        c.setPlayerTurn();
-        System.out.println(c.getPlayerTurn());
-        c.setPlayerTurn();
-        System.out.println(c.getPlayerTurn());
+        //System.out.println(c.getPlayerTurn());
+        //c.setPlayerTurn();
+        //System.out.println(c.getPlayerTurn());
+        //c.setPlayerTurn();
+        //System.out.println(c.getPlayerTurn());
+        //c.setPlayerTurn();
+        //System.out.println(c.getPlayerTurn());
+
+        System.out.println("");
+        c.removePlayer(4);
         c.setPlayerTurn();
         System.out.println(c.getPlayerTurn());
     }
