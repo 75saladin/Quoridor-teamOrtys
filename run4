@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Give 4 port number on command line to run
+if [ "$#" -ne 4 ]; then
+  echo "usage: run2 <port1> <port2> <port3> <port4>"
+  exit 1
+fi
+
+# Make sure you actually type in numbers
+re='^[0-9]+$'
+if ! [[ $1 =~ $re ]] || ! [[ $2 =~ $re ]] || ! [[ $3 =~ $re ]] || ! [[ $4 =~ $re ]]; then
+  echo "Error: non-integer value found"
+  exit 1
+fi
+
+# Keep port numbers in proper range
+if [ "$1" -lt 1024 ] || [ "$2" -lt 1024 ] || ["$3" -lt 1024] || ["$4" -lt 1024]; then
+  echo "Error: Try to keep port numbers above 2000"
+  exit 1
+fi
+
+# Cannot use same port number for both servers
+if [ "$1" -eq "$2" ]; then
+  echo "Error: same port number detected"
+  exit 1
+fi
+
+# Launch servers in own terminals
+gnome-terminal -e "java -cp build/libs/Quoridor.jar GameServer --port $1 --name ORT"
+gnome-terminal -e "java -cp build/libs/Quoridor.jar GameServer --port $2 --name BOB"
+gnome-terminal -e "java -cp build/libs/Quoridor.jar GameServer --port $3 --name LIP"
+gnome-terminal -e "java -cp build/libs/Quoridor.jar GameServer --port $4 --name RIP"
+
+# Wait for servers to start. (Thank you hivemind for the idea)
+sleep 1;
+
+# Launch client
+java -cp build/libs/Quoridor.jar GameClient localhost:$1 localhost:$2 localhost:$3 localhost:$4
