@@ -68,10 +68,13 @@ public class GameServer extends Server {
 	} else if(msg.startsWith("GAME")) { // get the game message from client
             String[] temp = msg.split(" ");
             this.playerNum = Integer.parseInt(s[1]);
-            if(temp.length == 4) 
+            if(temp.length == 4) {
                 AI = new RandomAI(2, playerNum); // set the random AI
-            else 
+                System.out.println("Two player AI");
+            }else {
                 AI = new RandomAI(4, playerNum);
+                System.out.println("Four player AI");
+            }
             return;
         } else if(msg.startsWith("MYOUSHU")) { // get a move
             try{
