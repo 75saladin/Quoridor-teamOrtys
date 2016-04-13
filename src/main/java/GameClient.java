@@ -46,11 +46,14 @@ public class GameClient{
       if(gameBoard.checkValid(pNum,move)){
         broadcastMove(players,pNum,move);
         gui.update(move);
+        try{ Thread.sleep(1000); }
+        catch(Exception e){}
       }
       else{
         System.out.println("INDEX: " + index);
         kickPlayer(players,pNum,index);
         gameBoard.kick(pNum);
+        gui.removePlayer(pNum);
       }
       winner = checkWinner(gameBoard,players.length);
       if(winner != 0){
