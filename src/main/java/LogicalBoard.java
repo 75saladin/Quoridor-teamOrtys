@@ -23,9 +23,7 @@ public class LogicalBoard {
     // the set of players in the game
     public Player[] players;
     // the set of edges in the game
-    
-    
-    
+
     /**
      * Constructor
      *
@@ -65,8 +63,6 @@ public class LogicalBoard {
         setWalls(playerCount);
     }
 
-    
-    
     //API methods; to be called by whoever instantiates a board
     /**
      * hasWon - Checks whether or not the given player has won the game
@@ -107,7 +103,7 @@ public class LogicalBoard {
 
     /**
      * kick - removes from the board the player with the given player number
-     * 
+     *
      * @param playerNum - player to kick
      */
     public void kick(int playerNum) {
@@ -117,7 +113,7 @@ public class LogicalBoard {
 
         players[playerNum - 1] = null;
     }
-    
+
     /**
      * getShortestWinningPath - Gets the shortest win path for the given player
      *
@@ -133,42 +129,45 @@ public class LogicalBoard {
         if (playerNum == 1) {
             for (int i = 0; i < 9; i++) {
                 destination = getVertexByCoord(i, 8);
-            }
-            temp = new DijkstraShortestPath<Vertex, Edge>(this.board, source, destination);
-            if (temp != null) {
-                if (temp.getPathLength() < length) {
-                    Dijkstra = temp;
+                temp = new DijkstraShortestPath<Vertex, Edge>(this.board, source, destination);
+                if (temp != null) {
+                    if (temp.getPathLength() < length) {
+                        Dijkstra = temp;
+                        length = (int) temp.getPathLength();
+                    }
                 }
             }
-
         } else if (playerNum == 2) {
             for (int i = 0; i < 9; i++) {
                 destination = getVertexByCoord(i, 0);
-            }
-            temp = new DijkstraShortestPath<Vertex, Edge>(this.board, source, destination);
-            if (temp != null) {
-                if (temp.getPathLength() < length) {
-                    Dijkstra = temp;
+                temp = new DijkstraShortestPath<Vertex, Edge>(this.board, source, destination);
+                if (temp != null) {
+                    if (temp.getPathLength() < length) {
+                        Dijkstra = temp;
+                        length = (int) temp.getPathLength();
+                    }
                 }
             }
         } else if (playerNum == 3) {
             for (int i = 0; i < 9; i++) {
                 destination = getVertexByCoord(8, i);
-            }
-            temp = new DijkstraShortestPath<Vertex, Edge>(this.board, source, destination);
-            if (temp != null) {
-                if (temp.getPathLength() < length) {
-                    Dijkstra = temp;
+                temp = new DijkstraShortestPath<Vertex, Edge>(this.board, source, destination);
+                if (temp != null) {
+                    if (temp.getPathLength() < length) {
+                        Dijkstra = temp;
+                        length = (int) temp.getPathLength();
+                    }
                 }
             }
         } else {
             for (int i = 0; i < 9; i++) {
                 destination = getVertexByCoord(0, i);
-            }
-            temp = new DijkstraShortestPath<Vertex, Edge>(this.board, source, destination);
-            if (temp != null) {
-                if (temp.getPathLength() < length) {
-                    Dijkstra = temp;
+                temp = new DijkstraShortestPath<Vertex, Edge>(this.board, source, destination);
+                if (temp != null) {
+                    if (temp.getPathLength() < length) {
+                        Dijkstra = temp;
+                        length = (int) temp.getPathLength();
+                    }
                 }
             }
         }
@@ -178,7 +177,7 @@ public class LogicalBoard {
 
     /**
      * checkValid - Checks whether or not the given player can make the given
-     * move. If it's a valid move, returns true and automatically makes the 
+     * move. If it's a valid move, returns true and automatically makes the
      * move.
      *
      * @param playerNum - player to check
@@ -191,25 +190,23 @@ public class LogicalBoard {
         }
         if (move.length() == 3 || move.length() == 5) {
             if (move.length() == 3) {
-                if (validMove(playerNum, move)){
-                    makeMove(playerNum,move);
+                if (validMove(playerNum, move)) {
+                    makeMove(playerNum, move);
                     return true;
-                } else{
+                } else {
                     return false;
                 }
-            } else if (validWall(playerNum, move)){
-                placeWall(playerNum,move);
+            } else if (validWall(playerNum, move)) {
+                placeWall(playerNum, move);
                 return true;
-            } else{
+            } else {
                 return false;
             }
-        }else{
+        } else {
             return false;
         }
     }
 
-    
-    
     //Helper methods; they get called under the hood of the API
     /**
      * validMove - Checks whether or not the given player can make the given
@@ -225,8 +222,8 @@ public class LogicalBoard {
         int r = Integer.parseInt(sc.next());
         Vertex Destination = getVertexByCoord(c, r);
         Set<Vertex> validMoves = getValidMoves(playerNum);
-        for(Vertex v : validMoves){
-            if(v.equals(Destination)){
+        for (Vertex v : validMoves) {
+            if (v.equals(Destination)) {
                 return true;
             }
         }
@@ -272,37 +269,41 @@ public class LogicalBoard {
         int sourceC = Integer.parseInt(sc.next());
         int sourceR = Integer.parseInt(sc.next());
         String direction = sc.next().toUpperCase();
-        
-        
+
         // wall must be on board and not in the 8th row or col
-        if (sourceC > 7 || sourceR > 7 || sourceC < 0 || sourceR < 0)
+        if (sourceC > 7 || sourceR > 7 || sourceC < 0 || sourceR < 0) {
             return false;
-        
+        }
+
         // if the player has no walls left, it's an invalid wall
-        if (player != null && player.getWalls() <= 0)
+        if (player != null && player.getWalls() <= 0) {
             return false;
+        }
 
         // Fewer than 2 edges to remove means there's a conflicting wall
         Set<Edge> EdgeSetToRemove = getEdgesToRemove(wall);
-        if (EdgeSetToRemove == null || EdgeSetToRemove.size() < 2)
+        if (EdgeSetToRemove == null || EdgeSetToRemove.size() < 2) {
             return false;
-        
+        }
+
         // if 0 edges to remove for opposite wall, this wall is a crisscross
-        if (direction.equals("V") && 
-                getEdgesToRemove(sourceC + " " + sourceR + " H").size() == 0)
-            return false;            
-        else if (direction.equals("H") && 
-                getEdgesToRemove(sourceC + " " + sourceR + " v").size() == 0)
-            return false;        
-        
+        if (direction.equals("V")
+                && getEdgesToRemove(sourceC + " " + sourceR + " H").size() == 0) {
+            return false;
+        } else if (direction.equals("H")
+                && getEdgesToRemove(sourceC + " " + sourceR + " v").size() == 0) {
+            return false;
+        }
+
         // Starting logic to test if winners path is blocked......
         for (Player p : players) {
             // vertex that contains this Player p
             // if path is blocked return false
-            if (pathBlocked(getPlayerNum(p), EdgeSetToRemove))
+            if (pathBlocked(getPlayerNum(p), EdgeSetToRemove)) {
                 return false;
+            }
         }
-        
+
         // if we get here it's a valid wall
         return true;
     }
@@ -316,15 +317,17 @@ public class LogicalBoard {
      */
     public void placeWall(int playerNum, String wall) {
         Player player = getPlayer(playerNum);
-        
+
         Set<Edge> edgesToRemove = getEdgesToRemove(wall);
-        for (Edge e : edgesToRemove)
+        for (Edge e : edgesToRemove) {
             board.removeEdge(e);
-        
-        if (player != null)
+        }
+
+        if (player != null) {
             player.decrementWall();
+        }
     }
-    
+
     /**
      * getValidMoves - Returns the set of vertices the given player can move to
      *
@@ -335,17 +338,17 @@ public class LogicalBoard {
         Player p = getPlayer(playerNum);
         return validMovesOf(p, new HashSet<Player>());
     }
-    
+
     /**
      * validMovesOf - returns the set of vertices a given player can move to.
-     * 
+     *
      * @param p - the player to check
      * @param ignoreJump - the set of players that p must not jump over. Moves
      * that are accessed by jumping are added through a recursive call, passing
      * in the adjacent player. If the player being jumped didn't ignore the
-     * jumping player, there would be an infinite reursive call alternating 
+     * jumping player, there would be an infinite reursive call alternating
      * between the two players. The recursive call must ignore ALL players from
-     * parent calls for the case of four players in a square formation: they 
+     * parent calls for the case of four players in a square formation: they
      * could check jumps in a circle forever otherwise.
      * @return - set of p's valid destinations
      */
@@ -353,36 +356,40 @@ public class LogicalBoard {
         Set<Vertex> valid = new HashSet<Vertex>();
         Set<Vertex> surrounding = new HashSet<Vertex>();
         Vertex cur = getVertexByCoord(p.getC(), p.getR());
-        
+
         // Can't add directly to surrounding b/c vertex may be null
         Set<Vertex> temp = new HashSet<Vertex>();
-        temp.add(getVertexByCoord(cur.c+1, cur.r)); //right
-        temp.add(getVertexByCoord(cur.c-1, cur.r)); //left
-        temp.add(getVertexByCoord(cur.c, cur.r+1)); //below
-        temp.add(getVertexByCoord(cur.c, cur.r-1)); //above
-        
-        for (Vertex v : temp)
-            if (v != null)
+        temp.add(getVertexByCoord(cur.c + 1, cur.r)); //right
+        temp.add(getVertexByCoord(cur.c - 1, cur.r)); //left
+        temp.add(getVertexByCoord(cur.c, cur.r + 1)); //below
+        temp.add(getVertexByCoord(cur.c, cur.r - 1)); //above
+
+        for (Vertex v : temp) {
+            if (v != null) {
                 surrounding.add(v);
-        
+            }
+        }
+
         //recursive calls must ignore all previous players
         ignoreJump.add(p);
-        
+
         Player vp;
         for (Vertex v : surrounding) {
             if (hasEdge(cur, v)) {  //if there's not a blocking wall
                 vp = getPlayer(v);
-                if (vp==null)    //no player there means it's valid
+                if (vp == null) //no player there means it's valid
+                {
                     valid.add(v);
-                else if (!ignoreJump.contains(vp))
-                    //ignore list not containing vp means that player's valid moves are valid
+                } else if (!ignoreJump.contains(vp)) //ignore list not containing vp means that player's valid moves are valid
+                {
                     valid.addAll(validMovesOf(vp, ignoreJump));
+                }
             }
         }
-        
+
         return valid;
     }
-  
+
     public UndirectedGraph<Vertex, Edge> buildGraph(UndirectedGraph<Vertex, Edge> graph) {
 
         // The graph is now constructed with no C,R Data, must fill
@@ -404,7 +411,7 @@ public class LogicalBoard {
 
     /**
      *
-     * pathBlocked - Checks whether or not the given wall blocks all of the 
+     * pathBlocked - Checks whether or not the given wall blocks all of the
      * given player's remaining win paths.
      *
      * @param playerNum - the player to check
@@ -483,19 +490,20 @@ public class LogicalBoard {
     }
 
     /**
-     * hasEdge - returns whether or not the two vertices have an edge between 
+     * hasEdge - returns whether or not the two vertices have an edge between
      * them. ie, checks if there is not a wall between the two vertices.
-     * 
+     *
      * @param destination - one vertex
      * @param Source - the other vertex
      * @return - if the path is clear
      */
-    private boolean hasEdge(Vertex destination,Vertex Source){
-        if (board.containsEdge(Source, destination))
+    private boolean hasEdge(Vertex destination, Vertex Source) {
+        if (board.containsEdge(Source, destination)) {
             return true;
+        }
         return false;
     }
-    
+
     /**
      * enoughPlayers - checks if the game has enough players to continue
      *
@@ -508,12 +516,10 @@ public class LogicalBoard {
         return false;
     }
 
-    
-    
     //Getters and Setters
     /**
      * vertexSet - gets the set of vertices on the board
-     * 
+     *
      * @return - the set of vertices on the board
      */
     public Set<Vertex> vertexSet() {
@@ -522,7 +528,7 @@ public class LogicalBoard {
 
     /**
      * edgeSet - gets the set of edges on the board
-     * 
+     *
      * @return - the set of edges on the board
      */
     public Set<Edge> edgeSet() {
@@ -538,7 +544,7 @@ public class LogicalBoard {
     public Player getPlayer(int playerNum) {
         return players[playerNum - 1];
     }
-    
+
     /**
      * getPlayer - Given a vertex, returns the player on that vertex. If there
      * is none, returns null.
@@ -547,16 +553,18 @@ public class LogicalBoard {
      * @return Player on that vertex (or null if none)
      */
     public Player getPlayer(Vertex v) {
-        for (Player p : players)
-            if (p.getC()==v.c && p.getR()==v.r)
+        for (Player p : players) {
+            if (p.getC() == v.c && p.getR() == v.r) {
                 return p;
+            }
+        }
         return null;
-        
+
     }
 
     /**
      * getPlayerNum - given a player object, returns their player number
-     * 
+     *
      * @param p - the player
      * @return - the player number
      */
@@ -599,7 +607,7 @@ public class LogicalBoard {
         }
         return null;
     }
- 
+
     /**
      * getVertexByCoord - returns Vertex object at that coordinate on the board
      *
@@ -646,19 +654,23 @@ public class LogicalBoard {
 
         // adding edges to the set to be removed based on wall placement direction
         if (d.equals("V")) {
-            if (s2r != null) 
+            if (s2r != null) {
                 remove.add(board.getEdge(s, r));
-            if (b2br != null) 
+            }
+            if (b2br != null) {
                 remove.add(board.getEdge(b, br));
+            }
         } else {
-            if (s2b != null) 
+            if (s2b != null) {
                 remove.add(board.getEdge(s, b));
-            if (r2br != null) 
+            }
+            if (r2br != null) {
                 remove.add(board.getEdge(r, br));
+            }
         }
         return remove;
     }
-    
+
     /**
      * setWalls - Sets wall counts for all players depending on player count
      *
@@ -675,9 +687,9 @@ public class LogicalBoard {
             players[3].setWalls(5);
         }
     }
-    
+
     /**
-     * addPlayer - puts a player on the board, using the coordinates in the 
+     * addPlayer - puts a player on the board, using the coordinates in the
      * Player object.
      *
      * @param player - the player to add
@@ -685,12 +697,11 @@ public class LogicalBoard {
     private void addPlayer(Player player) {
         getVertexByCoord(player.getC(), player.getR()).placePlayer();
     }
-    
-    
+
     //Testing only methods
     /**
-     * removeWall - FOR TESTING PURPOSES ONLY. Removes a wall and increments the player's 
-     * wallcount. To be called just after placing a wall.
+     * removeWall - FOR TESTING PURPOSES ONLY. Removes a wall and increments the
+     * player's wallcount. To be called just after placing a wall.
      *
      * @param playerNum - player number whose wallcount needs to be reverted
      * @param wall - the wall to remove
