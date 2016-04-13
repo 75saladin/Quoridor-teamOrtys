@@ -67,17 +67,4 @@ public class GUITest {
         assertNotNull(gui2);
     }
     
-    
-    /**
-     * Tests getting the player position
-     */
-    @Test
-    public void testGetPlayerPosition() {
-        Point p1 = new Point(4, 0);
-        Point p2 = new Point(0, 4);
-
-        
-        assertEquals(p1, gui.getPlayerPosition(1));
-        assertEquals(p2, gui2.getPlayerPosition(3));
-    }
 }

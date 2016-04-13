@@ -15,12 +15,6 @@ import java.awt.Point;
  */
 public interface GUIInterface {
     
-    public abstract void update(String move); // updates the board with just  move
-
-    public abstract Point getPlayerPosition(int num); // returns the c, r position of the player
-    
-    public abstract void buildWall(int column, int row, String direction); // build a wall based on a string passed in
-    
-    public abstract void movePlayer(int column, int row); // move a player based on a string passed in
-    
+    public abstract void update(String move); // updates the board with just move
+   
 }

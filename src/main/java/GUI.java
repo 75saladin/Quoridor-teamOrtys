@@ -40,6 +40,8 @@ public class GUI extends Application implements GUIInterface {
     private Controller player; 
     
     private TextArea output = null; // text area to broadcast game events
+
+    private GridPane loserBox = new GridPane(); // the loserBox to put kicked players
     
     
     // on off latch
@@ -130,6 +132,10 @@ public class GUI extends Application implements GUIInterface {
         
     }
 
+    /**
+     * @param move: The move to update the board.
+     * Calls buildWall or movePlayer based on the message passed in
+     */
     @Override
     public void update(String move) {
         move = move.toLowerCase();
@@ -148,12 +154,6 @@ public class GUI extends Application implements GUIInterface {
 
     }
 
-    
-    
-
-    public Point getPlayerPosition(int num) {
-        return player.getPlayerPosition(num);
-    }
 
     /**
      * 
@@ -161,8 +161,7 @@ public class GUI extends Application implements GUIInterface {
      * @param row: the column to move the player
      * builds a wall based on the c, r, and direction
      */
-    @Override
-    public void buildWall(int column, int row, String direction) {
+    private void buildWall(int column, int row, String direction) {
         final int c = revert(column);
         final int r = revert(row);
         
@@ -178,7 +177,7 @@ public class GUI extends Application implements GUIInterface {
                     grid.add(new Rectangle(50, 7.0, Color.WHITE), c+2, r +1);
                 }
                 output.appendText("Player " + player.getPlayerTurn() + " placed wall " +
-                              "Column " + column + " Row " + row + " " + direction + "\n\n");
+                              "column " + column + " row " + row + " " + direction + "\n\n");
                 player.setPlayerTurn();
             }
         });
@@ -191,8 +190,7 @@ public class GUI extends Application implements GUIInterface {
      * @param nrow: the row to move the player
      * moves the player to correct grid
      */
-    @Override
-    public void movePlayer(int col, int nrow) {
+    private void movePlayer(int col, int nrow) {
         final int c = revert(col);
         final int r = revert(nrow);
         
@@ -211,23 +209,33 @@ public class GUI extends Application implements GUIInterface {
           
     }
 
+    /** 
+     * @param num: The player to kick.
+     * Kicks the player passed in.
+     */
     public void removePlayer(int num) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 grid.getChildren().remove(player.getPlayerNode(num));
                 output.appendText("Kicked player " + num + "\n\n");
+                loserBox.add(player.getPlayerNode(num),num ,num);
+                
+                Text t = new Text("LOSER BOX! HA HA HA");
+                Text t2 = new Text("Heck ya little Rick");
+                VBox v = new VBox(t, t2, loserBox);
+                root.setRight(v);
+                output.appendText("Ha Ha Ha");
+                player.removePlayer(num);
                 player.setPlayerTurn();
             }
         });
+        
     }
     
-    public Controller getController() {
-        return player;
-    }
 
 
-        
+    // method to parse an integer from a string    
     private int parseToInt(String s) {
         try { 
             return Integer.parseInt(s);

@@ -70,10 +70,8 @@ public class GameServer extends Server {
             this.playerNum = Integer.parseInt(s[1]);
             if(temp.length == 4) {
                 AI = new RandomAI(2, playerNum); // set the random AI
-                System.out.println("Two player AI");
             }else {
                 AI = new RandomAI(4, playerNum);
-                System.out.println("Four player AI");
             }
             return;
         } else if(msg.startsWith("MYOUSHU")) { // get a move
