@@ -87,6 +87,7 @@ public class RandomAI {
             P3hasWalls = board.getPlayer(3).hasWalls();
             p3BestMove = getBestMove(3);
             playerThreePathLength = (int) board.getShortestWinningPath(3,board.board).getPathLength();
+            
             p4BestMove = getBestMove(4);
             playerFourPathLength = (int) board.getShortestWinningPath(4,board.board).getPathLength();
             P4hasWalls = board.getPlayer(4).hasWalls();
@@ -95,13 +96,13 @@ public class RandomAI {
         if(playerCount==2){
             // if this players path is shorter, move player position to here
             if (this.playerNum == 1) {
-                if (playerOnePathLength < playerTwoPathLength)
+                if (playerOnePathLength <= playerTwoPathLength)
                     return p1BestMove.c + " " + p1BestMove.r;
                 else if(P1hasWalls)
                     return getBestWall(1);
                 return p1BestMove.c + " " + p1BestMove.r;
             }else{
-                if (playerOnePathLength < playerTwoPathLength)
+                if (playerOnePathLength <= playerTwoPathLength)
                     return p2BestMove.c + " " + p2BestMove.r;
                 else if(P2hasWalls)
                     return getBestWall(2);
