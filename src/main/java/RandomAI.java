@@ -202,7 +202,7 @@ public class RandomAI {
                 //Player 1
                 if(player!=1){
                     if (board.validWall(player, tempWallH)){ 
-                    	temp = board.pathLengthAfterWall(1, tempWallH)
+                    	temp = board.pathLengthAfterWall(1, tempWallH);
                         if (currentPathLengthP1 < temp){ 
                             bestWall = tempWallH;
                             shortestPath = temp;
