@@ -46,7 +46,7 @@ public class GameClient{
       if(gameBoard.checkValid(pNum,move)){
         broadcastMove(players,pNum,move);
         gui.update(move);
-        try{ Thread.sleep(1000); }
+        try{ Thread.sleep(200); }
         catch(Exception e){}
       }
       else{
@@ -71,7 +71,7 @@ public class GameClient{
       }
     }
     try{
-      Thread.sleep(5000);
+      Thread.sleep(200);
     }
     catch(InterruptedException ie){
       ie.printStackTrace();

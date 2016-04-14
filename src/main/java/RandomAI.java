@@ -186,10 +186,13 @@ public class RandomAI {
         int currentPathLengthP2 = (int) board.getShortestWinningPath(2,board.board).getPathLength();
         int currentPathLengthP3 = 0;
         int currentPathLengthP4 = 0;
+        
+        int temp = 0;
         if(playerCount>2){
             currentPathLengthP3 = (int) board.getShortestWinningPath(3,board.board).getPathLength();
             currentPathLengthP4 = (int) board.getShortestWinningPath(4,board.board).getPathLength();
         }
+        int shortestPath = 0;
         // Current Column
         for (int c = 0; c < 8; c++) {
             // Current Row
@@ -198,41 +201,53 @@ public class RandomAI {
                 tempWallV = c + " " + r + " V";
                 //Player 1
                 if(player!=1){
-                    if (board.validWall(player, tempWallH)) 
-                        if (currentPathLengthP1 < board.pathLengthAfterWall(1, tempWallH)) 
+                    if (board.validWall(player, tempWallH)){ 
+                    	temp = board.pathLengthAfterWall(1, tempWallH)
+                        if (currentPathLengthP1 < temp){ 
                             bestWall = tempWallH;
-                    if (board.validWall(player, tempWallV)) 
-                        if (currentPathLengthP1 < board.pathLengthAfterWall(1, tempWallV)) 
+                            shortestPath = temp;
+                        }
+                    }if (board.validWall(player, tempWallV)){
+	                	temp = board.pathLengthAfterWall(2, tempWallH);
+                        if (currentPathLengthP1 < temp) {
                             bestWall = tempWallV;
-            }        
+                            shortestPath = temp;
+                        }
+	            	}        
                 // Player 2
-                if(player!=2){
+                }if(player!=2){
                     if (board.validWall(player, tempWallH)) 
-                        if (currentPathLengthP2 < board.pathLengthAfterWall(2, tempWallH)) 
+                        if (currentPathLengthP2 < board.pathLengthAfterWall(2, tempWallH)) {
                             bestWall = tempWallH;
+                        }
                     if (board.validWall(player, tempWallV)) 
-                        if (currentPathLengthP2 < board.pathLengthAfterWall(2, tempWallV)) 
+                        if (currentPathLengthP2 < board.pathLengthAfterWall(2, tempWallV)) {
                             bestWall = tempWallV;
+                        }
                 }
                 // Fpur Players
                 if (this.playerCount > 2) {
                     //Player 3
                     if(player!=3){
                         if (board.validWall(player, tempWallH)) 
-                            if (currentPathLengthP3 < board.pathLengthAfterWall(3, tempWallH)) 
+                            if (currentPathLengthP3 < board.pathLengthAfterWall(3, tempWallH)) {
                                     bestWall = tempWallH;
+                            }
                         if (board.validWall(player, tempWallV)) 
-                            if (currentPathLengthP3 < board.pathLengthAfterWall(3, tempWallV)) 
+                            if (currentPathLengthP3 < board.pathLengthAfterWall(3, tempWallV)) {
                                     bestWall = tempWallV;
+                            }
                     }
                     // Player Four
                     if(player!=4){
                         if (board.validWall(player, tempWallH)) 
-                            if (currentPathLengthP4 < board.pathLengthAfterWall(4, tempWallH)) 
+                            if (currentPathLengthP4 < board.pathLengthAfterWall(4, tempWallH)) {
                                     bestWall = tempWallH;
+                            }
                         if (board.validWall(player, tempWallV)) 
-                            if (currentPathLengthP4 < board.pathLengthAfterWall(4, tempWallV)) 
+                            if (currentPathLengthP4 < board.pathLengthAfterWall(4, tempWallV)) {
                                     bestWall = tempWallV;    
+                            }
                     }
                 }
             }
