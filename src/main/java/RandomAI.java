@@ -92,49 +92,64 @@ public class RandomAI {
             playerFourPathLength = (int) board.getShortestWinningPath(4,board.board).getPathLength();
             P4hasWalls = board.getPlayer(4).hasWalls();
         }
-        
+        String wall = "";
         if(playerCount==2){
             // if this players path is shorter, move player position to here
             if (this.playerNum == 1) {
                 if (playerOnePathLength <= playerTwoPathLength)
                     return p1BestMove.c + " " + p1BestMove.r;
-                else if(P1hasWalls)
-                    return getBestWall(1);
+                else if(P1hasWalls){
+                    wall = getBestWall(1);
+                    if(MyPathIsSame(1, wall))
+                        return wall;
+                }
                 return p1BestMove.c + " " + p1BestMove.r;
             }else{
-                if (playerOnePathLength <= playerTwoPathLength)
+                if (playerTwoPathLength <= playerOnePathLength)
                     return p2BestMove.c + " " + p2BestMove.r;
-                else if(P2hasWalls)
-                    return getBestWall(2);
+                else if(P2hasWalls){
+                    wall = getBestWall(2);
+                    if(MyPathIsSame(2, wall))
+                        return wall;
+                }
                 return p2BestMove.c + " " + p2BestMove.r;
             }
         }else{
             if (this.playerNum == 1) {
                 if (playerOnePathLength <= playerTwoPathLength && playerOnePathLength<=playerThreePathLength && playerOnePathLength<=playerFourPathLength)
                     return p1BestMove.c + " " + p1BestMove.r;
-                else if(P1hasWalls)
-                    return getBestWall(1);
-                else return p1BestMove.c + " " + p1BestMove.r;
+                else if(P1hasWalls){
+                    wall = getBestWall(1);
+                    if(MyPathIsSame(1, wall))
+                        return wall;
+                }
+                    return p1BestMove.c + " " + p1BestMove.r;
             }else if (this.playerNum == 2){
                 if (playerTwoPathLength <= playerOnePathLength && playerTwoPathLength<=playerThreePathLength && playerTwoPathLength<=playerFourPathLength)
                     return p2BestMove.c + " " + p2BestMove.r;
-                else if(P2hasWalls)
-                    return getBestWall(2);
-                else 
+                else if(P2hasWalls){
+                    wall = getBestWall(2);
+                    if(MyPathIsSame(2, wall))
+                        return wall;
+                }
                     return p2BestMove.c + " " + p2BestMove.r;
             }else if (this.playerNum == 3){
                 if (playerThreePathLength <= playerOnePathLength && playerThreePathLength<=playerTwoPathLength && playerThreePathLength<=playerFourPathLength)
                     return p3BestMove.c + " " + p3BestMove.r;
-                else if(P3hasWalls)
-                    return getBestWall(3);
-                else
+                else if(P3hasWalls){
+                    wall = getBestWall(3);
+                    if(MyPathIsSame(3, wall))
+                        return wall;
+                }
                     return p3BestMove.c + " " + p3BestMove.r;
             }else{
                 if (playerFourPathLength <= playerOnePathLength && playerFourPathLength<=playerTwoPathLength && playerFourPathLength<=playerThreePathLength)
                     return p4BestMove.c + " " + p4BestMove.r;
-                else if(P4hasWalls)
-                    return getBestWall(4);
-                else 
+                else if(P4hasWalls){
+                    wall = getBestWall(4);
+                    if(MyPathIsSame(4, wall))
+                        return wall;
+                }
                     return p4BestMove.c + " " + p4BestMove.r;
             }
             
@@ -223,5 +238,12 @@ public class RandomAI {
             }
         }
         return bestWall;
+    }
+    private boolean MyPathIsSame(int player, String wall){
+        if(wall.equals(""))
+            return false;
+        if((int)board.getShortestWinningPath(player, board.board).getPathLength()==board.pathLengthAfterWall(player, wall))
+            return true;
+        return false;
     }
 }
