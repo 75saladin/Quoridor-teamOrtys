@@ -92,7 +92,7 @@ public class RandomAI {
         if (playerCount == 2) {
             // if this players path is shorter, move player position to here
             if (this.playerNum == 1) {
-                if (playerOnePathLength <= playerTwoPathLength) {
+                if (playerOnePathLength <= playerTwoPathLength-1) {
                     return p1BestMove.c + " " + p1BestMove.r;
                 } else if (P1hasWalls) {
                     wall = getBestWall(1);
@@ -102,7 +102,7 @@ public class RandomAI {
                 }
                 return p1BestMove.c + " " + p1BestMove.r;
             } else {
-                if (playerTwoPathLength <= playerOnePathLength) {
+                if (playerTwoPathLength <= playerOnePathLength-1) {
                     return p2BestMove.c + " " + p2BestMove.r;
                 } else if (P2hasWalls) {
                     wall = getBestWall(2);
@@ -189,27 +189,21 @@ public class RandomAI {
         int currentPathLengthP3 = 0;
         int currentPathLengthP4 = 0;
 
-        int shortestPath = 0;
-        if (player != 1) {
-            shortestPath = currentPathLengthP1;
-        }
-        if (currentPathLengthP2 > shortestPath && player != 2) {
-            shortestPath = currentPathLengthP2;
-        }
+        int shortest = currentPathLengthP1;
+        if(currentPathLengthP2<shortest)
+            shortest = currentPathLengthP2;
+        
 
         if (playerCount > 2) {
             currentPathLengthP3 = (int) board.getShortestWinningPath(3, board.board).getPathLength();
             currentPathLengthP4 = (int) board.getShortestWinningPath(4, board.board).getPathLength();
-
-            if (currentPathLengthP3 > shortestPath && player != 3) {
-                shortestPath = currentPathLengthP3;
-            }
-            if (currentPathLengthP4 > shortestPath && player != 4) {
-                shortestPath = currentPathLengthP4;
-            }
+            if(currentPathLengthP3<shortest)
+                shortest = currentPathLengthP3;
+            if(currentPathLengthP4<shortest)
+                shortest = currentPathLengthP4;
         }
-
         int temp = 0;
+        int temp3 = 100;
         // Current Column
         for (int c = 0; c < 8; c++) {
             // Current Row
@@ -224,32 +218,37 @@ public class RandomAI {
                         temp = board.pathLengthAfterWall(1, tempWallH);
                         // will i benefit from placing this wall?
                         if (currentPathLengthP1 < temp) // is this player the most important one?
-                        {
-                            bestWall = tempWallH;
-                        }
+                            if(temp<temp3){
+                                bestWall = tempWallH;
+                                temp3 = temp;
+                            }
                     }
                     if (board.validWall(player, tempWallV)) {
                         temp = board.pathLengthAfterWall(1, tempWallV);
-                        if (currentPathLengthP1 < temp) {
-                            bestWall = tempWallV;
-                        }
+                        if (currentPathLengthP1 < temp)
+                            if(temp<temp3){
+                                bestWall = tempWallV;
+                                temp3 = temp;
+                            }
                     }
                     // Player 2
                 }
                 if (player != 2) {
                     if (board.validWall(player, tempWallH)) {
                         temp = board.pathLengthAfterWall(2, tempWallH);
-                        if (currentPathLengthP2 < temp) {
-                            bestWall = tempWallH;
-                        }
+                        if (currentPathLengthP2 < temp)
+                            if(temp<temp3){
+                                bestWall = tempWallH;
+                                temp3 = temp;
+                            }
                     }
                     if (board.validWall(player, tempWallV)) {
                         temp = board.pathLengthAfterWall(2, tempWallV);
-                        if (currentPathLengthP2 > temp) {
-                            if (currentPathLengthP1 != shortestPath) {
+                        if (currentPathLengthP2 < temp)
+                            if(temp<temp3){
                                 bestWall = tempWallV;
+                                temp3 = temp;
                             }
-                        }
                     }
                 }
                 // Fpur Players
@@ -258,32 +257,37 @@ public class RandomAI {
                     if (player != 3) {
                         if (board.validWall(player, tempWallH)) {
                             temp = board.pathLengthAfterWall(3, tempWallH);
-                            if (currentPathLengthP3 < temp) {
-                                if (currentPathLengthP3 < shortestPath) {
+                            if (currentPathLengthP3 < temp)
+                                if(temp<temp3){
                                     bestWall = tempWallH;
-                                    if (board.validWall(player, tempWallV)) {
-                                        temp = board.pathLengthAfterWall(3, tempWallV);
-                                        if (currentPathLengthP3 < temp) {
-                                            bestWall = tempWallV;
-                                        }
-                                    }
+                                    temp3 = temp;
                                 }
-                            }
+                        }if (board.validWall(player, tempWallV)) {
+                            temp = board.pathLengthAfterWall(3, tempWallV);
+                            if (currentPathLengthP3 < temp) 
+                                if(temp<temp3){
+                                    bestWall = tempWallV;
+                                    temp3 = temp;
+                                }
                         }
                     }
                     // Player Four
                     if (player != 4) {
                         if (board.validWall(player, tempWallH)) {
                             temp = board.pathLengthAfterWall(4, tempWallH);
-                            if (currentPathLengthP4 < temp) {
-                                bestWall = tempWallH;
-                            }
+                            if (currentPathLengthP4 < temp)
+                                if(temp<temp3){
+                                    bestWall = tempWallH;
+                                    temp3 = temp;
+                                }
                         }
                         if (board.validWall(player, tempWallV)) {
                             temp = board.pathLengthAfterWall(4, tempWallV);
-                            if (currentPathLengthP4 < temp) {
-                                bestWall = tempWallV;
-                            }
+                            if (currentPathLengthP4 < temp)
+                                if(temp<temp3){
+                                    bestWall = tempWallV;
+                                    temp3 = temp;
+                                }
                         }
                     }
                 }
