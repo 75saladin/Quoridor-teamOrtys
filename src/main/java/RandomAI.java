@@ -88,34 +88,39 @@ public class RandomAI {
             playerFourPathLength = (int) board.getShortestWinningPath(4, board.board).getPathLength();
             P4hasWalls = board.getPlayer(4).hasWalls();
         }
+        
+        
+        // Changing any of these numbers will change the way the AI plays
+        // each one is for that particular AI
+        int one = 4;
+        int two = 4;
+        int three = 4;
+        int four = 4;
+        
+               
         String wall = "";
         if (playerCount == 2) {
             // if this players path is shorter, move player position to here
             if (this.playerNum == 1) {
-                if (playerOnePathLength <= playerTwoPathLength-1) {
-                    return p1BestMove.c + " " + p1BestMove.r;
-                } else if (P1hasWalls) {
+                if (playerTwoPathLength <=one && P1hasWalls){ 
                     wall = getBestWall(1);
-                    if (MyPathIsSame(1, wall)) {
+                    if (MyPathIsSame(1, wall)) 
                         return wall;
-                    }
                 }
                 return p1BestMove.c + " " + p1BestMove.r;
             } else {
-                if (playerTwoPathLength <= playerOnePathLength-1) {
-                    return p2BestMove.c + " " + p2BestMove.r;
-                } else if (P2hasWalls) {
+                if (playerOnePathLength <= two && P2hasWalls) {
                     wall = getBestWall(2);
-                    if (MyPathIsSame(2, wall)) {
+                    if (MyPathIsSame(2, wall)) 
                         return wall;
-                    }
                 }
                 return p2BestMove.c + " " + p2BestMove.r;
             }
         } else if (this.playerNum == 1) {
-            if (playerOnePathLength <= playerTwoPathLength && playerOnePathLength <= playerThreePathLength && playerOnePathLength <= playerFourPathLength) {
-                return p1BestMove.c + " " + p1BestMove.r;
-            } else if (P1hasWalls) {
+            //if (playerOnePathLength <= playerTwoPathLength && playerOnePathLength <= playerThreePathLength && playerOnePathLength <= playerFourPathLength) {
+            //    return p1BestMove.c + " " + p1BestMove.r;
+            //} else if (P1hasWalls) {
+            if((playerFourPathLength<=one || playerTwoPathLength <= one || playerThreePathLength <= one) && playerOnePathLength>2){ 
                 wall = getBestWall(1);
                 if (MyPathIsSame(1, wall)) {
                     return wall;
@@ -123,9 +128,10 @@ public class RandomAI {
             }
             return p1BestMove.c + " " + p1BestMove.r;
         } else if (this.playerNum == 2) {
-            if (playerTwoPathLength <= playerOnePathLength && playerTwoPathLength <= playerThreePathLength && playerTwoPathLength <= playerFourPathLength) {
-                return p2BestMove.c + " " + p2BestMove.r;
-            } else if (P2hasWalls) {
+            //if (playerTwoPathLength <= playerOnePathLength && playerTwoPathLength <= playerThreePathLength && playerTwoPathLength <= playerFourPathLength) {
+            //    return p2BestMove.c + " " + p2BestMove.r;
+            //} else if (P2hasWalls) {
+             if((playerOnePathLength<=two || playerThreePathLength <= two || playerThreePathLength <= two) && playerTwoPathLength>2){ 
                 wall = getBestWall(2);
                 if (MyPathIsSame(2, wall)) {
                     return wall;
@@ -133,9 +139,10 @@ public class RandomAI {
             }
             return p2BestMove.c + " " + p2BestMove.r;
         } else if (this.playerNum == 3) {
-            if (playerThreePathLength <= playerOnePathLength && playerThreePathLength <= playerTwoPathLength && playerThreePathLength <= playerFourPathLength) {
-                return p3BestMove.c + " " + p3BestMove.r;
-            } else if (P3hasWalls) {
+            //if (playerThreePathLength <= playerOnePathLength && playerThreePathLength <= playerTwoPathLength && playerThreePathLength <= playerFourPathLength) {
+            //    return p3BestMove.c + " " + p3BestMove.r;
+            //} else if (P3hasWalls) {
+              if((playerOnePathLength<=three || playerTwoPathLength <= three || playerFourPathLength <=three) && playerThreePathLength>2){
                 wall = getBestWall(3);
                 if (MyPathIsSame(3, wall)) {
                     return wall;
@@ -143,9 +150,10 @@ public class RandomAI {
             }
             return p3BestMove.c + " " + p3BestMove.r;
         } else {
-            if (playerFourPathLength <= playerOnePathLength && playerFourPathLength <= playerTwoPathLength && playerFourPathLength <= playerThreePathLength) {
-                return p4BestMove.c + " " + p4BestMove.r;
-            } else if (P4hasWalls) {
+            //if (playerFourPathLength <= playerOnePathLength && playerFourPathLength <= playerTwoPathLength && playerFourPathLength <= playerThreePathLength) {
+            //    return p4BestMove.c + " " + p4BestMove.r;
+            //} else if (P4hasWalls) {
+            if((playerOnePathLength<=four || playerTwoPathLength <= four || playerThreePathLength <= four) && playerFourPathLength>2){ 
                 wall = getBestWall(4);
                 if (MyPathIsSame(4, wall)) {
                     return wall;
@@ -189,18 +197,9 @@ public class RandomAI {
         int currentPathLengthP3 = 0;
         int currentPathLengthP4 = 0;
 
-        int shortest = currentPathLengthP1;
-        if(currentPathLengthP2<shortest)
-            shortest = currentPathLengthP2;
-        
-
         if (playerCount > 2) {
             currentPathLengthP3 = (int) board.getShortestWinningPath(3, board.board).getPathLength();
             currentPathLengthP4 = (int) board.getShortestWinningPath(4, board.board).getPathLength();
-            if(currentPathLengthP3<shortest)
-                shortest = currentPathLengthP3;
-            if(currentPathLengthP4<shortest)
-                shortest = currentPathLengthP4;
         }
         int temp = 0;
         int temp3 = 100;
@@ -258,14 +257,14 @@ public class RandomAI {
                         if (board.validWall(player, tempWallH)) {
                             temp = board.pathLengthAfterWall(3, tempWallH);
                             if (currentPathLengthP3 < temp)
-                                if(temp<temp3){
+                                if(temp<=temp3){
                                     bestWall = tempWallH;
                                     temp3 = temp;
                                 }
                         }if (board.validWall(player, tempWallV)) {
                             temp = board.pathLengthAfterWall(3, tempWallV);
                             if (currentPathLengthP3 < temp) 
-                                if(temp<temp3){
+                                if(temp<=temp3){
                                     bestWall = tempWallV;
                                     temp3 = temp;
                                 }
@@ -276,7 +275,7 @@ public class RandomAI {
                         if (board.validWall(player, tempWallH)) {
                             temp = board.pathLengthAfterWall(4, tempWallH);
                             if (currentPathLengthP4 < temp)
-                                if(temp<temp3){
+                                if(temp<=temp3){
                                     bestWall = tempWallH;
                                     temp3 = temp;
                                 }
@@ -284,7 +283,7 @@ public class RandomAI {
                         if (board.validWall(player, tempWallV)) {
                             temp = board.pathLengthAfterWall(4, tempWallV);
                             if (currentPathLengthP4 < temp)
-                                if(temp<temp3){
+                                if(temp<=temp3){
                                     bestWall = tempWallV;
                                     temp3 = temp;
                                 }
