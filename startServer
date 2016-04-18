@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Make sure there is a port number
+if [ "$#" -ne 1 ]; then
+  echo "usage: server <port>"
+  exit 1
+fi
+
+# Make sure you actually type in a number
+re='^[0-9]+$'
+if ! [[ $1 =~ $re ]]; then
+  echo "Error: non-integer value found"
+  exit 1
+fi
+
+# Keep port number in proper range
+if [ "$1" -lt 2000 ]; then
+  echo "Error: Try to keep port numbers above 2000"
+  exit 1
+fi
+
+# Start single server for testing purposes
+java -cp build/libs/Quoridor.jar GameServer --port $1
