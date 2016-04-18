@@ -222,11 +222,17 @@ public class GUI extends Application implements GUIInterface {
                 loserBox.add(player.getPlayerNode(num),num ,num);
                 
                 Text t = new Text("LOSER BOX! HA HA HA");
-                Text t2 = new Text("Heck ya little Rick");
+                Text t2 = new Text("Heck ya little Rick!");
                 VBox v = new VBox(t, t2, loserBox);
                 root.setRight(v);
                 output.appendText("Ha Ha Ha");
                 player.removePlayer(num);
+                try {
+                    Thread.sleep(4000);
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                
                 player.setPlayerTurn();
             }
         });

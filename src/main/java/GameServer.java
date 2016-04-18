@@ -76,7 +76,7 @@ public class GameServer extends Server {
             return;
         } else if(msg.startsWith("MYOUSHU")) { // get a move
             try{
-                Thread.sleep(200); // here temporarily for move
+                Thread.sleep(1000); // here temporarily for move
             } catch(Exception e) {
 		e.printStackTrace();
             }
