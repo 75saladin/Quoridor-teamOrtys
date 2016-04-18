@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Give 2 port number on command line to run
-if [ "$#" -ne 2 ] || [ "$#" -ne 4 ]; then
+if [ "$#" -ne 2 ] && [ "$#" -ne 4 ]; then
   echo "usage: clientStart <port1> <port2> [<port3> <port4>]"
   exit 1
 fi
