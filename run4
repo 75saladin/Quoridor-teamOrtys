@@ -26,10 +26,10 @@ if [ "$1" -eq "$2" ]; then
 fi
 
 # Launch servers in own terminals
-gnome-terminal -e "java -cp build/libs/Quoridor.jar GameServer --port $1 --name ORT"
-gnome-terminal -e "java -cp build/libs/Quoridor.jar GameServer --port $2 --name BOB"
-gnome-terminal -e "java -cp build/libs/Quoridor.jar GameServer --port $3 --name LIP"
-gnome-terminal -e "java -cp build/libs/Quoridor.jar GameServer --port $4 --name RIP"
+gnome-terminal -e "java -cp build/libs/Quoridor.jar GameServer --port $1 --name ORT" &
+gnome-terminal -e "java -cp build/libs/Quoridor.jar GameServer --port $2 --name BOB" &
+gnome-terminal -e "java -cp build/libs/Quoridor.jar GameServer --port $3 --name LIP" &
+gnome-terminal -e "java -cp build/libs/Quoridor.jar GameServer --port $4 --name RIP" &
 
 # Wait for servers to start. (Thank you hivemind for the idea)
 sleep 1;
