@@ -14,25 +14,36 @@ if ! [[ $1 =~ $re ]] || ! [[ $2 =~ $re ]] || ! [[ $3 =~ $re ]] || ! [[ $4 =~ $re
 fi
 
 # Keep port numbers in proper range
-if [ "$1" -le 1024 ] || [ "$2" -le 1024 ] || ["$3" -le 1024] || ["$4" -le 1024]; then
+if [ "$1" -le 1024 ] || [ "$2" -le 1024 ] || [ "$3" -le 1024 ] || [ "$4" -le 1024 ]; then
   echo "Error: Port numbers must be above 1024"
   exit 1
 fi
 
-# Cannot use same port number for both servers
-if [ "$1" -eq "$2" ]; then
-  echo "Error: same port number detected"
+p1=$1 p2=$2 p3=$3 p4=$4
+
+# Check 4 ports
+ck=0
+for a; do
+  shift
+  for b; do
+    if [ "$a" -eq "$b" ]; then
+      ck=$(( $ck + 1 ))
+    fi
+  done
+done
+if [ "$ck" -ne 0 ]; then
+  echo "Error: Same port number detected"
   exit 1
 fi
 
 # Launch servers in own terminals
-gnome-terminal -e "./startServer $1" &
-gnome-terminal -e "./startServer $2" &
-gnome-terminal -e "./startServer $3" &
-gnome-terminal -e "./startServer $4" &
+gnome-terminal -e "./serverStart $p1" &
+gnome-terminal -e "./serverStart $p2" &
+gnome-terminal -e "./serverStart $p3" &
+gnome-terminal -e "./serverStart $p4" &
 
 # Wait for servers to start. (Thank you hivemind for the idea)
 sleep 1;
 
 # Launch client
-java -cp build/libs/Quoridor.jar GameClient localhost:$1 localhost:$2 localhost:$3 localhost:$4
+./clientStart $p1 $p2 $p3 $p4

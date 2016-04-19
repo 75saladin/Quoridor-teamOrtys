@@ -35,18 +35,35 @@ if [ "$#" -eq 4 ]; then
   fi
 fi
 
-# Cannot use same port number for both servers
-if [ "$1" -eq "$2" ]; then
-  echo "Error: same port number detected"
-  exit 1
-fi
-
-# Run with 2 players
+# Cannot use same port numbers
 if [ "$#" -eq 2 ]; then
+  if [ "$1" -eq "$2" ]; then
+    echo "Error: same port number detected"
+    exit 1
+  fi
+  echo "Running 2 player"
   java -cp build/libs/Quoridor.jar GameClient localhost:$1 localhost:$2
+  exit 0
 fi
 
-# Run with 4 players
+# Check 4 ports
+ck=0
 if [ "$#" -eq 4 ]; then
-  java -cp build/libs/Quoridor.jar GameClient localhost:$1 localhost:$2 localhost:$3 localhost:$4
+  p1=$1 p2=$2 p3=$3 p4=$4
+  #set -- $1 $2 $3 $4
+  for a; do
+    shift
+    for b; do
+      if [ "$a" -eq "$b" ]; then
+        ck=$(( $ck + 1 ))
+      fi
+    done
+  done
+  if [ "$ck" -ne 0 ]; then
+    echo "Error: Same port number detected"
+    exit 1
+  fi
+  echo "Running 4 player"
+  java -cp build/libs/Quoridor.jar GameClient localhost:$p1 localhost:$p2 localhost:$p3 localhost:$p4
+  exit 0
 fi
