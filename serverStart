@@ -14,8 +14,8 @@ if ! [[ $1 =~ $re ]]; then
 fi
 
 # Keep port number in proper range
-if [ "$1" -lt 2000 ]; then
-  echo "Error: Try to keep port numbers above 2000"
+if [ "$1" -le 1024 ]; then
+  echo "Error: Port number must be above 2000"
   exit 1
 fi
 
