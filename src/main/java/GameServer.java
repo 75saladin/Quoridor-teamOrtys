@@ -81,7 +81,7 @@ public class GameServer extends Server {
         e.printStackTrace();
       }
       String move = AI.getMove(); // get a random move from the AI
-      move = formatMove(move);
+      move = Parser.formatMove(move);
       System.out.println("Sending TESUJI " + move);
       out.println("TESUJI " + move);
     } else if(msg.startsWith("ATARI")) {
@@ -111,16 +111,6 @@ public class GameServer extends Server {
       return;
   }
 
-  public String formatMove(String move) {
-    move = Parser.stripBrackets(move);
-    String [] s = move.split(" ");
-
-    if(move.contains("v") || move.contains("h")) {
-        return "[(" + s[0] + ", " + s[1] + "), " + s[2] + "]";
-    } else {
-        return "(" + s[0] + ", " + s[1] + ")";
-    }
-  }
 
   public static void main(String[] args) {
     System.out.println(usage);
