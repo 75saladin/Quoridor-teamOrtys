@@ -88,11 +88,11 @@ private int playerNum; // player Number given to this server by the client
       t.start();
       gui = gui.waitForGUIStartUpTest();
       try {
-        Thread.sleep(1000);
+        Thread.sleep(4000);
       } catch(Exception e) {
         
       }
-      gui.setPlayer(new FPController(playerNum));
+      gui.setPlayer(new FPController(2));
 
       return;
     } else if(msg.startsWith("MYOUSHU")) { // get a move
@@ -105,27 +105,28 @@ private int playerNum; // player Number given to this server by the client
         move = Parser.formatMove(move);
         System.out.println("Sending TESUJI " + move);
         out.println("TESUJI " + move);
+        gui.setMove();
     } else if(msg.startsWith("ATARI")) {
       // only for reading move moves will not handle wall placement
-      String temp[] = msg.split(" ");
-      int player = Integer.parseInt(temp[1]);
-      String move = temp[2] +" "+ temp[3];
-      if(temp.length==5){
-        System.out.println("here");
-        move = move + " " + temp[4];
-      }
-      gui.update(move);
+      System.out.println(Parser.parse(msg));
+      String mv = Parser.parse(msg);
+      gui.update(mv);
+      try{ Thread.sleep(2000); }
+        catch(Exception e){}
       System.out.println("Saw ATARI");
     } else if(msg.startsWith("KIKASHI")) { // game is over guy won
       try {
         out.close();
         socket.close();
         in.close();
+        gui.stopApplication();
       }catch(IOException e) {
         e.printStackTrace();
       }
     } else if(msg.startsWith("GOTE")) {
       System.out.println("Person kicked");
+
+
     } else 
       return;
   }

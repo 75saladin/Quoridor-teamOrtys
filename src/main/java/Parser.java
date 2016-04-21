@@ -22,7 +22,7 @@ public class Parser {
       case "TESUJI":
         return noKey;
       case "ATARI":
-         // return noKey;
+         return handleAtari(arrayCharles);
       case "GOTE":
         //          handleGote();
       case "KIKASHI":
@@ -64,7 +64,12 @@ public class Parser {
   }
 
 
-  public void handleAtari() {
+  public static String handleAtari(String[] s) {
+      if(s.length == 4) {
+          return s[2] + " " + s[3];
+      } 
+
+      return s[2] + " " + s[3] + " " + s[4];
     // Client: First arg is player's number. Second is move-string.
     // Communicates player's move to all players.
   }
