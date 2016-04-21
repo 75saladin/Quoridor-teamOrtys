@@ -1,4 +1,4 @@
-package EntireDirectory;
+
 
 
 
@@ -16,7 +16,7 @@ import javafx.scene.text.Text;
  *
  * @author jed_lechner
  */
-public class  Controller{
+public class  FPController{
     
     private int playerCount; // the number of players competing
     private int playerTurn; // which player turn it is
@@ -39,7 +39,7 @@ public class  Controller{
     
     
     // constructor
-    public Controller (int numOfPlayers) {
+    public FPController (int numOfPlayers) {
         if(numOfPlayers == 2 || numOfPlayers == 4) {
             this.playerCount = numOfPlayers;
             this.playerTurn = 1;
@@ -204,41 +204,26 @@ public class  Controller{
      * Sets the players initial point
      */
     private void setPlayers(int n) {
-        circle1 = new Circle(20.0, Color.BLUE);
+        circle1 = new Circle(10.0, Color.BLUE);
         player1 = new StackPane(circle1, new Text("1"));
         position1 = new Point(4, 0);
         
-        circle2 = new Circle(20.0, Color.DARKGREEN);
+        circle2 = new Circle(10.0, Color.DARKGREEN);
         player2 = new StackPane(circle2, new Text("2"));
         position2 = new Point(4, 8);
         
         if(n == 4) {
-            circle3 = new Circle(20.0, Color.YELLOW);
+            circle3 = new Circle(10.0, Color.YELLOW);
             player3 = new StackPane(circle3, new Text("3"));
             position3 = new Point(0, 4);
             
-            circle4 = new Circle(20.0, Color.DARKORANGE);
+            circle4 = new Circle(10.0, Color.DARKORANGE);
             player4 = new StackPane(circle4, new Text("4"));
             position4 = new Point(8, 4);
         }
         
     }
 
-    public static void main(String[] args) {
-        Controller c = new Controller(4);
-        //System.out.println(c.getPlayerTurn());
-        //c.setPlayerTurn();
-        //System.out.println(c.getPlayerTurn());
-        //c.setPlayerTurn();
-        //System.out.println(c.getPlayerTurn());
-        //c.setPlayerTurn();
-        //System.out.println(c.getPlayerTurn());
-
-        System.out.println("");
-        c.removePlayer(4);
-        c.setPlayerTurn();
-        System.out.println(c.getPlayerTurn());
-    }
    
 }
 

@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 
-import EntireDirectory.Controller;
 import java.awt.Point;
 import org.junit.After;
 import org.junit.Before;

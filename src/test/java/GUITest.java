@@ -5,8 +5,6 @@
  */
 
 
-import EntireDirectory.Controller;
-import EntireDirectory.GUI;
 import javafx.scene.layout.Region;
 import org.junit.After;
 import static org.junit.Assert.assertNotNull;

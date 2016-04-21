@@ -1,24 +1,27 @@
-package Server;
-
-import AI.RandomAI;
-import Client.Parser;
-import java.io.*;
-import java.net.*;
-import java.util.*;
-
-/**
- * 
- * @author jed_lechner
- * Main server to listen for connects. Handles all incoming game messages for 
- * Quoridor. 
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 
-public class GameServer extends Server {
 
-  private int playerNum; // player Number given to this server by the client
-  private RandomAI AI; // The AI to get a move from.
+import Client.Parser;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.Scanner;
+
+/**
+ *
+ * @author jed_lechner
+ */
+public class FirstPersonPlayerServer extends Server {
+private int playerNum; // player Number given to this server by the client
   private String name = ""; // The name of the player. 
   private static String usage = "java GameServer --port <port number> [--name <ai name>]";
+  private PlayerGUI gui;
 
 
   /**
@@ -27,7 +30,7 @@ public class GameServer extends Server {
    * @param name: Name of the server.
    * Constructor
    */
-  public GameServer(int port, String name) {
+  public FirstPersonPlayerServer(int port, String name) {
     super(port);
     this.name = "ort:" + name;
     System.out.println("In the constructor");
@@ -72,22 +75,36 @@ public class GameServer extends Server {
     } else if(msg.startsWith("GAME")) { // get the game message from client
       String[] temp = msg.split(" ");
       this.playerNum = Integer.parseInt(s[1]);
-      if(temp.length == 4) {
-        AI = new RandomAI(2, playerNum); // set the random AI
-      }else {
-        AI = new RandomAI(4, playerNum);
+      System.out.println(playerNum);
+      
+      Thread t = new Thread() {
+      @Override
+      public void run() {
+        javafx.application.Application.launch(PlayerGUI.class);
       }
+      };
+
+      t.setDaemon(true);
+      t.start();
+      gui = gui.waitForGUIStartUpTest();
+      try {
+        Thread.sleep(1000);
+      } catch(Exception e) {
+        
+      }
+      gui.setPlayer(new FPController(playerNum));
+
       return;
     } else if(msg.startsWith("MYOUSHU")) { // get a move
-      try{
-        Thread.sleep(1000); // here temporarily for move
-      } catch(Exception e) {
-        e.printStackTrace();
-      }
-      String move = AI.getMove(); // get a random move from the AI
-      move = Parser.formatMove(move);
-      System.out.println("Sending TESUJI " + move);
-      out.println("TESUJI " + move);
+
+        String move = null;
+        while(move == null) {
+          move = gui.getMove();
+        }
+        
+        move = Parser.formatMove(move);
+        System.out.println("Sending TESUJI " + move);
+        out.println("TESUJI " + move);
     } else if(msg.startsWith("ATARI")) {
       // only for reading move moves will not handle wall placement
       String temp[] = msg.split(" ");
@@ -97,20 +114,18 @@ public class GameServer extends Server {
         System.out.println("here");
         move = move + " " + temp[4];
       }
-      AI.update(player,move);
+      gui.update(move);
       System.out.println("Saw ATARI");
     } else if(msg.startsWith("KIKASHI")) { // game is over guy won
       try {
         out.close();
         socket.close();
         in.close();
-        AI = null;
       }catch(IOException e) {
         e.printStackTrace();
       }
     } else if(msg.startsWith("GOTE")) {
       System.out.println("Person kicked");
-      AI.kick(Integer.parseInt(s[1]));
     } else 
       return;
   }
@@ -129,7 +144,7 @@ public class GameServer extends Server {
       }
     }
 
-    GameServer s = new GameServer(port, name);
-    s.connect();
+    FirstPersonPlayerServer fp = new FirstPersonPlayerServer(port, name);
+    fp.connect();
   }
 }
