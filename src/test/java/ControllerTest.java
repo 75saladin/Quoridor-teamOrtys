@@ -4,8 +4,8 @@
  * and open the template in the editor.
  */
 
+import EntireDirectory.Controller;
 import java.awt.Point;
-import javafx.scene.shape.Circle;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -14,7 +14,6 @@ import static org.junit.Assert.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
-import org.junit.Ignore;
 
 /**
  *

@@ -1,6 +1,10 @@
+package Client;
+
+import AI.LogicalBoard;
+import GUI.Controller;
+import GUI.GUI;
 import java.net.*;
 import java.io.*;
-import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -234,7 +238,7 @@ public class GameClient{
       player = new Controller(2);
     else
       player = new Controller(4);
-    gui.setPlayer(player);
+      gui.setPlayer(player);
     return gui;
   }
 

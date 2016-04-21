@@ -5,14 +5,13 @@
  */
 
 
-import java.awt.Point;
+import EntireDirectory.Controller;
+import EntireDirectory.GUI;
 import javafx.scene.layout.Region;
 import org.junit.After;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Ignore;
 
 /**
  *

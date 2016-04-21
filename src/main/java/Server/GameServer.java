@@ -1,3 +1,6 @@
+package Server;
+
+import AI.RandomAI;
 import java.io.*;
 import java.net.*;
 import java.util.*;

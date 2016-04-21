@@ -1,3 +1,5 @@
+package Server;
+
 public class ServerMain{
 
   private static ServerWrapper server;

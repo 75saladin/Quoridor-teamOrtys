@@ -1,7 +1,5 @@
+package GUI;
 
-
-
-import java.awt.Point;
 
 /*
  * To change this license header, choose License Headers in Project Properties.

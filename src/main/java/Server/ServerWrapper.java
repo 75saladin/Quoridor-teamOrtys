@@ -1,3 +1,6 @@
+package Server;
+
+import AI.RandomAI;
 import java.util.Queue;
 import java.util.LinkedList;
 import java.lang.Runnable;
