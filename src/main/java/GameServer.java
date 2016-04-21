@@ -47,6 +47,8 @@ public class GameServer extends Server {
     System.out.println("In handle");
     while(true) {
       msg = in.readLine();
+      if(socket == null)
+        System.exit(0);
       System.out.println("Message from client " + msg);
       handleMessage(msg, out, socket,in);
     }
@@ -109,6 +111,20 @@ public class GameServer extends Server {
     } else if(msg.startsWith("GOTE")) {
       System.out.println("Person kicked");
       AI.kick(Integer.parseInt(s[1]));
+      if(Integer.parseInt(s[1]) == playerNum) {
+        try {
+          socket.close();
+          out.close();
+        
+          in.close();
+
+          AI = null;
+          System.exit(0);
+      }catch(IOException e) {
+        e.printStackTrace();
+      }
+      }
+      return;
     } else 
       return;
   }

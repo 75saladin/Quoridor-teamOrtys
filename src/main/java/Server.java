@@ -33,6 +33,7 @@ public abstract class Server {
 				System.out.println("Waiting for a connection");
 				client = socket.accept();
 				handle(client);
+				client.close();
 			}
 		} catch(IOException e) {
 			e.printStackTrace();

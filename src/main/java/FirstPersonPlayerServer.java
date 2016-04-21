@@ -52,6 +52,8 @@ private int playerNum; // player Number given to this server by the client
     System.out.println("In handle");
     while(true) {
       msg = in.readLine();
+      if(socket == null) 
+        System.exit(0);
       System.out.println("Message from client " + msg);
       handleMessage(msg, out, socket,in);
     }
@@ -124,9 +126,16 @@ private int playerNum; // player Number given to this server by the client
         e.printStackTrace();
       }
     } else if(msg.startsWith("GOTE")) {
-      System.out.println("Person kicked");
-
-
+      if(Integer.parseInt(s[1]) == playerNum) {
+        try {
+          socket.close();
+          out.close();
+          in.close();
+          System.exit(0);
+      }catch(IOException e) {
+        e.printStackTrace();
+      }
+     }
     } else 
       return;
   }
