@@ -56,8 +56,9 @@ public class GUI extends Application implements GUIInterface {
      * Constructor
      */
     public GUI() {
-        guiStartUpTest(this);
         player = new Controller(2);
+        guiStartUpTest(this);
+        
     }
     
     // waiting for gui to set up
@@ -109,7 +110,7 @@ public class GUI extends Application implements GUIInterface {
         // place the board in the center
         // the controls on the right, description left, and label top
         root = new BorderPane();
-        grid = drawGrid(player.getPlayerCount());
+        grid = drawGrid();
         root.setCenter(grid);
         root.setLeft(setDescriptionRegion());
         root.setTop(setTitleRegion());
@@ -282,7 +283,7 @@ public class GUI extends Application implements GUIInterface {
      * @param numOfPlayers: The number of players in the game 2 or 4
      * @return The board with a 16 x 16 grid
      */
-    private GridPane drawGrid(int numOfPlayers) {
+    private GridPane drawGrid() {
         GridPane gp = new GridPane();
         // loop through and add rectangles to create the board
         for(int i = 0; i < 17; i++) {
@@ -304,7 +305,7 @@ public class GUI extends Application implements GUIInterface {
 
         gp.add(player.getPlayerNode(1), 8, 0);
         gp.add(player.getPlayerNode(2), 8, 16);
-        if(numOfPlayers == 4) {
+        if(player.getPlayerCount() == 4) {
             gp.add(player.getPlayerNode(3), 0, 8);
             gp.add(player.getPlayerNode(4), 16, 8);
         }
