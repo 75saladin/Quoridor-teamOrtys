@@ -1,7 +1,5 @@
 package GUI;
 
-
-import java.awt.Point;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import javafx.application.Application;
@@ -312,7 +310,7 @@ public class GUI extends Application implements GUIInterface {
         
         
         gp.setAlignment(Pos.CENTER);
-        //gp.getStylesheets().addAll(this.getClass().getResource("Layout.css").toExternalForm());
+        gp.getStylesheets().addAll(this.getClass().getResource("Layout.css").toExternalForm());
         gp.setId("board"); // set the css id of the gridpane
         
         return gp;
