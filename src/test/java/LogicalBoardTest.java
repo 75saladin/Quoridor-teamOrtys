@@ -676,4 +676,6 @@ public class LogicalBoardTest {
         assertNotEquals(pathLength,pathLengthAfterWall);
         
     }
+    
+    
 }

@@ -99,7 +99,8 @@ public class LogicalBoard {
         // if he hasnt made it to the end but is the last man standing he wins
         if (enoughPlayers()) 
             return false;
-        return true;
+        else
+            return true;
     }
 
     /**
