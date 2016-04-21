@@ -47,7 +47,7 @@ public class GameServer extends Server {
     System.out.println("In handle");
     while(true) {
       msg = in.readLine();
-      if(socket == null)
+      if(msg == null || socket == null)
         System.exit(0);
       System.out.println("Message from client " + msg);
       handleMessage(msg, out, socket,in);
