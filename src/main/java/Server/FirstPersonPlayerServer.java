@@ -75,12 +75,32 @@ private int playerNum; // player Number given to this server by the client
     } else if(msg.startsWith("GAME")) { // get the game message from client
       String[] temp = msg.split(" ");
       this.playerNum = Integer.parseInt(s[1]);
-      gui = new PlayerGUI();
+      System.out.println(playerNum);
+      
+      Thread t = new Thread() {
+      @Override
+      public void run() {
+        javafx.application.Application.launch(PlayerGUI.class);
+      }
+      };
+
+      t.setDaemon(true);
+      t.start();
+      gui = gui.waitForGUIStartUpTest();
+      try {
+        Thread.sleep(1000);
+      } catch(Exception e) {
+        
+      }
       gui.setPlayer(new FPController(playerNum));
 
       return;
     } else if(msg.startsWith("MYOUSHU")) { // get a move
-        String move = gui.getMove();
+
+        String move = null;
+        while(move == null) {
+          move = gui.getMove();
+        }
         
         move = Parser.formatMove(move);
         System.out.println("Sending TESUJI " + move);
@@ -124,7 +144,7 @@ private int playerNum; // player Number given to this server by the client
       }
     }
 
-    GameServer s = new GameServer(port, name);
-    s.connect();
+    FirstPersonPlayerServer fp = new FirstPersonPlayerServer(port, name);
+    fp.connect();
   }
 }
