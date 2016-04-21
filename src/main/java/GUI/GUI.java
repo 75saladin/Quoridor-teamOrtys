@@ -283,7 +283,6 @@ public class GUI extends Application implements GUIInterface {
      * @return The board with a 16 x 16 grid
      */
     private GridPane drawGrid(int numOfPlayers) {
-        player = new Controller(numOfPlayers);
         GridPane gp = new GridPane();
         // loop through and add rectangles to create the board
         for(int i = 0; i < 17; i++) {
