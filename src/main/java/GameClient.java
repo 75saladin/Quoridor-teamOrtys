@@ -38,8 +38,16 @@ public class GameClient{
     int pNum = 1;
     int winner = 0;
     while(running){
-      if(players[index].isClosed())
+      if (players[index].isClosed()) {
+        if (players.length == 2) {
+          index ^= 1;
+          pNum = (pNum % 2) + 1;
+          } else {
+            index = (index + 1) % 4;
+            pNum = updateNumber(pNum);
+          }
         continue;
+      }
       System.out.println("REQUESTING MOVE: Player " + (pNum));
       String move = requestMove(players[index]);
       System.out.println("GOT MOVE: " + move);
