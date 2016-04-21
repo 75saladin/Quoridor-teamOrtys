@@ -54,7 +54,7 @@ public class GameClient{
         catch(Exception e){}
       }
       else{
-        System.out.println("INDEX: " + index);
+        //System.out.println("INDEX: " + index);
         kickPlayer(players,pNum,index);
         gameBoard.kick(pNum);
         gui.removePlayer(pNum);
@@ -74,12 +74,8 @@ public class GameClient{
         pNum = updateNumber(pNum);
       }
     }
-    try{
-      Thread.sleep(200);
-    }
-    catch(InterruptedException ie){
-      ie.printStackTrace();
-    }
+    try{ Thread.sleep(200); }
+    catch(InterruptedException ie){ ie.printStackTrace(); }
     gui.stopApplication();
   }
 
@@ -161,9 +157,8 @@ public class GameClient{
     * @param move String of the move made
     */
   public static void broadcastMove(Socket[] players, int pNum, String move){
+    String fMove = Parser.formatMove(move);
     for(int i = 0; i < players.length; i++){
-      String fMove = Parser.formatMove(move);
-      //System.out.println("FORMAT TEST: " + fMove);
       if(!players[i].isClosed())
         getOut(players[i]).println(MOVE_MADE + " " + pNum + " " + fMove);
     }
