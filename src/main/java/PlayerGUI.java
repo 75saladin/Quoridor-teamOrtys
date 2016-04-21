@@ -259,19 +259,19 @@ public class PlayerGUI extends Application {
                 int column = GridPane.getColumnIndex(node);
                                 
                 if(row % 2 == 0 && column % 2 != 0 && row != 16) { // vertical wall
-                    move = convert(column) + " " +  convert(row - 1) + " v";
+                    move = convert(column) + " " +  convert(row) + " v";
                     grid.add(new Rectangle(5.0, 30.0, Color.BLUE), column, row);
                     row+=2;
                     grid.add(new Rectangle(5.0, 30.0, Color.BLUE), column, row);
-                    player.setPlayerTurn();
+                    //player.setPlayerTurn();
                 } else if (row % 2 != 0 && column % 2 == 0 && column != 16) { // horizontal wall
-                    move = convert(column) + " " + convert(row - 1) + " h";
+                    move = convert(column) + " " + convert(row) + " h";
                     grid.add(new Rectangle(30, 5.0, Color.BLUE), column, row);
                     column += 2;
                     grid.add(new Rectangle(30, 5.0, Color.BLUE), column, row);
-                    player.setPlayerTurn();
+                    //player.setPlayerTurn();
                 } else {
-                    player.setPlayerTurn();
+                    //player.setPlayerTurn();
                     move = convert(column) + " " + convert(row);
 
                 }
@@ -308,11 +308,8 @@ public class PlayerGUI extends Application {
      * @return the converted column based on the 8x8 board
      */
     private int convert(int n) {
-        if(n % 2 == 0) {
             return n / 2;
-        } else {
-            return n / 2 + 1;
-        }
+
     }
     
     
