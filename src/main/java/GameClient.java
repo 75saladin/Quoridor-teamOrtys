@@ -59,6 +59,7 @@ public class GameClient{
       }
       else{
         //System.out.println("INDEX: " + index);
+        System.out.println("CRAIG: THAT MOVE WAS INVALID");
         kickPlayer(players,pNum,index);
         gameBoard.kick(pNum);
         gui.removePlayer(pNum);
