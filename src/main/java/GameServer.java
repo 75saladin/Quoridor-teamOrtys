@@ -94,7 +94,6 @@ public class GameServer extends Server {
       int player = Integer.parseInt(temp[1]);
       String move = temp[2] +" "+ temp[3];
       if(temp.length==5){
-        System.out.println("here");
         move = move + " " + temp[4];
       }
       AI.update(player,move);

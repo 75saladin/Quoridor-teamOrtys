@@ -295,6 +295,7 @@ public class GUI extends Application implements GUIInterface {
         if(player.getPlayerCount() == 4) {
             gp.add(player.getPlayerNode(3), 0, 8);
             gp.add(player.getPlayerNode(4), 16, 8);
+            
         }
         
         

@@ -800,6 +800,9 @@ public class LogicalBoard {
         Edge r2br = boardCopy.getEdge(r, br);
 
         Set<Edge> remove = new HashSet<Edge>();
+  
+        if(wall == "")
+          return remove;
 
         // adding edges to the set to be removed based on wall placement direction
         if (d.equals("V")) {

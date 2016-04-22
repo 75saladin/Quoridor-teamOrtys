@@ -14,7 +14,7 @@ import org.jgrapht.alg.DijkstraShortestPath;
  */
 /**
  *
- * @author jed_lechner
+ * @author  Craig Gardner
  */
 public class RandomAI {
 
@@ -204,6 +204,8 @@ public class RandomAI {
      * @return Wall String to be sent to server
      */
     private String getBestWall(int player) {
+        if(Math.random()>.7)
+          return "";
         String bestWall = "";
         String tempWallH = "";
         String tempWallV = "";
@@ -222,6 +224,29 @@ public class RandomAI {
             if(board.getPlayer(4)!=null)
                 currentPathLengthP4 = (int) board.getShortestWinningPath(4, board.board).getPathLength();
         }
+        
+        if(currentPathLengthP1<2 && playerNum!=1 && board.getPlayer(1) != null){
+          Vertex temp = board.getVertexByCoord(board.getPlayer(1).getC(),board.getPlayer(1).getR());
+          if(board.validWall(1,temp.c + " " + (temp.r-1) + " H"))
+            return temp.c + " " + (temp.r-1) + " H";
+        }
+        if(currentPathLengthP2<2 && playerNum!=2 && board.getPlayer(2) != null){
+          Vertex temp = board.getVertexByCoord(board.getPlayer(2).getC(),board.getPlayer(2).getR());
+          if(board.validWall(2,temp.c + " " + temp.r + " H"))
+            return temp.c + " " + temp.r + " H";
+        }
+        if(currentPathLengthP3<2 && playerNum!=3 && board.getPlayer(3) != null){
+          Vertex temp = board.getVertexByCoord(board.getPlayer(3).getC(),board.getPlayer(3).getR());
+          if(board.validWall(3,temp.c + " " + temp.r + " V"))
+            return temp.c + " " + temp.r + " V";
+        }
+        if(currentPathLengthP4<2 && playerNum!=4 && board.getPlayer(4) != null){
+          Vertex temp = board.getVertexByCoord(board.getPlayer(4).getC(),board.getPlayer(4).getR());
+          if(board.validWall(4,(temp.c-1) + " " + temp.r + " V"))
+            return (temp.c-1) + " " + temp.r + " V";
+        }
+        
+        
         int temp = 0;
         int temp3 = 100;
         // Current Column
@@ -313,7 +338,8 @@ public class RandomAI {
                 }
             }
         }
-        return bestWall;
+        if(Math.random() < .7)
+          return bestWall;
     }
 
     private boolean MyPathIsSame(int player, String wall) {

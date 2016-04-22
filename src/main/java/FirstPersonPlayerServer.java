@@ -21,7 +21,7 @@ public class FirstPersonPlayerServer extends Server {
 private int playerNum; // player Number given to this server by the client
   private String name = ""; // The name of the player. 
   private static String usage = "java GameServer --port <port number> [--name <ai name>]";
-  private PlayerGUI gui;
+  public PlayerGUI gui;
 
 
   /**

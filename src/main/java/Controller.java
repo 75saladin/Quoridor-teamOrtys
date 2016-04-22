@@ -65,12 +65,9 @@ public class  Controller{
     // pre: none
     // post: sets the player turn based off of the number of players. 
     public void setPlayerTurn(){
-        System.out.println("Player count = " + playerCount);
-        
         if(playerCount > 2) {
             switch(playerTurn) {
                 case 1: 
-                    System.out.println("Player turn = " + playerTurn);
                     playerTurn = 4;
                     if(player4 == null) setPlayerTurn();
                     break;
@@ -102,7 +99,6 @@ public class  Controller{
 
 
     public void removePlayer(int n) {
-        playerCount--;
         switch(n) {
             case 1:
                 position1 = null;

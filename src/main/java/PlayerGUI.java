@@ -106,7 +106,7 @@ public class PlayerGUI extends Application {
      */
     @Override
     public void start(Stage stage) {
-        grid = drawGrid(2);
+        grid = drawGrid(4);
         Scene scene = new Scene(grid, 300, 300, Color.BLUE);
         stage.setTitle("Player Board");
         
