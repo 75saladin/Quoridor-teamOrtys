@@ -84,7 +84,7 @@ public class  Controller{
                     break;
                 case 4:
                     playerTurn = 2;
-                    if(player1 == null) setPlayerTurn();
+                    if(player2 == null) setPlayerTurn();
                     break;
             }
         } else {
