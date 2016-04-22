@@ -339,7 +339,8 @@ public class RandomAI {
             }
         }
         if(Math.random() < .7)
-          return bestWall;
+          return "";
+        return bestWall;
     }
 
     private boolean MyPathIsSame(int player, String wall) {
