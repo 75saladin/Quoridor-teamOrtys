@@ -556,7 +556,7 @@ public class LogicalBoard {
      */
     public Player getPlayer(Vertex v) {
         for (Player p : players) {
-            if (p.getC() == v.c && p.getR() == v.r) {
+            if (p!=null && (p.getC() == v.c && p.getR() == v.r)) {
                 return p;
             }
         }
