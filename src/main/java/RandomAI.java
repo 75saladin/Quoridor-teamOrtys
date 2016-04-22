@@ -21,7 +21,6 @@ public class RandomAI {
     private LogicalBoard board;
     private int playerCount;
     private int playerNum;
-    private Random rand = new Random();
 
     /**
      *
@@ -62,32 +61,47 @@ public class RandomAI {
      * @return
      */
     public String getMove() {
-        //player 1
-        boolean P1hasWalls = board.getPlayer(1).hasWalls();
-        Vertex p1BestMove = getBestMove(1);
-        int playerOnePathLength = (int) board.getShortestWinningPath(1, board.board).getPathLength();
-        // player 2
-        boolean P2hasWalls = board.getPlayer(2).hasWalls();
-        Vertex p2BestMove = getBestMove(2);
-        int playerTwoPathLength = (int) board.getShortestWinningPath(2, board.board).getPathLength();
-        //player 3
+        // player1 init as null
+        boolean P1hasWalls = false;
+        Vertex p1BestMove = null;
+        int playerOnePathLength = 1000;
+        //player 2 init as null
+        boolean P2hasWalls = false;
+        Vertex p2BestMove = null;
+        int playerTwoPathLength = 1000;
+        //player 3 init as null
         boolean P3hasWalls = false;
         Vertex p3BestMove = null;
-        int playerThreePathLength = 0;
-        // player 4
+        int playerThreePathLength = 1000;
+        // player 4 init as null
         boolean P4hasWalls = false;
         Vertex p4BestMove = null;
-        int playerFourPathLength = 0;
-
+        int playerFourPathLength = 1000;
+        
+        //player 1
+        if(board.getPlayer(1)!=null){
+            P1hasWalls = board.getPlayer(1).hasWalls();
+            p1BestMove = getBestMove(1);
+            playerOnePathLength = (int) board.getShortestWinningPath(1, board.board).getPathLength();
+        }
+        // player 2
+        if(board.getPlayer(2)!=null){
+            P2hasWalls = board.getPlayer(2).hasWalls();
+            p2BestMove = getBestMove(2);
+            playerTwoPathLength = (int) board.getShortestWinningPath(2, board.board).getPathLength();
+        }
         // if 2p no need to initialize
         if (playerCount > 2) {
-            P3hasWalls = board.getPlayer(3).hasWalls();
-            p3BestMove = getBestMove(3);
-            playerThreePathLength = (int) board.getShortestWinningPath(3, board.board).getPathLength();
-
-            p4BestMove = getBestMove(4);
-            playerFourPathLength = (int) board.getShortestWinningPath(4, board.board).getPathLength();
-            P4hasWalls = board.getPlayer(4).hasWalls();
+            if(board.getPlayer(3)!=null){
+                P3hasWalls = board.getPlayer(3).hasWalls();
+                p3BestMove = getBestMove(3);
+                playerThreePathLength = (int) board.getShortestWinningPath(3, board.board).getPathLength();
+            }
+            if(board.getPlayer(4)!=null){
+                p4BestMove = getBestMove(4);
+                playerFourPathLength = (int) board.getShortestWinningPath(4, board.board).getPathLength();
+                P4hasWalls = board.getPlayer(4).hasWalls();
+            }
         }
         
         
@@ -193,14 +207,20 @@ public class RandomAI {
         String bestWall = "";
         String tempWallH = "";
         String tempWallV = "";
-        int currentPathLengthP1 = (int) board.getShortestWinningPath(1, board.board).getPathLength();
-        int currentPathLengthP2 = (int) board.getShortestWinningPath(2, board.board).getPathLength();
-        int currentPathLengthP3 = 0;
-        int currentPathLengthP4 = 0;
+        int currentPathLengthP1 = 1000;
+        if(board.getPlayer(1)!=null)
+            currentPathLengthP1 = (int) board.getShortestWinningPath(1, board.board).getPathLength();
+        int currentPathLengthP2 = 1000;
+        if(board.getPlayer(2)!=null)
+            currentPathLengthP2 = (int) board.getShortestWinningPath(2, board.board).getPathLength();
+        int currentPathLengthP3 = 1000;
+        int currentPathLengthP4 = 1000;
 
         if (playerCount > 2) {
-            currentPathLengthP3 = (int) board.getShortestWinningPath(3, board.board).getPathLength();
-            currentPathLengthP4 = (int) board.getShortestWinningPath(4, board.board).getPathLength();
+            if(board.getPlayer(3)!=null)
+                currentPathLengthP3 = (int) board.getShortestWinningPath(3, board.board).getPathLength();
+            if(board.getPlayer(4)!=null)
+                currentPathLengthP4 = (int) board.getShortestWinningPath(4, board.board).getPathLength();
         }
         int temp = 0;
         int temp3 = 100;
@@ -211,7 +231,7 @@ public class RandomAI {
                 tempWallH = c + " " + r + " H";
                 tempWallV = c + " " + r + " V";
                 //Player 1
-                if (player != 1) {
+                if (player != 1 && board.getPlayer(1)!=null) {
                     // if it is a valid wall continue
                     if (board.validWall(player, tempWallH)) {
                         // Length of p1's path after the wall placement
@@ -233,7 +253,7 @@ public class RandomAI {
                     }
                     // Player 2
                 }
-                if (player != 2) {
+                if (player != 2 && board.getPlayer(2)!=null) {
                     if (board.validWall(player, tempWallH)) {
                         temp = board.pathLengthAfterWall(2, tempWallH);
                         if (currentPathLengthP2 < temp)
@@ -254,7 +274,7 @@ public class RandomAI {
                 // Fpur Players
                 if (this.playerCount > 2) {
                     //Player 3
-                    if (player != 3) {
+                    if (player != 3 && board.getPlayer(3)!=null) {
                         if (board.validWall(player, tempWallH)) {
                             temp = board.pathLengthAfterWall(3, tempWallH);
                             if (currentPathLengthP3 < temp)
@@ -272,7 +292,7 @@ public class RandomAI {
                         }
                     }
                     // Player Four
-                    if (player != 4) {
+                    if (player != 4  && board.getPlayer(4)!=null) {
                         if (board.validWall(player, tempWallH)) {
                             temp = board.pathLengthAfterWall(4, tempWallH);
                             if (currentPathLengthP4 < temp)

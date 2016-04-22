@@ -2,7 +2,6 @@
 
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import org.jgrapht.Graphs;
@@ -123,6 +122,8 @@ public class LogicalBoard {
      * @return - DijkstraShortestPath of player's shortest winning path
      */
     public DijkstraShortestPath<Vertex, Edge> getShortestWinningPath(int playerNum,UndirectedGraph<Vertex,Edge> board) {
+        if(getPlayer(playerNum)==null)
+            return null;
         Vertex source = getVertexByCoord(getPlayer(playerNum).getC(), getPlayer(playerNum).getR());
         Vertex destination = null;
         DijkstraShortestPath<Vertex, Edge> temp = null;
@@ -337,8 +338,11 @@ public class LogicalBoard {
      * @return - The set of vertices the player can move to this turn
      */
     public Set<Vertex> getValidMoves(int playerNum) {
+        
         Player p = getPlayer(playerNum);
-        return validMovesOf(p, new HashSet<Player>());
+        if(p!=null)
+            return validMovesOf(p, new HashSet<Player>());
+        return null;
     }
 
     /**
@@ -422,6 +426,8 @@ public class LogicalBoard {
      */
     public boolean pathBlocked(int playerNum, Set<Edge> edgeSet) {
         Player p = getPlayer(playerNum);
+        if(p==null)
+            return false;
         boolean blocked = false;
         DijkstraShortestPath<Vertex, Edge> Dijkstra;
         Vertex destination;
@@ -544,6 +550,8 @@ public class LogicalBoard {
      * @return Player object
      */
     public Player getPlayer(int playerNum) {
+        if(playerNum<0 || playerNum>players.length)
+            return null;
         return players[playerNum - 1];
     }
 
@@ -555,13 +563,11 @@ public class LogicalBoard {
      * @return Player on that vertex (or null if none)
      */
     public Player getPlayer(Vertex v) {
-        for (Player p : players) {
-            if (p.getC() == v.c && p.getR() == v.r) {
-                return p;
-            }
-        }
+        for (Player p : players) 
+            if(p != null)
+                if (p.getC() == v.c && p.getR() == v.r) 
+                    return p;
         return null;
-
     }
 
     /**
@@ -571,12 +577,17 @@ public class LogicalBoard {
      * @return - the player number
      */
     public int getPlayerNum(Player p) {
-        for (int i = 0; i < 4; i++) {
-            if (players[i].equals(p)) {
-                return i + 1;
-            }
-        }
-        return -1;
+        if(p==null)
+            return -1;
+        if(players.length ==4){
+            for (int i = 0; i < 4; i++) 
+                if (players[i]!=null && players[i].equals(p)) 
+                    return i + 1;
+        }else{
+            for (int i = 0; i < 2; i++) 
+                if (players[i]!=null && players[i].equals(p)) 
+                    return i + 1;
+        }return -1;
     }
 
     /**
