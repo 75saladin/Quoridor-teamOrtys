@@ -117,7 +117,7 @@ public class RandomAI {
         if (playerCount == 2) {
             // if this players path is shorter, move player position to here
             if (this.playerNum == 1) {
-                if (playerTwoPathLength <= one && P1hasWalls){ 
+                if (playerTwoPathLength <=one && P1hasWalls){ 
                     wall = getBestWall(1);
                     if (MyPathIsSame(1, wall)) 
                         return wall;
@@ -132,11 +132,11 @@ public class RandomAI {
                 return p2BestMove.c + " " + p2BestMove.r;
             }
         } else if (this.playerNum == 1) {
-            //if (playerOnePathLength <= playerTwoPathLength && playerOnePathLength <= playerThreePathLength && playerOnePathLength <= playerFourPathLength) {
-            //    return p1BestMove.c + " " + p1BestMove.r;
-            //} else if (P1hasWalls) {
-            if((playerFourPathLength<=one || playerTwoPathLength <= one || playerThreePathLength <= one) && playerOnePathLength>2){ 
-                wall = getBestWall(1);
+            if (playerOnePathLength <= playerTwoPathLength && playerOnePathLength <= playerThreePathLength && playerOnePathLength <= playerFourPathLength) {
+                return p1BestMove.c + " " + p1BestMove.r;
+            } else if (P1hasWalls) {
+            //if((playerFourPathLength<=one || playerTwoPathLength <= one || playerThreePathLength <= one) && playerOnePathLength>2){ 
+              //  wall = getBestWall(1);
                 if (MyPathIsSame(1, wall)) {
                     return wall;
                 }
@@ -339,8 +339,8 @@ public class RandomAI {
             }
         }
         if(Math.random() < .7)
-          return bestWall;
-        return "";
+          return "";
+        return bestWall;
     }
 
     private boolean MyPathIsSame(int player, String wall) {
