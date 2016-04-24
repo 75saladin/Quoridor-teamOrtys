@@ -18,17 +18,11 @@ import java.util.Scanner;
  * @author jed_lechner
  */
 public class FirstPersonPlayerServer extends Server {
-<<<<<<< HEAD
+
     private int playerNum; // player Number given to this server by the client
     private String name = ""; // The name of the player. 
     private static String usage = "java GameServer --port <port number> [--name <ai name>]";
     private GUI gui;
-=======
-private int playerNum; // player Number given to this server by the client
-  private String name = ""; // The name of the player. 
-  private static String usage = "java GameServer --port <port number> [--name <ai name>]";
-  public PlayerGUI gui;
->>>>>>> c3d65b968323808b564dfdfca8c237ef04fd16ac
 
 
   /**
