@@ -18,10 +18,10 @@ import java.util.Scanner;
  * @author jed_lechner
  */
 public class FirstPersonPlayerServer extends Server {
-private int playerNum; // player Number given to this server by the client
-  private String name = ""; // The name of the player. 
-  private static String usage = "java GameServer --port <port number> [--name <ai name>]";
-  private PlayerGUI gui;
+    private int playerNum; // player Number given to this server by the client
+    private String name = ""; // The name of the player. 
+    private static String usage = "java GameServer --port <port number> [--name <ai name>]";
+    private GUI gui;
 
 
   /**
@@ -59,46 +59,36 @@ private int playerNum; // player Number given to this server by the client
     }
   }
 
-  /**
-   * 
-   * @param msg: The message from the client.
-   * @param out: The printwriter to send messages back to the client. 
-   * @param socket: The socket to close upon a certain message.
-   * Handle the specific protocol messages. Denoted by capital words. 
-   */
-  private void handleMessage(String msg, PrintWriter out, Socket socket,BufferedReader in) {
-    Scanner sc = new Scanner(System.in);
-    msg = Parser.stripBrackets(msg); // strip the brackets from the message
-    String [] s = msg.split(" "); // splits the string by spaces
+    /**
+    * 
+    * @param msg: The message from the client.
+    * @param out: The printwriter to send messages back to the client. 
+    * @param socket: The socket to close upon a certain message.
+    * Handle the specific protocol messages. Denoted by capital words. 
+    */
+    private void handleMessage(String msg, PrintWriter out, Socket socket,BufferedReader in) {
+        Scanner sc = new Scanner(System.in);
+        msg = Parser.stripBrackets(msg); // strip the brackets from the message
+        String [] s = msg.split(" "); // splits the string by spaces
 
     if(msg.startsWith("HELLO")) { // handle hello
-      System.out.println("Sending IAM " + name + " to client");
-      out.println("IAM " + name);
+        System.out.println("Sending IAM " + name + " to client");
+        out.println("IAM " + name);
     } else if(msg.startsWith("GAME")) { // get the game message from client
-      String[] temp = msg.split(" ");
-      this.playerNum = Integer.parseInt(s[1]);
-      System.out.println(playerNum);
-      
-      Thread t = new Thread() {
-      @Override
-      public void run() {
-        javafx.application.Application.launch(PlayerGUI.class);
-      }
-      };
-
-      t.setDaemon(true);
-      t.start();
-      gui = gui.waitForGUIStartUpTest();
+        String[] temp = msg.split(" ");
+        this.playerNum = Integer.parseInt(s[1]);
+        System.out.println(playerNum);
+        gui = Mediator.getGui();
+        
       try {
         Thread.sleep(4000);
       } catch(Exception e) {
         
       }
-      gui.setPlayer(new FPController(2));
 
       return;
     } else if(msg.startsWith("MYOUSHU")) { // get a move
-
+        gui.setPerson(true);
         String move = null;
         while(move == null) {
           move = gui.getMove();
@@ -108,6 +98,7 @@ private int playerNum; // player Number given to this server by the client
         System.out.println("Sending TESUJI " + move);
         out.println("TESUJI " + move);
         gui.setMove();
+        gui.setPerson(false);
     } else if(msg.startsWith("ATARI")) {
       // only for reading move moves will not handle wall placement
       System.out.println(Parser.parse(msg));
