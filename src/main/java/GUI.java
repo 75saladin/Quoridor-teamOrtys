@@ -327,6 +327,7 @@ public class GUI extends Application implements GUIInterface {
         if(player.getPlayerCount() == 4) {
             gp.add(player.getPlayerNode(3), 0, 8);
             gp.add(player.getPlayerNode(4), 16, 8);
+            
         }
         
         
@@ -402,7 +403,7 @@ public class GUI extends Application implements GUIInterface {
      * @return The bottom label of the game
      */
     private Region setBottomRegion() {
-        Label text = new Label("Team Or Tees");
+        Label text = new Label("Team Our Tease");
         text.setFont(Font.font("Arial", FontWeight.BOLD, 40));
         StackPane stackPane = new StackPane();
         Insets inset = new Insets(20, 20, 20, 20);
