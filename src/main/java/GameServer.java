@@ -31,7 +31,6 @@ public class GameServer extends Server {
   public GameServer(int port, String name) {
     super(port);
     this.name = "ort:" + name;
-    System.out.println("In the constructor");
 
   } 
 
@@ -48,7 +47,6 @@ public class GameServer extends Server {
         client = socket;
 
         String msg = "";
-        System.out.println("In handle");
         while(true) {
             if(socket == null)
                 System.exit(0);
@@ -75,14 +73,18 @@ public class GameServer extends Server {
             case "GAME":
                 handleGame(s);
                 break;
-            case "MYOUSU":
+            case "MYOUSHU":
                 handleMyoushu();
+                break;
             case "ATARI":
                 handleAtari(s);
+                break;
             case "KIKASHI":
                 handleKikashi();
+                break;
             case "GOTE":
                 handleGote(s);
+                break;
         }
     }
     
@@ -113,6 +115,11 @@ public class GameServer extends Server {
     public void handleMyoushu(){
         String move = AI.getMove();
         move = Parser.formatMove(move);
+        try {
+            Thread.sleep(250);
+        } catch(Exception e) {
+            System.out.println(e);
+        }
         out.println("TESUJI " + move);
     }
     
@@ -125,9 +132,9 @@ public class GameServer extends Server {
         int player = Integer.parseInt(s[1]);
         String move = s[2] +" "+ s[3];
         if(s.length==5){      
-            AI.update(player,move);
             move = move + " " + s[4];
         }
+        AI.update(player,move);
     } 
 
     /**
