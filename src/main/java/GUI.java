@@ -48,7 +48,7 @@ public class GUI extends Application implements GUIInterface {
     private String move;
     
     
-    // on off latch
+    // launches threades simultaneously
     public static final CountDownLatch latch = new CountDownLatch(1);
     
     // instantiation of class

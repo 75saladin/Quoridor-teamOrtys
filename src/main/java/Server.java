@@ -12,6 +12,7 @@ import java.net.*;
 public abstract class Server {
 
 	private int port; // port to connect to 
+        private Socket client;
 	
         /**
          * 
@@ -28,7 +29,6 @@ public abstract class Server {
          */
 	public void connect() {
 		try(ServerSocket socket = new ServerSocket(port)) {
-			Socket client;
 			while(true) {
 				System.out.println("Waiting for a connection");
 				client = socket.accept();
