@@ -225,7 +225,7 @@ public class GUI extends Application implements GUIInterface {
                 grid.getChildren().remove(player.getPlayerNode(num));
                 player.removePlayer(num);
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                 } catch(Exception e) {
                     e.printStackTrace();
                 }

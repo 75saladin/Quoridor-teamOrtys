@@ -228,7 +228,7 @@ public class RandomAI {
         if(currentPathLengthP1<2 && playerNum!=1 && board.getPlayer(1) != null){
           Vertex temp = board.getVertexByCoord(board.getPlayer(1).getC(),board.getPlayer(1).getR());
           if(board.validWall(1,temp.c + " " + (temp.r-1) + " H"))
-            return temp.c + " " + (temp.r-1) + " H";
+            return temp.c + " " + (temp.r+1) + " H";
         }
         if(currentPathLengthP2<2 && playerNum!=2 && board.getPlayer(2) != null){
           Vertex temp = board.getVertexByCoord(board.getPlayer(2).getC(),board.getPlayer(2).getR());
