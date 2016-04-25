@@ -50,9 +50,10 @@ public class GameServer extends Server {
         String msg = "";
         System.out.println("In handle");
         while(true) {
-            msg = in.readLine();
-            if(msg == null || socket == null)
+            if(socket == null)
                 System.exit(0);
+            msg = in.readLine();
+            
             System.out.println("Message from client " + msg);
             handleMessage(msg);
         }
@@ -61,8 +62,6 @@ public class GameServer extends Server {
   /**
    * 
    * @param msg: The message from the client.
-   * @param out: The printwriter to send messages back to the client. 
-   * @param socket: The socket to close upon a certain message.
    * Handle the specific protocol messages. Denoted by capital words. 
    */
     private void handleMessage(String msg) {
@@ -87,10 +86,18 @@ public class GameServer extends Server {
         }
     }
     
+    /**
+     * Handles the hello message from the client.
+     */
     public void handleHello(){
         out.println("IAM " + name);
     }
     
+    /**
+     * 
+     * @param s The message from the client in a string array.
+     * Handles game message.
+     */
     public void handleGame(String[] s) {
         this.playerNum = Integer.parseInt(s[1]);
         if(s.length == 4) {
@@ -100,12 +107,20 @@ public class GameServer extends Server {
         }
     }
 
+    /**
+     * handles get move message
+     */
     public void handleMyoushu(){
         String move = AI.getMove();
         move = Parser.formatMove(move);
         out.println("TESUJI " + move);
     }
     
+    /**
+     * 
+     * @param s The message from the client in a string array.
+     * Updates the AI
+     */
     public void handleAtari(String[] s) {
         int player = Integer.parseInt(s[1]);
         String move = s[2] +" "+ s[3];
@@ -115,6 +130,9 @@ public class GameServer extends Server {
         }
     } 
 
+    /**
+     * handles end of game clean up
+     */
     public void handleKikashi() {
         try {
             out.close();
@@ -125,7 +143,13 @@ public class GameServer extends Server {
         e.printStackTrace();
       }
     }
-        
+    
+    /**
+     * 
+     * @param s The message split into a string array.
+     * Kicks player in AI.
+     * Closes server if that person being kicked is you.
+     */
     public void handleGote(String[] s) {
         AI.kick(Integer.parseInt(s[1]));
         if(Integer.parseInt(s[1]) == playerNum) {
