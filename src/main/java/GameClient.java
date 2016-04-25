@@ -58,7 +58,7 @@ public class GameClient{
       if(gameBoard.checkValid(pNum,move)){
         broadcastMove(players,pNum,move);
         gui.update(move);
-        try{ Thread.sleep(200); }
+        try{ Thread.sleep(250); }
         catch(Exception e){}
       }
       else{
@@ -67,6 +67,7 @@ public class GameClient{
         kickPlayer(players,pNum,index);
         gameBoard.kick(pNum);
         gui.removePlayer(pNum);
+
       }
       winner = checkWinner(gameBoard,players.length);
       if(winner != 0){
@@ -99,6 +100,7 @@ public class GameClient{
     String machine2 = pairs[2];
     int port1 = 0;
     int port2 = 0;
+
     try{
       port1 = Integer.parseInt(pairs[1]);
       port2 = Integer.parseInt(pairs[3]);
@@ -420,6 +422,7 @@ public class GameClient{
     }
     return 0;
   }
+
 
   /**
     * Handles checks for initial parameters.

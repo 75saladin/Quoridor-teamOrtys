@@ -224,6 +224,7 @@ public class GUI extends Application implements GUIInterface {
             public void run() {
                 grid.getChildren().remove(player.getPlayerNode(num));
                 player.removePlayer(num);
+                player.setPlayerTurn(); // i think
                 try {
                     Thread.sleep(500);
                 } catch(Exception e) {

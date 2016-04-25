@@ -222,18 +222,17 @@ public class  Controller{
 
     public static void main(String[] args) {
         Controller c = new Controller(4);
-        //System.out.println(c.getPlayerTurn());
-        //c.setPlayerTurn();
-        //System.out.println(c.getPlayerTurn());
-        //c.setPlayerTurn();
-        //System.out.println(c.getPlayerTurn());
-        //c.setPlayerTurn();
-        //System.out.println(c.getPlayerTurn());
-
-        System.out.println("");
+        System.out.println(c.getPlayerTurn());
         c.removePlayer(4);
         c.setPlayerTurn();
+        c.removePlayer(3);
+        c.setPlayerTurn();
+        c.removePlayer(1);
+        c.setPlayerTurn();
+        c.removePlayer(2);
+        c.setPlayerTurn();
         System.out.println(c.getPlayerTurn());
+        // 1, remove 4, player 2s turn
     }
    
 }

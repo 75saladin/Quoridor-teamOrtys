@@ -165,7 +165,7 @@ public class GameServer extends Server {
                 out.close();
                 in.close();
                 AI = null;
-                System.exit(0);
+                //System.exit(0);
             }catch(IOException e) {
                 e.printStackTrace();
             }
