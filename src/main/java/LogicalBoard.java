@@ -428,7 +428,7 @@ public class LogicalBoard {
         Player p = getPlayer(playerNum);
         if(p==null)
             return false;
-        boolean blocked = false;
+        int blocked = 0; //number of win spaces blocked
         DijkstraShortestPath<Vertex, Edge> Dijkstra;
         Vertex destination;
         Vertex source = getVertexByCoord(p.getC(), p.getR());
@@ -456,7 +456,7 @@ public class LogicalBoard {
                     Dijkstra = new DijkstraShortestPath<Vertex, Edge>(boardCopy, source, destination);
                     if (Dijkstra.getPath() == null) // .getPath() returns null if there is no path
                     {
-                        blocked = true;
+                        blocked++;
                     }
                 }
                 break;
@@ -466,7 +466,7 @@ public class LogicalBoard {
                     destination = getVertexByCoord(i, 0, boardCopy);  // top wall of nodes
                     Dijkstra = new DijkstraShortestPath<Vertex, Edge>(boardCopy, source, destination);
                     if (Dijkstra.getPath() == null) {
-                        blocked = true;
+                        blocked++;
                     }
                 }
                 break;
@@ -476,7 +476,7 @@ public class LogicalBoard {
                     destination = getVertexByCoord(8, i, boardCopy); // right wall of nodes
                     Dijkstra = new DijkstraShortestPath<Vertex, Edge>(boardCopy, source, destination);
                     if (Dijkstra.getPath() == null) {
-                        blocked = true;
+                        blocked++;
                     }
                 }
                 break;
@@ -486,14 +486,14 @@ public class LogicalBoard {
                     destination = getVertexByCoord(0, i, boardCopy); // left wall of nodes
                     Dijkstra = new DijkstraShortestPath<Vertex, Edge>(boardCopy, source, destination);
                     if (Dijkstra.getPath() == null) {
-                        blocked = true;
+                        blocked++;
                     }
                 }
                 break;
         }
 
         // returning verdict of whether or not path is blocked
-        return blocked;
+        return blocked==9;
     }
 
     /**

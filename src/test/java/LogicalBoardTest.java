@@ -248,6 +248,7 @@ public class LogicalBoardTest {
         //testing filling board with horizontal walls (except rightmost column)
         //Cannot test that
         // you run out of walls.....
+        // Yeah, that's why player 0 was doing it before. Player 0 had no wall limit. That was the point of player 0.
         for (int c=0; c<8; c+=2) {
             for (int r=0; r<8; r++) {
                 wallString = ""+c+" "+r+" "+"h";
@@ -342,6 +343,115 @@ public class LogicalBoardTest {
 	assertFalse(boardTwo.checkValid(1, "7 0 v"));
 	
 	assertTrue(boardTwo.checkValid(1, "7 1 h"));
+    }
+    
+    @Test
+    public void checkValidShouldAcceptTWalls() throws Exception {
+        Random rand = new Random();
+        int c;
+        int r;
+        String wall;
+        String tWall;
+        String opTWall;
+        
+        //Vertical wall, tWall to the right
+        for (int i=0; i<10; i++) {
+            c = rand.nextInt(7);
+            r = rand.nextInt(8);
+            wall = c+" "+r+" v";
+            tWall = (c+1)+" "+r+" h";
+            opTWall = (c+1)+" "+r+" v";
+            
+            //First check if tWall is valid to begin with, remove it, then test if it's valid after wall
+            assertTrue(boardTwo.checkValid(1, tWall));
+            boardTwo.removeWall(1, tWall);
+            
+            //Now try placing tWall after wall
+            assertTrue("On iteration "+i+" failed to place "+wall, boardTwo.checkValid(1, wall));
+                //Sanity check: There are two edges to remove for tWall and there aren't 0 to remove for tWall's opposite
+                assertTrue(boardTwo.getEdgesToRemove(tWall).size()==2);
+                assertFalse(boardTwo.getEdgesToRemove(opTWall).size()==0);
+            assertTrue("On iteration "+i+" failed to place "+tWall+" after placing "+wall, boardTwo.checkValid(1, tWall));
+            boardTwo.removeWall(1, wall);
+            boardTwo.removeWall(1, tWall);
+        }
+        
+        //Vertical wall, tWall to the left
+        for (int i=0; i<10; i++) {
+            c = rand.nextInt(7) + 1; //Between cols 1 and 7
+            r = rand.nextInt(8);
+            wall = c+" "+r+" v";
+            tWall = (c-1)+" "+r+" h";
+            opTWall = (c-1)+" "+r+" v";
+            
+            
+            //First check if tWall is valid to begin with
+            assertTrue(boardTwo.checkValid(1, tWall));
+            boardTwo.removeWall(1, tWall);
+            
+            //Now try placing tWall after wall
+            assertTrue("On iteration "+i+" failed to place "+wall, boardTwo.checkValid(1, wall));
+                //Sanity check: There are two edges to remove for tWall and there aren't 0 to remove for tWall's opposite
+                assertTrue(boardTwo.getEdgesToRemove(tWall).size()==2);
+                assertFalse(boardTwo.getEdgesToRemove(opTWall).size()==0);
+            assertTrue("On iteration "+i+" failed to place "+tWall+" after placing "+wall, boardTwo.checkValid(1, tWall));
+            boardTwo.removeWall(1, wall);
+            boardTwo.removeWall(1, tWall);
+        }
+        
+        //Horizontal wall, tWall down
+        for (int i=0; i<10; i++) {
+            c = rand.nextInt(8);
+            r = rand.nextInt(7);
+            wall = c+" "+r+" h";
+            tWall = c+" "+(r+1)+" v";
+            opTWall = c+" "+(r+1)+" h";
+            
+            //First check if tWall is valid to begin with, remove it, then test if it's valid after wall
+            assertTrue(boardTwo.checkValid(1, tWall));
+            boardTwo.removeWall(1, tWall);
+            
+            //Now try placing tWall after wall
+            assertTrue("On iteration "+i+" failed to place "+wall, boardTwo.checkValid(1, wall));
+                //Sanity check: There are two edges to remove for tWall and there aren't 0 to remove for tWall's opposite
+                assertTrue(boardTwo.getEdgesToRemove(tWall).size()==2);
+                assertFalse(boardTwo.getEdgesToRemove(opTWall).size()==0);
+            assertTrue("On iteration "+i+" failed to place "+tWall+" after placing "+wall, boardTwo.checkValid(1, tWall));
+            boardTwo.removeWall(1, wall);
+            boardTwo.removeWall(1, tWall);
+        }
+        
+        //Horizontal wall, tWall up
+        for (int i=0; i<10; i++) {
+            c = rand.nextInt(8);
+            r = rand.nextInt(7) + 1; //Between rows 1 and 7
+            wall = c+" "+r+" h";
+            tWall = c+" "+(r-1)+" v";
+            opTWall = c+" "+(r-1)+" h";
+            
+            //First check if tWall is valid to begin with, remove it, then test if it's valid after wall
+            assertTrue(boardTwo.checkValid(1, tWall));
+            boardTwo.removeWall(1, tWall);
+            
+            //Now try placing tWall after wall
+            assertTrue("On iteration "+i+" failed to place "+wall, boardTwo.checkValid(1, wall));
+                //Sanity check: There are two edges to remove for tWall and there aren't 0 to remove for tWall's opposite
+                assertTrue(boardTwo.getEdgesToRemove(tWall).size()==2);
+                assertFalse(boardTwo.getEdgesToRemove(opTWall).size()==0);
+            assertTrue("On iteration "+i+" failed to place "+tWall+" after placing "+wall, boardTwo.checkValid(1, tWall));
+            boardTwo.removeWall(1, wall);
+            boardTwo.removeWall(1, tWall);
+        }    
+    }
+    
+    @Test 
+    public void blockingOnlySomeWinSpacesShouldBeValid() {
+        assertTrue(boardTwo.checkValid(1, "0 0 h"));
+        assertTrue(boardTwo.checkValid(1, "2 0 h"));
+        assertTrue(boardTwo.checkValid(1, "7 0 h"));
+        assertTrue(boardTwo.checkValid(1, "5 0 h"));
+        assertTrue(boardTwo.checkValid(2, "3 0 v"));
+        assertTrue(boardTwo.checkValid(2, "4 0 v"));
     }
     
     @Test
