@@ -172,8 +172,11 @@ public class GameServer extends Server {
         }
     }
 
-
-  public static void main(String[] args) {
+    /**
+     *
+     * @param args
+     */
+    public static void main(String[] args) {
     System.out.println(usage);
     int port = 6969;
     String name = "RICK";
