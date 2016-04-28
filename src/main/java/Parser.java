@@ -2,6 +2,13 @@
 
 public class Parser {
 
+  /**
+   * This is the main parser method for this class. It takes in 
+   * a string and processes it to a usable format for us.
+   *
+   * @param message the input message to this method.
+   * @return a usable String for our methods.
+   */
   public static String parse(String message) {
     
     String strip = stripBrackets(message);
@@ -24,9 +31,7 @@ public class Parser {
       case "ATARI":
          return handleAtari(arrayCharles);
       case "GOTE":
-        //          handleGote();
       case "KIKASHI":
-        //          handleKikashi();
       default:
         return ("Error");
     }
@@ -47,24 +52,27 @@ public class Parser {
       return "[(" + spirit[0] + ", " + spirit[1] + "), " + spirit[2] + "]";
   } 
 
-  // Strips brackets and commas from move-string.
-  // Ex. Pawn movement (0, 3) --> 0 3
-  //     Wall placement [(0, 3), h] --> 0 3 h
+  /** Strips brackets and commas from move-string.
+   * Ex. Pawn movement (0, 3) --> 0 3
+   *     Wall placement [(0, 3), h] --> 0 3 h
+   *
+   * @param s The string to have the brackets stripped from.
+   * @return a String with all of its brackets stripped.
+   */
   public static String stripBrackets(String s) {
     s = s.replaceAll("[\\[()\\],]+", "");
     return s;
   }
 
 
-  public String[] handleGame(String[] arr,String input) {
+  private String[] handleGame(String[] arr,String input) {
     // Client: Game is ready to start. First argument is player number
     // for the server receiving the message. 
 
     return arr;
   }
 
-
-  public static String handleAtari(String[] s) {
+  private static String handleAtari(String[] s) {
       if(s.length == 4) {
           return s[2] + " " + s[3];
       } 
@@ -72,18 +80,6 @@ public class Parser {
       return s[2] + " " + s[3] + " " + s[4];
     // Client: First arg is player's number. Second is move-string.
     // Communicates player's move to all players.
-  }
-
-  public void handleGote() {
-    // First arg is a player's number. Message sent by client to all move-servers
-    // informing them that <p> made an illegal move and has been removed from the game.
-    // This will be the last message sent to the offending server.
-  }
-
-  public void handleKikashi() {
-    // Message sent by client to all servers. First arg is player number.
-    // Informs all servers that game is over and <p> won.
-    // This is last message sent to any server.
   }
 }
 
