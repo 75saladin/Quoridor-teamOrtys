@@ -15,13 +15,14 @@ public class GameClientTest{
   
   GameServer server1;
   GameServer server2;
-
+  LogicalBoard gameBoard;
 
   // set up a server for testing against
   @Before
   public void setup(){
     GameServer server1 = new GameServer(2000,"RICK");
     GameServer server2 = new GameServer(2001,"ALSORICK");
+    LogicalBoard gameBoard = new LogicalBoard(2);
   }
 
   /*
@@ -162,6 +163,39 @@ public class GameClientTest{
     GUI gui = GameClient.startGUI(players);
     assertNotNull("GUI should exist",gui);
   }
+
+  //test requesting move from server
+  @Test
+  public void GameClientRequestMoveTest() throws Exception{
+
+    Thread t = new Thread() { 
+      public void handle() {
+    	  server1.connect();
+        server2.connect();
+    	}
+    };
+    t.setDaemon(true);
+    t.start();
+    
+    Thread c = new Thread() {
+      public void handle() {
+        try {
+          Socket player1Socket = GameClient.socketSetup("localhost",2000);
+          Socket player2Socket = GameClient.socketSetup("localhost",2001);
+          Socket[] players = {player1Socket,player2Socket};
+          GameClient.contactServers(players);
+          
+          String move = GameClient.requestMove(players[0]);
+
+          assertNotNull("Player 1 should have made a move",move);
+          assertEquals("Failure - move not expected","TESUJI (4,1)",move);
+
+        } catch(Exception e) {}
+      }
+    };
+    c.setDaemon(true);
+    c.start();
+  } 
 
   //testing the updating of player turn number
   @Test
