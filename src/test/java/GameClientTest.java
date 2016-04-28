@@ -154,7 +154,14 @@ public class GameClientTest{
     c.start();
   } 
 
-
+  //test starting of GUI
+  @Test
+  public void GameClientStartGUITest() throws Exception{
+    
+    int players = 2;
+    GUI gui = GameClient.startGUI(players);
+    assertNotNull("GUI should exist",gui);
+  }
 
   //testing the updating of player turn number
   @Test
