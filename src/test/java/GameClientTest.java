@@ -231,6 +231,41 @@ public class GameClientTest{
     c.start();
   }
 
+  //test broadcasting move to players
+  @Test
+  public void GameClientBroadcastMove() throws Exception{
+
+    Thread t = new Thread() { 
+      public void handle() {
+    	  server1.connect();
+        server2.connect();
+    	}
+    };
+    t.setDaemon(true);
+    t.start();
+    
+    Thread c = new Thread() {
+      public void handle() {
+        try {
+          Socket player1Socket = GameClient.socketSetup("localhost",2000);
+          Socket player2Socket = GameClient.socketSetup("localhost",2001);
+          Socket[] players = {player1Socket,player2Socket};
+          GameClient.contactServers(players);
+          
+          String move = Parser.parse(GameClient.requestMove(players[0]));
+          GameClient.broadcastMove(players, 1, move);
+
+          assertNotNull("Players should still be open",players[0]);
+          assertNotNull("Players should still be open",players[1]);
+
+        } catch(Exception e) {}
+      }
+    };
+    c.setDaemon(true);
+    c.start();
+  }
+
+
   //testing the updating of player turn number
   @Test
   public void GameClientUpdatePlayerNumberTest() throws Exception{
