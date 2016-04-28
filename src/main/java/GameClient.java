@@ -31,9 +31,6 @@ public class GameClient{
   public static void runGame(Socket[] players){
     contactServers(players);
     GUI gui = startGUI(players.length); 
-   
-    Mediator.setGui(gui); // added in by jed for playerServer
-    Mediator.setPlayerCount(players.length); // added by jed
     
     LogicalBoard gameBoard = new LogicalBoard(players.length); 
     // Start asking for moves

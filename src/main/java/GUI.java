@@ -48,10 +48,10 @@ public class GUI extends Application implements GUIInterface {
     private String move;
     
     
-    // launches threades simultaneously
+    // launches threads simultaneously
     public static final CountDownLatch latch = new CountDownLatch(1);
     
-    // instantiation of class
+    // instantiation of class, utilized for external use of appliations methods
     public static GUI gui = null;
     
     /**
@@ -76,7 +76,8 @@ public class GUI extends Application implements GUIInterface {
     
     /**
      * 
-     * @param g: Passing in parameter to initialize gui
+     * @param g: Passing in parameter to initialize an instantion of GUI within itself
+     *
      */
     public static void guiStartUpTest(GUI g) {
         gui = g;

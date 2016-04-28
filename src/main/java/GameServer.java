@@ -91,7 +91,7 @@ public class GameServer extends Server {
     /**
      * Handles the hello message from the client.
      */
-    public void handleHello(){
+    private void handleHello(){
         out.println("IAM " + name);
     }
     
@@ -100,7 +100,7 @@ public class GameServer extends Server {
      * @param s The message from the client in a string array.
      * Handles game message.
      */
-    public void handleGame(String[] s) {
+    private void handleGame(String[] s) {
         this.playerNum = Integer.parseInt(s[1]);
         if(s.length == 4) {
             AI = new RandomAI(2, playerNum); // set the random AI
@@ -112,7 +112,7 @@ public class GameServer extends Server {
     /**
      * handles get move message
      */
-    public void handleMyoushu(){
+    private void handleMyoushu(){
         String move = AI.getMove();
         move = Parser.formatMove(move);
         try {
@@ -128,7 +128,7 @@ public class GameServer extends Server {
      * @param s The message from the client in a string array.
      * Updates the AI
      */
-    public void handleAtari(String[] s) {
+    private void handleAtari(String[] s) {
         int player = Integer.parseInt(s[1]);
         String move = s[2] +" "+ s[3];
         if(s.length==5){      
@@ -140,7 +140,7 @@ public class GameServer extends Server {
     /**
      * handles end of game clean up
      */
-    public void handleKikashi() {
+    private void handleKikashi() {
         try {
             out.close();
             client.close();
@@ -157,7 +157,7 @@ public class GameServer extends Server {
      * Kicks player in AI.
      * Closes server if that person being kicked is you.
      */
-    public void handleGote(String[] s) {
+    private void handleGote(String[] s) {
         AI.kick(Integer.parseInt(s[1]));
         if(Integer.parseInt(s[1]) == playerNum) {
             try {
