@@ -765,7 +765,6 @@ public class LogicalBoard {
      * Places a wall. This wall must be validated by validWall() BEFORE being
      * placed. ## Modified for pathLengthAfterWall
      *
-     * @param playerNum - player that is placing the wall.
      * @param wall - A string representing the wall: "[c] [r] [d]"
      */
     public void placeWall(String wall,UndirectedGraph<Vertex,Edge> boardCopy) {
