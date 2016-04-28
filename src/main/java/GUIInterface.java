@@ -13,6 +13,10 @@
  */
 public interface GUIInterface {
     
+    /**
+     *
+     * @param move
+     */
     public abstract void update(String move); // updates the board with just move
    
 }
