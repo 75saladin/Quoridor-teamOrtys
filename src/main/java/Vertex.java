@@ -32,8 +32,8 @@ public class Vertex {
     
     /**
      * Creates a vertex with the given column and row number.
-     * @param c - Rolumn number
-     * @param r - Row number
+     * @param c Column number
+     * @param r Row number
      */
     public Vertex(int c, int r){
         this.c = c;
@@ -42,7 +42,8 @@ public class Vertex {
     }
     
     /**
-     * @return - Whether or not a player is on this square.
+     * Checks if there's a player here.
+     * @return Whether or not a player is on this square.
      */
     public boolean isHere(){
         return here;
@@ -50,7 +51,7 @@ public class Vertex {
     
     /**
      * Resets the column number of this vertex.
-     * @param c - the column number to set
+     * @param c The column number to set
      */
     public void setC(int c) {
        this.c=c;
@@ -58,7 +59,7 @@ public class Vertex {
 
     /**
      * Resets the row number of this vertex.
-     * @param r - the row number to set
+     * @param r The row number to set
      */
     public void setR(int r) {
         this.r=r;
@@ -66,7 +67,7 @@ public class Vertex {
 
     /** 
      * Returns a string representation.
-     * @return - "{[here], [col], [row]}"
+     * @return "{[here], [col], [row]}"
      */
     @Override
     public String toString() {

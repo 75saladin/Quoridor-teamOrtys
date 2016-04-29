@@ -22,7 +22,8 @@ public class Edge extends DefaultEdge{
     private static final long serialVersionUID = 1L;
 
     /** 
-     * @return - A node of this edge. Since graph is undirected, either may be 
+     * Returns a node belonging to this edge.
+     * @return A node of this edge. Since graph is undirected, either may be 
      * the source or destination. Also check getTarget() if you need a specific
      * node of this edge.  */
     @Override
@@ -31,7 +32,8 @@ public class Edge extends DefaultEdge{
     }
     
     /** 
-     * @return - A node of this edge. Since graph is undirected, either may be 
+     * Returns a node belonging to this edge.
+     * @return A node of this edge. Since graph is undirected, either may be 
      * the source or destination. Also check getSource() if you need a specific
      * node of this edge.  
      */
@@ -41,14 +43,16 @@ public class Edge extends DefaultEdge{
     }
     
     /**
-     * @return - the string representation. "([node]:[node])\n"
+     * Gets a string representation.
+     * @return The string representation. "([node]:[node])\n"
      */
     @Override public String toString(){
            return "("+this.getSource().toString() + ":" + this.getTarget().toString()+ ")\n";
     }
     
     /**
-     * @return - whether or not the sources and targets are the .equal() each other.
+     * Check equality of nodes belonging to this edge.
+     * @return Whether or not the sources and targets are the .equal() each other.
      */
     public boolean equals(Edge e){
         return this.getSource().equals(e.getSource())&&this.getTarget().equals(e.getTarget());

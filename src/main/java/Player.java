@@ -18,7 +18,7 @@ public class Player {
      * player number will determine starting position
      * board will be placing it on the board logically
      *
-     * @param playerNum number of this player
+     * @param playerNum Number of this player
      */
     public Player(int playerNum){
             if(playerNum==1){
@@ -38,37 +38,40 @@ public class Player {
     }
   
     /**
-     * @return - This player's column number
+     * Gets the player's column number.
+     * @return This player's column number
      */
     public int getC() {
         return c;
     }
 
     /**
-     * @return - This player's row number
+     * Gets the player's row number.
+     * @return This player's row number
      */
     public int getR() {
         return r;
     }
     
     /**
-     * Set's player's current column
-     * @param c - column number
+     * Sets player's current column
+     * @param c Column number
      */
     public void setC(int c) {
         this.c = c;
     }
 
     /**
-     * Set's player's current row
-     * @param r - row number
+     * Sets player's current row
+     * @param r Row number
      */
     public void setR(int r) {
         this.r = r;
     }
 
     /** 
-     * @return - player's number of walls left
+     * Retruns player's number of walls left.
+     * @return Player's number of walls left
      */
     public int getWalls() {
         return walls;
@@ -90,14 +93,15 @@ public class Player {
     
     /**
      * Initializes player's wall count, depending on number of players in the game.
-     * @param walls - number of walls they get
+     * @param walls Number of walls they get
      */
     public void setWalls(int walls) {
         this.walls = walls;
     }
 
     /**
-     * @return - whether or not the players have the same location and wallcount.
+     * Checks if the players are in the same location and have the same wallocount.
+     * @return Whether or not the players have the same location and wallcount.
      */
     public boolean equals(Player player) {
         return (r == player.r && c == player.c && walls == player.walls);
@@ -105,7 +109,7 @@ public class Player {
 
     /**
      * Gets a string representation.
-     * @return - "{c=[col], r=[row], walls=[num]}"
+     * @return "{c=[col], r=[row], walls=[num]}"
      */
     @Override
     public String toString() {
@@ -113,14 +117,16 @@ public class Player {
     }
     
     /**
-     * @return - This player's player number.
+     * Gets the player's number
+     * @return This player's player number.
      */
     public int getPlayerNum(){
         return playerNum;
     }
     
     /**
-     * @return - Whether or not this player has walls left.
+     * Gets whether or not the player has more than 0 walls left.
+     * @return Whether or not this player has walls left.
      */
     public boolean hasWalls(){
         if(walls==0)
