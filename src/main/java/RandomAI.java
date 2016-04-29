@@ -57,9 +57,9 @@ public class RandomAI {
     /**
      * get a player move in a 2Player Game
      *
-     * @param playerNum - player requesting move
+     *
      * @return
-     */
+     */ //@param playerNum - player requesting move
     public String getMove() {
         // player1 init as null
         boolean P1hasWalls = false;

@@ -189,7 +189,6 @@ public class GameClient{
     * Handles the requesting of a move from the server.
     *
     * @param player Socket of player to request move from
-    * @param pNum number of the player
     *
     * @return move made by player
     */
@@ -251,8 +250,7 @@ public class GameClient{
     *
     * @param players Array of Sockets open to all servers.
     *
-    * @return String array of player names.
-    */
+    */ //@return String array of player names.
   public static void contactServers(Socket[] players){
     PrintStream p1out = getOut(players[0]);
     Scanner p1in = getIn(players[0]);

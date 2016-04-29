@@ -175,7 +175,7 @@ public class  Controller{
     /**
      * 
      * @param player: The player number to get their position on the board
-     * @returns a point coordinate of the specific person. 
+     * @return a point coordinate of the specific person. 
      */
     public Point getPlayerPosition(int player) {
         if(player > playerCount) 
