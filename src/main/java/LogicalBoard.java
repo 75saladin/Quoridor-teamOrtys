@@ -11,8 +11,10 @@ import org.jgrapht.graph.ClassBasedVertexFactory;
 import org.jgrapht.graph.SimpleGraph;
 
 /**
- *
- * @author craig
+ * An object representing a board state. Contains a jgrapht.UndirectedGraph 
+ * with board squares represented by vertices and valid (ie, not blocked by a 
+ * wall) moves between them. Also contains the set of players in the game.
+ * 
  */
 public class LogicalBoard {
 
