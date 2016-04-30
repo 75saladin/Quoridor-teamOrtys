@@ -1,21 +1,14 @@
-
-
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import org.jgrapht.alg.DijkstraShortestPath;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
- *
  * @author  Craig Gardner
+ * Documented by Josh Naar on 4/30/16
  */
+
 public class RandomAI {
 
     private LogicalBoard board;
@@ -23,9 +16,9 @@ public class RandomAI {
     private int playerNum;
 
     /**
-     *
-     * @param playerCount
-     * @param playerNum
+     * @param playerCount: number of players in game
+     * @param playerNum: number of current player
+     * Constructor
      */
     public RandomAI(int playerCount, int playerNum) {
         board = new LogicalBoard(playerCount);
@@ -33,18 +26,18 @@ public class RandomAI {
         this.playerNum = playerNum;
     }
 
-    /**
-     *
-     * @param player
+    /** 
+     * @param player: number of player to be kicked
+     * Kicks a player when an illegal move is made
      */
     public void kick(int player) {
         board.kick(player);
     }
 
     /**
-     *
-     * @param playerNum
-     * @param move
+     * @param playerNum: number of current player
+     * @param move: instruction for current player's move
+     * Updates the board to reflect most recent move
      */
     public void update(int playerNum, String move) {
         if (move.length() == 3) {
@@ -55,11 +48,9 @@ public class RandomAI {
     }
 
     /**
-     * get a player move in a 2Player Game
-     *
-     *
-     * @return
-     */ //@param playerNum - player requesting move
+     * @return String representation of move to be made
+     * Get a player move in a 2Player Game
+     */ 
     public String getMove() {
         // player1 init as null
         boolean P1hasWalls = false;
@@ -167,6 +158,11 @@ public class RandomAI {
 
     }
 
+    /**
+     * @param playerNum: number of current player
+     * @return String representation of best pawn movement
+     * Gets best pawn movement for current player
+     */
     private Vertex getBestMove(int playerNum) {
         DijkstraShortestPath<Vertex, Edge> shortest = board.getShortestWinningPath(playerNum, board.board);
         List<Edge> winningEdges = shortest.getPathEdgeList();
@@ -185,11 +181,9 @@ public class RandomAI {
     }
 
     /**
-     * getBestWall - gets the best wall for a player to place whether it is 2 or
-     * 4 player game
-     *
-     * @param player - player requesting wall
+     * @param player: player requesting wall
      * @return Wall String to be sent to server
+     * Gets the best wall for a player to place whether it is 2 or 4 player game
      */
     private String getBestWall(int player) {
         if(Math.random()>.7)
@@ -331,6 +325,12 @@ public class RandomAI {
         return "";
     }
 
+    /**
+     * @param player: number of current player
+     * @param wall: String representation of wall to be placed
+     * @return: Boolean representation of whether this wall will negatively affect the player that is about to place it          
+     * Makes sure wall about to be placed doesn't interfere with its owner's movement                  
+     */
     private boolean MyPathIsSame(int player, String wall) {
         if (wall.equals("")) {
             return false;
