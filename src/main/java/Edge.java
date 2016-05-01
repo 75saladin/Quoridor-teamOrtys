@@ -46,7 +46,8 @@ public class Edge extends DefaultEdge{
      * Gets a string representation.
      * @return The string representation. "([node]:[node])\n"
      */
-    @Override public String toString(){
+    @Override 
+    public String toString(){
            return "("+this.getSource().toString() + ":" + this.getTarget().toString()+ ")\n";
     }
     
