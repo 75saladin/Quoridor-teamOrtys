@@ -162,7 +162,8 @@ public class GameClientTest{
   public void GameClientStartGUITest() throws Exception{
     
     int players = 2;
-    GUI gui = GameClient.startGUI(players);
+    String[] names = {"RICK","RICK"};
+    GUI gui = GameClient.startGUI(names);
     assertNotNull("GUI should exist",gui);
   }
 
