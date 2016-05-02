@@ -77,9 +77,9 @@ public class GUI extends Application implements GUIInterface {
     
     private static final AudioClip OH_YEA = new AudioClip("https://d2eopxgp627wep.cloudfront.net/ps/audios/000/000/547/original/Oooo_yeah__caaan_doo!.wav?1441333631");
     
-    private static final AudioClip WRECKED = new AudioClip("http://peal.io/download/3tcbx");
+    private static final AudioClip WRECKED = new AudioClip("https://d2eopxgp627wep.cloudfront.net/ps/audios/000/000/533/original/Riggity.wav?1441330423");
     
-    private static final AudioClip WUBBA = new AudioClip("http://peal.io/download/3tcbx");
+    private static final AudioClip WUBBA = new AudioClip("http://peal.io/download/3tcbxhttp://peal.io/download/3tcbx");
     
     
     /**
