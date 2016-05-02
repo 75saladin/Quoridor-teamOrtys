@@ -319,7 +319,7 @@ public class GUI extends Application implements GUIInterface {
      * Sets the player 
      */
     public void setPlayerArray(String[] names) {
-        names = playerNames;
+        playerNames = names;
     }
 
     /**
