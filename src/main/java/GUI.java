@@ -7,6 +7,7 @@
  * 
  */
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import javafx.application.Application;
@@ -208,8 +209,9 @@ public class GUI extends Application implements GUIInterface {
                 output.appendText("-----------------\n");
                 output.appendText("Number of moves: " + numberOfMoves++ + "\n");
                 player.setWalls(player.getPlayerTurn()); // decrements this players walls
-                for(int i = 1; i <= player.getPlayerCount(); i++) {
-                    output.appendText("Player " + i + ": " + playerNames[i] + 
+                System.out.println(Arrays.toString(playerNames));
+                for(int i = 1; i <= playerNames.length; i++) {
+                    output.appendText("Player " + i + ": " + playerNames[i] + "\n" + 
                             " Walls Remaining: " + player.getWalls(i) + "\n");
                 }
                 output.appendText("-----------------\n");
