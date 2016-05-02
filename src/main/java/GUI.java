@@ -71,7 +71,7 @@ public class GUI extends Application implements GUIInterface {
     // instantiation of class, utilized for external use of appliations methods
     private static GUI gui = null;
     
-    private static final AudioClip ALERT_AUDIOCLIP = new AudioClip(GUI.class.getResource("boop.wav").toString());
+    private static final AudioClip ALERT_AUDIOCLIP = new AudioClip(GUI.class.getResource("/boop.wav").toString());
     
     
     /**
