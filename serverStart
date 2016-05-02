@@ -20,4 +20,4 @@ if [ "$1" -le 1024 ]; then
 fi
 
 # Start single server for testing purposes
-java -cp build/libs/Quoridor.jar GameServer --port $1
+java -cp build/libs/Quoridor-all.jar GameServer --port $1
