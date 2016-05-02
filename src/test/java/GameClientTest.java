@@ -158,6 +158,7 @@ public class GameClientTest{
 
   //test starting of GUI
   @Test
+  @Ignore
   public void GameClientStartGUITest() throws Exception{
     
     int players = 2;

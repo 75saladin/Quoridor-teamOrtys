@@ -10,6 +10,7 @@ import org.junit.After;
 import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Ignore;
 
 /**
  *
@@ -59,6 +60,7 @@ public class GUITest {
      * Test the set up and check for null gui. 
      */
     @Test
+    @Ignore
     public void testGUISetUp() {
         assertNotNull(gui);
         assertNotNull(gui2);

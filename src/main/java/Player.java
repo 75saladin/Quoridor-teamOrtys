@@ -38,8 +38,14 @@ public class Player {
     }
   
     /**
+<<<<<<< Updated upstream
      * Gets the player's column number.
      * @return This player's column number
+=======
+     * Returns the column that the player is currently in.
+     *
+     * @return the current column that the player is in.
+>>>>>>> Stashed changes
      */
     public int getC() {
         return c;
