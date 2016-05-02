@@ -109,26 +109,6 @@ public class ControllerTest {
         controller2.setPlayerTurn();
         
     }
-
-    /**
-     * Test setting the controller count to a new number.
-     */
-    @Test
-    public void testSetPlayerCount() {
-        int one = 1;
-        int two = 2;
-        int three = 3; 
-        int four = 4;
-        controller1.setPlayerCount(3);
-
-        assertEquals("Test set controller count", controller1.getPlayerCount(), 3);
-        controller2.setPlayerCount(1);
- 
-        assertEquals("Test set controller count", controller2.getPlayerCount(), 1);
-        
-        controller2.setPlayerCount(4);
-        assertEquals("Test set controller count", controller2.getPlayerCount(), 4);
-    }
     
     /**
      * Tests getting the controller node
@@ -137,31 +117,6 @@ public class ControllerTest {
     public void testGetPlayerNode() {
         assertNull(new Controller(2).getPlayerNode(4));
         
-    }
-    
-    /**
-     * tests getting the player position
-     */
-    @Test
-    public void testGetPlayerPosition() {
-        Point p1 = new Point(4, 0);
-        Point p2 = new Point(4, 8);
-        
-        assertEquals(p1, controller1.getPlayerPosition(1));
-        assertEquals(p2, controller2.getPlayerPosition(2));
-        
-        assertEquals(p1.x, controller1.getPlayerPosition(1).x);
-    }
-    
-    @Test 
-    public void testSetPlayerPosition() {
-        Point p1 = new Point(5, 3);
-        Point p2 = new Point(2, 6);
-        controller1.setPlayerPosition(2, 5, 3);
-        controller2.setPlayerPosition(4, 2, 6);
-        assertEquals(p1, controller1.getPlayerPosition(2));
-        assertEquals(p2, controller2.getPlayerPosition(4));
-
     }
 
 }
