@@ -29,9 +29,10 @@ public class GameClient{
     * @param players array of Socket open to servers 
     */
   public static void runGame(Socket[] players){
-    contactServers(players);
-    GUI gui = startGUI(players.length); 
-    
+    String[] playerNames = contactServers(players);
+    GUI gui = startGUI(playerNames); 
+    try{ Thread.sleep(200); }
+    catch(InterruptedException ie){}
     LogicalBoard gameBoard = new LogicalBoard(players.length); 
     // Start asking for moves
     boolean running = true;
@@ -43,10 +44,11 @@ public class GameClient{
         if (players.length == 2) {
           index ^= 1;
           pNum = (pNum % 2) + 1;
-          } else {
-            index = (index + 1) % 4;
-            pNum = updateNumber(pNum);
-          }
+        } 
+        else {
+          index = (index + 1) % 4;
+          pNum = updateNumber(pNum);
+        }
         continue;
       }
       System.out.println("REQUESTING MOVE: Player " + (pNum));
@@ -55,7 +57,7 @@ public class GameClient{
       if(gameBoard.checkValid(pNum,move)){
         broadcastMove(players,pNum,move);
         gui.update(move);
-        try{ Thread.sleep(250); }
+        try{ Thread.sleep(200); }
         catch(Exception e){}
       }
       else{
@@ -223,7 +225,7 @@ public class GameClient{
     *
     * @param pNum number of players in game
     */
-  public static GUI startGUI(int pNum){
+  public static GUI startGUI(String[] playerNames){
     Thread t = new Thread() {
       @Override
       public void run() {
@@ -236,11 +238,12 @@ public class GameClient{
         
     GUI gui = GUI.waitForGUIStartUpTest();
     Controller player = null;
-    if(pNum == 2)
+    if(playerNames.length == 2)
       player = new Controller(2);
     else
       player = new Controller(4);
-      gui.setPlayer(player);
+    gui.setPlayer(player);
+    gui.setPlayerArray(playerNames);
     return gui;
   }
 
@@ -251,7 +254,11 @@ public class GameClient{
     * @param players Array of Sockets open to all servers.
     *
     */ //@return String array of player names.
-  public static void contactServers(Socket[] players){
+  public static String[] contactServers(Socket[] players){
+    String[] playerNames = new String[2];
+    if(players.length == 4)
+      playerNames = new String[4];
+
     PrintStream p1out = getOut(players[0]);
     Scanner p1in = getIn(players[0]);
     PrintStream p2out = getOut(players[1]);
@@ -285,15 +292,22 @@ public class GameClient{
       //System.out.println("Player 4 Name: " + p4Name);
     }
     if(players.length == 2){
+      playerNames[0] = p1Name;
+      playerNames[1] = p2Name;
       p1out.println(GAME + " 1 " + p1Name + " " + p2Name);
       p2out.println(GAME + " 2 " + p1Name + " " + p2Name);
     }
     else{
+      playerNames[0] = p1Name;
+      playerNames[1] = p2Name;
+      playerNames[2] = p3Name;
+      playerNames[3] = p4Name;
       p1out.println(GAME + " 1 " + p1Name + " " + p3Name + " " + p4Name + " " + p2Name); 
       p2out.println(GAME + " 4 " + p1Name + " " + p3Name + " " + p4Name + " " + p2Name); 
       p3out.println(GAME + " 2 " + p1Name + " " + p3Name + " " + p4Name + " " + p2Name); 
       p4out.println(GAME + " 3 " + p1Name + " " + p3Name + " " + p4Name + " " + p2Name); 
     }
+    return playerNames;
   }
 
   /**
