@@ -240,7 +240,6 @@ public class GUI extends Application implements GUIInterface {
                 grid.add(player.getPlayerNode(turn), c, r);
                 output.appendText("-----------------\n");
                 output.appendText("Number of moves: " + numberOfMoves++ + "\n");
-                player.setWalls(player.getPlayerTurn()); // decrements this players walls
                 for(int i = 1; i <= player.getPlayerCount(); i++) {
                     output.appendText("Player " + i + ": " + playerNames[i] + 
                             " Walls Remaining: " + player.getWalls(i) + "\n");
