@@ -129,6 +129,25 @@ public class ControllerTest {
     }
     
     /**
+     * Test remove player
+     */
+    public void testRemovePlayer() {
+        controller1.removePlayer(2);
+        controller1.setPlayerTurn();
+        
+        assertEquals("Test turn", 1, controller1.getPlayerTurn());
+        controller1.setPlayerTurn();
+        assertNotEquals(2, controller1.getPlayerTurn());
+        
+        controller2.removePlayer(1);
+        assertEquals(4, controller2.getPlayerTurn());
+        
+        controller2.removePlayer(2);
+        assertEquals(3, controller2.getPlayerTurn());
+        
+    }
+    
+    /**
      * Tests getting the controller node
      */
     @Test
