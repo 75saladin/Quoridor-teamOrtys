@@ -73,6 +73,10 @@ public class GUI extends Application implements GUIInterface {
     
     private static final AudioClip ALERT_AUDIOCLIP = new AudioClip(GUI.class.getResource("/boop.wav").toString());
     
+
+    
+    private static final AudioClip WIN_CLIP = new AudioClip(GUI.class.getResource("/winner.mp3").toString());
+    
     
     /**
      * Constructor.
@@ -187,6 +191,18 @@ public class GUI extends Application implements GUIInterface {
             movePlayer(column, row);
         }
 
+    }
+    
+    /**
+     * Plays an mp3 when the player wins the game.
+     */
+    public void winGame() {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                GUI.WIN_CLIP.play();
+            }
+        }) ;
     }
 
 
