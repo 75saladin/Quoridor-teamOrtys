@@ -69,6 +69,24 @@ public class ControllerTest {
     }
     
     /**
+     * Test get Walls and SetWalls
+     */
+     @Test
+     public void testGetandSetWalls(){
+        int n = controller1.getWalls(1);
+        assertEquals("Testing get walls", 10, n);
+        controller1.setWalls(1);
+        n = controller1.getWalls(1);
+        assertEquals("Testing get walls", 9, n);
+        controller2.setWalls(4);
+        controller2.setWalls(4);
+        controller2.setWalls(4);
+        controller2.setWalls(4);
+        
+        assertEquals("Testing get walls", 1, controller2.getWalls(4));
+        assertEquals("Testing get walls", 5, controller2.getWalls(2));
+     }
+    /**
      * Test get controller count
      */
    @Test 
@@ -111,11 +129,31 @@ public class ControllerTest {
     }
     
     /**
+     * Test remove player
+     */
+    public void testRemovePlayer() {
+        controller1.removePlayer(2);
+        controller1.setPlayerTurn();
+        
+        assertEquals("Test turn", 1, controller1.getPlayerTurn());
+        controller1.setPlayerTurn();
+        assertNotEquals(2, controller1.getPlayerTurn());
+        
+        controller2.removePlayer(1);
+        assertEquals(4, controller2.getPlayerTurn());
+        
+        controller2.removePlayer(2);
+        assertEquals(3, controller2.getPlayerTurn());
+        
+    }
+    
+    /**
      * Tests getting the controller node
      */
     @Test
     public void testGetPlayerNode() {
         assertNull(new Controller(2).getPlayerNode(4));
+        assertNotNull(controller1.getPlayerNode(1));
         
     }
 
