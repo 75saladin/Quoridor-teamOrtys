@@ -10,6 +10,7 @@ import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -73,11 +74,12 @@ public class GUI extends Application implements GUIInterface {
     
     private static final AudioClip ALERT_AUDIOCLIP = new AudioClip(GUI.class.getResource("/boop.wav").toString());
     
-
-    
-    private static final AudioClip WIN_CLIP = new AudioClip(GUI.class.getResource("/winner.mp3").toString());
     
     private static final AudioClip OH_YEA = new AudioClip("https://d2eopxgp627wep.cloudfront.net/ps/audios/000/000/547/original/Oooo_yeah__caaan_doo!.wav?1441333631");
+    
+    private static final AudioClip WRECKED = new AudioClip("http://peal.io/download/3tcbx");
+    
+    private static final AudioClip WUBBA = new AudioClip("http://peal.io/download/3tcbx");
     
     
     /**
@@ -202,8 +204,20 @@ public class GUI extends Application implements GUIInterface {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                GUI.OH_YEA.play();
-                //GUI.WIN_CLIP.play();
+                Random rand = new Random();
+                int n = rand.nextInt(3) + 1;
+                switch(n) {
+                    case 1:
+                        GUI.WRECKED.play(100.0);
+                        break;
+                    case 2:
+                        GUI.OH_YEA.play(100.0);
+                        break;
+                    case 3:
+                        GUI.WUBBA.play(100.0);
+                        break;
+                                
+                }
             }
         }) ;
     }
