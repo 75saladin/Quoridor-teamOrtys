@@ -84,12 +84,16 @@ public class  Controller{
         switch(pNum) {
             case 1:
                 walls1--;
+                break;
             case 2:
                 walls2--;
+                break;
             case 3:
                 walls3--;
+                break;
             case 4:
                 walls4--;
+                break;
         }
     }
     
