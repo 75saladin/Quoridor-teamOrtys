@@ -1,19 +1,19 @@
-
 import java.net.*;
 import java.io.*;
 import java.util.Scanner;
+import java.util.NoSuchElementException;
 
 /**
-  * GameClient class controls game logic,
-  * sets up server connections and sends updates to board. 
-  *
-  * @author Nicholas Marasco
-  */
+ * GameClient class controls game logic,
+ * sets up server connections and sends updates to board. 
+ *
+ * @author Nicholas Marasco
+ */
 public class GameClient{
 
   private static final String USAGE = "usage: GameClient <machine1>:<port1> "
-                                    + "<machine2>:<port2> \\\n[<machine3>:<port3> "
-                                    + "<machine4>:<port4>]";
+    + "<machine2>:<port2> \\\n[<machine3>:<port3> "
+    + "<machine4>:<port4>]";
 
   private static final String HELLO = "HELLO";
   private static final String GAME = "GAME";
@@ -23,11 +23,11 @@ public class GameClient{
   private static final String PLAYER_KICKED = "GOTE";
 
   /**
-    * Start the game logic.
-    * Goes through the initial contact, then executes turn order game.
-    *
-    * @param players array of Socket open to servers 
-    */
+   * Start the game logic.
+   * Goes through the initial contact, then executes turn order game.
+   *
+   * @param players array of Socket open to servers 
+   */
   public static void runGame(Socket[] players){
     String[] playerNames = contactServers(players);
     GUI gui = startGUI(playerNames); 
@@ -52,7 +52,17 @@ public class GameClient{
         continue;
       }
       System.out.println("REQUESTING MOVE: Player " + (pNum));
-      String move = requestMove(players[index]);
+      String move = null;
+      try{
+        move = requestMove(players[index]);
+      } 
+      catch(NoSuchElementException e){
+        System.out.println("PLAYER " + pNum + " HAS CROAKED");
+        kickPlayer(players,pNum,index);
+        gameBoard.kick(pNum);
+        gui.removePlayer(pNum);
+        continue;
+      }
       System.out.println("GOT MOVE: " + move);
       if(gameBoard.checkValid(pNum,move)){
         broadcastMove(players,pNum,move);
@@ -85,17 +95,17 @@ public class GameClient{
     }
     gui.winGame();
     try{ Thread.sleep(5000); 
-        
+
     } catch(InterruptedException ie){ ie.printStackTrace(); }
     gui.stopApplication();
   }
 
   /**
-    * Start a 2 player game.
-    * Sets up connections for two move servers and executes game function.
-    *
-    * @param pairs String array of machine names and port numbers
-    */
+   * Start a 2 player game.
+   * Sets up connections for two move servers and executes game function.
+   *
+   * @param pairs String array of machine names and port numbers
+   */
   public static void setup2Player(String[] pairs){
     String machine1 = pairs[0];
     String machine2 = pairs[2];
@@ -123,11 +133,11 @@ public class GameClient{
   }
 
   /**
-    * Start a 4 player game.
-    * Sets up connections for four move servers and executes game function.
-    *
-    * @param pairs String array of machine names and port numbers
-    */
+   * Start a 4 player game.
+   * Sets up connections for four move servers and executes game function.
+   *
+   * @param pairs String array of machine names and port numbers
+   */
   // Currently not implemented
   public static void setup4Player(String[] pairs){
     String machine1 = pairs[0];
@@ -162,12 +172,12 @@ public class GameClient{
   }
 
   /**
-    * Handles the broadcasting of valid moves to players.
-    *
-    * @param players Array of Sockets open to servers/players.
-    * @param pNum Number of player that made the move.
-    * @param move String of the move made
-    */
+   * Handles the broadcasting of valid moves to players.
+   *
+   * @param players Array of Sockets open to servers/players.
+   * @param pNum Number of player that made the move.
+   * @param move String of the move made
+   */
   public static void broadcastMove(Socket[] players, int pNum, String move){
     String fMove = Parser.formatMove(move);
     for(int i = 0; i < players.length; i++){
@@ -177,11 +187,11 @@ public class GameClient{
   }
 
   /**
-    * Handles broadcasting winner to all players.
-    *
-    * @param players Array of sockets
-    * @param winner Number of player winner
-    */
+   * Handles broadcasting winner to all players.
+   *
+   * @param players Array of sockets
+   * @param winner Number of player winner
+   */
   public static void broadcastWinner(Socket[] players, int winner){
     for(int i = 0; i < players.length; i++){
       if(!players[i].isClosed())
@@ -190,12 +200,12 @@ public class GameClient{
   }
 
   /**
-    * Handles the requesting of a move from the server.
-    *
-    * @param player Socket of player to request move from
-    *
-    * @return move made by player
-    */
+   * Handles the requesting of a move from the server.
+   *
+   * @param player Socket of player to request move from
+   *
+   * @return move made by player
+   */
   public static String requestMove(Socket player){
     getOut(player).println(MOVE_REQUEST);
     String mesg = getIn(player).nextLine();
@@ -205,13 +215,13 @@ public class GameClient{
   }
 
   /**
-    * Handles checking for a winner.
-    *
-    * @param board LogicalGameBoard
-    * @param players number of player in game
-    *
-    * @return number of the winning player, 0 if none.
-    */
+   * Handles checking for a winner.
+   *
+   * @param board LogicalGameBoard
+   * @param players number of player in game
+   *
+   * @return number of the winning player, 0 if none.
+   */
   public static int checkWinner(LogicalBoard board, int players){
     int win = 0;
     for(int i = 1; i <= players; i++){
@@ -222,11 +232,11 @@ public class GameClient{
   }
 
   /**
-    * Handles starting the GUI.
-    * Nothing more. Nothing less.
-    *
-    * @param pNum number of players in game
-    */
+   * Handles starting the GUI.
+   * Nothing more. Nothing less.
+   *
+   * @param pNum number of players in game
+   */
   public static GUI startGUI(String[] playerNames){
     Thread t = new Thread() {
       @Override
@@ -237,7 +247,7 @@ public class GameClient{
 
     t.setDaemon(true);
     t.start();
-        
+
     GUI gui = GUI.waitForGUIStartUpTest();
     Controller player = null;
     if(playerNames.length == 2)
@@ -250,12 +260,12 @@ public class GameClient{
   }
 
   /**
-    * Handle initial server contact.
-    * Send HELLO and GAME messages.
-    *
-    * @param players Array of Sockets open to all servers.
-    *
-    */ //@return String array of player names.
+   * Handle initial server contact.
+   * Send HELLO and GAME messages.
+   *
+   * @param players Array of Sockets open to all servers.
+   *
+   */ //@return String array of player names.
   public static String[] contactServers(Socket[] players){
     String[] playerNames = new String[2];
     if(players.length == 4)
@@ -313,13 +323,13 @@ public class GameClient{
   }
 
   /**
-    * Get PrintStream wrapping OutputStream of Socket.
-    * Takes care of gross try-catch block stuff.
-    *
-    * @param player Socket open to a server
-    *
-    * @return PrintStream wrapper for OutputStream
-    */
+   * Get PrintStream wrapping OutputStream of Socket.
+   * Takes care of gross try-catch block stuff.
+   *
+   * @param player Socket open to a server
+   *
+   * @return PrintStream wrapper for OutputStream
+   */
   public static PrintStream getOut(Socket player){
     try{
       return new PrintStream(player.getOutputStream());
@@ -332,13 +342,13 @@ public class GameClient{
   }
 
   /**
-    * Get Scanner wrapping InputStream of Socket.
-    * Takes care of gross try-catch block stuff.
-    *
-    * @param player Socket open to a server.
-    *
-    * @return Scanner wrapper for InputStream
-    */
+   * Get Scanner wrapping InputStream of Socket.
+   * Takes care of gross try-catch block stuff.
+   *
+   * @param player Socket open to a server.
+   *
+   * @return Scanner wrapper for InputStream
+   */
   public static Scanner getIn(Socket player){
     try{
       return new Scanner(player.getInputStream());
@@ -352,14 +362,14 @@ public class GameClient{
 
 
   /**
-    * Handle creation of socket.
-    * Creates socket from machine name and port.
-    *
-    * @param host machine name to connect to
-    * @param port port number to connect to
-    *
-    * @return Socket open to the machine/port pair given or dies
-    */
+   * Handle creation of socket.
+   * Creates socket from machine name and port.
+   *
+   * @param host machine name to connect to
+   * @param port port number to connect to
+   *
+   * @return Socket open to the machine/port pair given or dies
+   */
   public static Socket socketSetup(String host, int port) {
     try{
       return new Socket(host, port);
@@ -374,10 +384,10 @@ public class GameClient{
   }
 
   /**
-    * Closes connections to all servers at end of game.
-    * 
-    * @param players Socket array of connections to close
-    */
+   * Closes connections to all servers at end of game.
+   * 
+   * @param players Socket array of connections to close
+   */
   public static void closeConnection(Socket[] players){
     for(int i = 0; i < players.length; i++){
       try{
@@ -392,12 +402,12 @@ public class GameClient{
   }
 
   /**
-    * Handles the closing of a specific player connection.
-    * i.e. when a player is kicked for an invalid move
-    *
-    * @param players Array of players
-    * @param pNum number of player kicked
-    */
+   * Handles the closing of a specific player connection.
+   * i.e. when a player is kicked for an invalid move
+   *
+   * @param players Array of players
+   * @param pNum number of player kicked
+   */
   public static void kickPlayer(Socket[] players,int pNum,int index){
     for(int i = 0; i < players.length; i++){
       //System.out.println("PLAYER " + i + " CLOSED: " + players[i].isClosed());
@@ -414,12 +424,12 @@ public class GameClient{
   }
 
   /**
-    * Updates player number.
-    *
-    * @param p Current player number
-    *
-    * @return new player number
-    */
+   * Updates player number.
+   *
+   * @param p Current player number
+   *
+   * @return new player number
+   */
   public static int updateNumber(int p){
     switch(p){
       case 1:
@@ -436,13 +446,13 @@ public class GameClient{
 
 
   /**
-    * Handles checks for initial parameters.
-    * Checks for proper number of arguments and splits
-    * machine/port pairs into an array for easy access
-    *
-    * @param args String array of arguments to process
-    * @return String array of separated machine names and port numbers
-    */
+   * Handles checks for initial parameters.
+   * Checks for proper number of arguments and splits
+   * machine/port pairs into an array for easy access
+   *
+   * @param args String array of arguments to process
+   * @return String array of separated machine names and port numbers
+   */
   public static String[] processParams(String[] args){
     if(args.length != 2 && args.length != 4){
       System.out.println(USAGE);
@@ -464,8 +474,8 @@ public class GameClient{
   public static void main(String[] args){
     String[] pairs = processParams(args);
     if(pairs.length == 4)
-     setup2Player(pairs);
+      setup2Player(pairs);
     else
-     setup4Player(pairs); 
+      setup4Player(pairs); 
   }
 }
