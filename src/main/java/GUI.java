@@ -141,14 +141,7 @@ public class GUI extends Application implements GUIInterface {
         root.setTop(setTitleRegion());
         root.setBottom(setBottomRegion()); 
         centerAlignNodes();
-        output.appendText("-----------------\n");
-        output.appendText("Number of moves: " + numberOfMoves++ + "\n");
-        player.setWalls(player.getPlayerTurn()); // decrements this players walls
-        for(int i = 1; i <= player.getPlayerCount(); i++) {
-            output.appendText("Player " + i + ": " + playerNames[i] + 
-                            " Walls Remaining: " + player.getWalls(i) + "\n");
-        }
-        output.appendText("-----------------\n");
+
     }
     
     /**
