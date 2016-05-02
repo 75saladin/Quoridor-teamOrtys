@@ -42,7 +42,7 @@ if [ "$#" -eq 2 ]; then
     exit 1
   fi
   echo "Running 2 player"
-  java -cp build/libs/Quoridor.jar GameClient localhost:$1 localhost:$2
+  java -cp build/libs/Quoridor-all.jar GameClient localhost:$1 localhost:$2
   exit 0
 fi
 
@@ -64,6 +64,6 @@ if [ "$#" -eq 4 ]; then
     exit 1
   fi
   echo "Running 4 player"
-  java -cp build/libs/Quoridor.jar GameClient localhost:$p1 localhost:$p2 localhost:$p3 localhost:$p4
+  java -cp build/libs/Quoridor-all.jar GameClient localhost:$p1 localhost:$p2 localhost:$p3 localhost:$p4
   exit 0
 fi
