@@ -27,6 +27,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -69,6 +70,8 @@ public class GUI extends Application implements GUIInterface {
     
     // instantiation of class, utilized for external use of appliations methods
     private static GUI gui = null;
+    
+    private static final AudioClip ALERT_AUDIOCLIP = new AudioClip(GUI.class.getResource("boop.wav").toString());
     
     
     /**
@@ -196,11 +199,9 @@ public class GUI extends Application implements GUIInterface {
     private void buildWall(int column, int row, String direction) {
         final int c = revert(column);
         final int r = revert(row);
-        Toolkit.getDefaultToolkit().beep();
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                System.out.println("\007");
                 if(direction.equals("v")) {
                     grid.add(new Rectangle(7.0, 50, Color.WHITE), c + 1, r);
                     grid.add(new Rectangle(7.0, 50, Color.WHITE), c + 1, r + 2);
@@ -208,6 +209,7 @@ public class GUI extends Application implements GUIInterface {
                     grid.add(new Rectangle(50, 7.0, Color.WHITE), c, r + 1);
                     grid.add(new Rectangle(50, 7.0, Color.WHITE), c+2, r +1);
                 }
+                GUI.ALERT_AUDIOCLIP.play();
                 output.appendText("-----------------\n");
                 output.appendText("Number of moves: " + numberOfMoves++ + "\n");
                 player.setWalls(player.getPlayerTurn()); // decrements this players walls
@@ -233,14 +235,13 @@ public class GUI extends Application implements GUIInterface {
     private void movePlayer(int col, int nrow) {
         final int c = revert(col);
         final int r = revert(nrow);
-        Toolkit.getDefaultToolkit().beep();
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 int turn = player.getPlayerTurn();
                 grid.getChildren().remove(player.getPlayerNode(turn));
                 grid.add(player.getPlayerNode(turn), c, r);
-                System.out.println("\007");
+                GUI.ALERT_AUDIOCLIP.play();
                 output.appendText("-----------------\n");
                 output.appendText("Number of moves: " + numberOfMoves++ + "\n");
                 for(int i = 1; i <= player.getPlayerCount(); i++) {
