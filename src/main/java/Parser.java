@@ -50,33 +50,10 @@ public class Parser {
     */
   public static String formatMove(String move){
     String[] spirit = move.split(" ");
-    String toReturn = null;
-    int r = -1;
-    int c = -1;
-    try{
-	r = Integer.parseInt(spirit[0]);
-	c = Integer.parseInt(spirit[1]);
-    }catch(NumberFormatException e){
-	toReturn = "Invalid move " + move;
-    }
-    if(spirit.length == 2 
-       && r >= 0 
-       && r <= 8 
-       && c >= 0 
-       && c <= 8){
-      toReturn = "(" + spirit[0] + ", " + spirit[1] + ")";
-    }else if(spirit.length == 3 && 
-	     r >= 0 && 
-	     r < 8 && 
-	     c >= 0 && 
-	     c < 8 && 
-	     (spirit[2].equals("H") || spirit[2].equals("V"))){
-        toReturn = "[(" + spirit[0] + ", " + spirit[1] + "), " + spirit[2] + "]";
-      
-    }else{
-	toReturn = "Invalid move " + move;
-    }
-    return toReturn;
+    if(spirit.length == 2)
+      return "(" + spirit[0] + ", " + spirit[1] + ")";
+    else
+      return "[(" + spirit[0] + ", " + spirit[1] + "), " + spirit[2] + "]";
   } 
 
   /** Strips brackets and commas from move-string.

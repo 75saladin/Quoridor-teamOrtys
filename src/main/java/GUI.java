@@ -200,20 +200,22 @@ public class GUI extends Application implements GUIInterface {
     /**
      * Plays an mp3 when the player wins the game.
      */
-    public void winGame() {
+    public void winGame(int winner) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 Random rand = new Random();
-                int n = rand.nextInt(3) + 1;
+                int n = rand.nextInt(3);
+                output.appendText("OOOOOOOOH YEAAAA!!!\n");
+                output.appendText("Player " + winner + ": " + playerNames[winner-1] + " won the game!");
                 switch(n) {
-                    case 1:
+                    case 0:
                         GUI.WRECKED.play(100.0);
                         break;
-                    case 2:
+                    case 1:
                         GUI.OH_YEA.play(100.0);
                         break;
-                    case 3:
+                    case 2:
                         GUI.WUBBA.play(100.0);
                         break;
                                 
@@ -278,8 +280,8 @@ public class GUI extends Application implements GUIInterface {
                 output.appendText("-----------------\n");
                 output.appendText("Number of moves: " + numberOfMoves++ + "\n");
                 for(int i = 1; i <= player.getPlayerCount(); i++) {
-                    output.appendText("Player " + i + ": " + playerNames[i-1] + 
-                            " Walls Remaining: " + player.getWalls(i) + "\n");
+                    output.appendText("Player " + i + ": " + playerNames[i-1] + "\n" + 
+                            "Walls Remaining: " + player.getWalls(i) + "\n");
                 }
                 output.appendText("-----------------\n");
                 player.setPlayerTurn();
