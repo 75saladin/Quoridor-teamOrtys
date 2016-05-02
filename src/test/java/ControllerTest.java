@@ -153,6 +153,7 @@ public class ControllerTest {
     @Test
     public void testGetPlayerNode() {
         assertNull(new Controller(2).getPlayerNode(4));
+        assertNotNull(controller1.getPlayerNode(1));
         
     }
 
