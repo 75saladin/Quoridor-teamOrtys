@@ -81,6 +81,7 @@ public class GameClient{
       winner = checkWinner(gameBoard,players.length);
       if(winner != 0){
         System.out.println("WINNER: " + winner);
+        gui.winGame(winner);
         broadcastWinner(players,winner);
         running = false;
       }
@@ -93,7 +94,7 @@ public class GameClient{
         pNum = updateNumber(pNum);
       }
     }
-    gui.winGame();
+    
     try{ Thread.sleep(5000); 
 
     } catch(InterruptedException ie){ ie.printStackTrace(); }
