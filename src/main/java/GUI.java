@@ -77,6 +77,8 @@ public class GUI extends Application implements GUIInterface {
     
     private static final AudioClip WIN_CLIP = new AudioClip(GUI.class.getResource("/winner.mp3").toString());
     
+    private static final AudioClip OH_YEA = new AudioClip("https://d2eopxgp627wep.cloudfront.net/ps/audios/000/000/547/original/Oooo_yeah__caaan_doo!.wav?1441333631");
+    
     
     /**
      * Constructor.
@@ -200,7 +202,8 @@ public class GUI extends Application implements GUIInterface {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                GUI.WIN_CLIP.play();
+                GUI.OH_YEA.play();
+                //GUI.WIN_CLIP.play();
             }
         }) ;
     }
