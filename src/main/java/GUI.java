@@ -1,4 +1,12 @@
-
+/**
+ * The GUI is the user interface for the game. This class utilizes javafx.
+ * More specifically the class utilizes a BorderPane as it's root scene and
+ * and a GridPane to display the actual game. The players are StackPanes and 
+ * the combination of text and Circle objects. This board does allow a human 
+ * interaction, however this interaction needs to be set up through the client.
+ * 
+ */
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import javafx.application.Application;
@@ -25,7 +33,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 
-/* This class is the GUI for the game. Implements GUIInterface and extends Application */
+
 
 /**
  *
@@ -41,12 +49,16 @@ public class GUI extends Application implements GUIInterface {
     private Controller player; 
     
     private TextArea output = null; // text area to broadcast game events
-
-    private GridPane loserBox = new GridPane(); // the loserBox to put kicked players
     
     private boolean person = false;
     
     private String move;
+    
+    private String[] playerNames;
+    
+    private TextArea walls = null;
+    
+    private int numberOfMoves = 0;
     
     
     // launches threads in synch
@@ -57,7 +69,7 @@ public class GUI extends Application implements GUIInterface {
     
     
     /**
-     * Constructor
+     * Constructor.
      */
     public GUI() {
         player = new Controller(2);
@@ -65,10 +77,11 @@ public class GUI extends Application implements GUIInterface {
         
     }
     
-    // waiting for gui to set up
 
     /**
-     *
+     * Statically instantiates a GUI object for external reference and 
+     * utilizes a countdownlatch to synchronize the launching of the application
+     * threads. 
      * @return An instantiation of the GUI for external class reference. 
      */
     public static GUI waitForGUIStartUpTest()  {
@@ -82,8 +95,9 @@ public class GUI extends Application implements GUIInterface {
     }
     
     /**
-     * 
-     * @param g: Passing in parameter to initialize an instantion of GUI within itself
+     * Sets gui object with internal instantiation and starts the coundown
+     * on the countdownlatch.
+     * @param g: Passing in parameter to initialize an instantiation of GUI object.
      *
      */
     public static void guiStartUpTest(GUI g) {
@@ -92,16 +106,17 @@ public class GUI extends Application implements GUIInterface {
     }
     
     /**
+     * Sets the controller for the player objects in the game. Only
+     * called during four player game.
+     * @param c The player object to set up with. Used for four player game.
      * 
-     * @param c: The player object to set up with
-     * Used for four player game
      */
     public void setPlayer(Controller c) {
         player = c;
     }
     
     /**
-     *  Closes the application upon call
+     *  Closes the application upon call.
      */
     public void stopApplication() {
         try {
@@ -113,7 +128,7 @@ public class GUI extends Application implements GUIInterface {
     }
     
     /**
-     * Sets up the initial configurations for the gui
+     * Sets up the initial configurations for the user interface.
      */
     @Override
     public void init() {
@@ -126,12 +141,20 @@ public class GUI extends Application implements GUIInterface {
         root.setTop(setTitleRegion());
         root.setBottom(setBottomRegion()); 
         centerAlignNodes();
+        output.appendText("-----------------\n");
+        output.appendText("Number of moves: " + numberOfMoves++ + "\n");
+        player.setWalls(player.getPlayerTurn()); // decrements this players walls
+        for(int i = 1; i <= player.getPlayerCount(); i++) {
+            output.appendText("Player " + i + ": " + playerNames[i] + 
+                            " Walls Remaining: " + player.getWalls(i) + "\n");
+        }
+        output.appendText("-----------------\n");
     }
     
     /**
      * 
-     * @param stage: Main stage to work off
-     * Entry point for javaFX Applications
+     * @param stage Main stage.
+     * Entry point for javaFX Applications.
      */
     @Override
     public void start(Stage stage) {
@@ -146,8 +169,8 @@ public class GUI extends Application implements GUIInterface {
     }
 
     /**
-     * @param move: The move to update the board.
-     * Calls buildWall or movePlayer based on the message passed in
+     * @param move Updates board with move.
+     * Calls buildWall or movePlayer based on the message passed in.
      */
     @Override
     public void update(String move) {
@@ -170,8 +193,8 @@ public class GUI extends Application implements GUIInterface {
 
     /**
      * 
-     * @param column: the column to move the player
-     * @param row: the column to move the player
+     * @param column The column to move the player
+     * @param row The column to move the player
      * builds a wall based on the c, r, and direction
      */
     private void buildWall(int column, int row, String direction) {
@@ -189,8 +212,15 @@ public class GUI extends Application implements GUIInterface {
                     grid.add(new Rectangle(50, 7.0, Color.WHITE), c, r + 1);
                     grid.add(new Rectangle(50, 7.0, Color.WHITE), c+2, r +1);
                 }
-                output.appendText("Player " + player.getPlayerTurn() + " placed wall " +
-                              "column " + column + " row " + row + " " + direction + "\n\n");
+                output.appendText("-----------------\n");
+                output.appendText("Number of moves: " + numberOfMoves++ + "\n");
+                player.setWalls(player.getPlayerTurn()); // decrements this players walls
+                for(int i = 1; i <= player.getPlayerCount(); i++) {
+                    output.appendText("Player " + i + ": " + playerNames[i] + 
+                            " Walls Remaining: " + player.getWalls(i) + "\n");
+                }
+                output.appendText("-----------------\n");
+                
                 player.setPlayerTurn();
             }
         });
@@ -213,9 +243,14 @@ public class GUI extends Application implements GUIInterface {
                 int turn = player.getPlayerTurn();
                 grid.getChildren().remove(player.getPlayerNode(turn));
                 grid.add(player.getPlayerNode(turn), c, r);
-                output.appendText("Player " + player.getPlayerTurn() + " moved to " +
-                              "Column " + col + " Row " + nrow + "\n\n");
-                player.setPlayerPosition(turn, col, nrow);
+                output.appendText("-----------------\n");
+                output.appendText("Number of moves: " + numberOfMoves++ + "\n");
+                player.setWalls(player.getPlayerTurn()); // decrements this players walls
+                for(int i = 1; i <= player.getPlayerCount(); i++) {
+                    output.appendText("Player " + i + ": " + playerNames[i] + 
+                            " Walls Remaining: " + player.getWalls(i) + "\n");
+                }
+                output.appendText("-----------------\n");
                 player.setPlayerTurn();
             }
         });
@@ -223,10 +258,14 @@ public class GUI extends Application implements GUIInterface {
     }
 
     /** 
-     * @param num: The player to kick.
+     * @param num The player number to kick. 
+     * @throws IllegalArgumentException if the parameter is less than 0 or 
+     * greater than 4.
      * Kicks the player passed in.
      */
     public void removePlayer(int num) {
+        if(num < 0 || num > 4) 
+            throw new IllegalArgumentException("Number < 0 or > 4");
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -244,8 +283,8 @@ public class GUI extends Application implements GUIInterface {
     }
     
     /**
-     * 
-     * @return the move string generated by user click
+     * Gets a move generated by a user click event.
+     * @return The move string generated by user click event.
      */
     public String getMove() {
         if(person) {
@@ -270,15 +309,23 @@ public class GUI extends Application implements GUIInterface {
     }
     
     /**
-     *
-     * @param set: Sets boolean for click events. True the human server
+     * Removes click functionality on board if setting the person to false. 
+     * The person represents human interaction.
+     * @param set: Sets boolean for click events. If true the human server
      *  can now click. 
      */
     public void setPerson(boolean set) {
         person = set;
     }
     
-
+    /** 
+     * 
+     * @param names: The array of player names.
+     * Sets the player 
+     */
+    public void setPlayerArray(String[] names) {
+        names = playerNames;
+    }
 
     /**
      * 
@@ -410,7 +457,7 @@ public class GUI extends Application implements GUIInterface {
         output = new TextArea();
         output.setWrapText(true);
         output.setPrefWidth(200);
-        output.setPrefHeight(100);
+        output.setPrefHeight(400);
         
         vb.getChildren().addAll(label, output);
         vb.getStylesheets().addAll(this.getClass().getResource("Layout.css").toExternalForm());

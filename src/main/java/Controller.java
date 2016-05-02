@@ -35,6 +35,11 @@ public class  Controller{
     private Circle circle2;
     private Circle circle3;
     private Circle circle4;
+    
+    private int walls1;
+    private int walls2;
+    private int walls3;
+    private int walls4;
 
     
     
@@ -48,6 +53,44 @@ public class  Controller{
             throw new IndexOutOfBoundsException();
         }
         
+    }
+    
+    /**
+     * 
+     * @param pNum The player number.
+     * @return The number of walls specific to the player number.
+     */
+    public int getWalls(int pNum) {
+        switch(pNum) {
+            case 1:
+                return walls1;
+            case 2:
+                return walls2;
+            case 3:
+                return walls3;
+            case 4:
+                return walls4;
+        }
+        
+        return -1;
+    }
+    
+    /**
+     * 
+     * @param pNum The number of the player.
+     * Decreases the number of walls specific to the player. 
+     */
+    public void setWalls(int pNum) {
+        switch(pNum) {
+            case 1:
+                walls1--;
+            case 2:
+                walls2--;
+            case 3:
+                walls3--;
+            case 4:
+                walls4--;
+        }
     }
     
     // pre: none
@@ -104,21 +147,25 @@ public class  Controller{
                 position1 = null;
                 player1 = null;
                 circle1 = null;
+                walls1 = 0; 
                 break;
             case 2:
                 position2 = null;
                 player2 = null;
                 circle2 = null;
+                walls2 = 0;
                 break;
             case 3:
                 position3 = null;
                 player3 = null;
                 circle3 = null;
+                walls2 = 0;
                 break;
             case 4:
                 position4 = null;
                 player4 = null;
                 circle4 = null;
+                walls4 = 0; 
                 break;
         }
     }
@@ -200,22 +247,37 @@ public class  Controller{
      * Sets the players initial point
      */
     private void setPlayers(int n) {
-        circle1 = new Circle(20.0, Color.BLUE);
-        player1 = new StackPane(circle1, new Text("1"));
-        position1 = new Point(4, 0);
-        
-        circle2 = new Circle(20.0, Color.DARKGREEN);
-        player2 = new StackPane(circle2, new Text("2"));
-        position2 = new Point(4, 8);
-        
         if(n == 4) {
+            circle1 = new Circle(20.0, Color.BLUE);
+            player1 = new StackPane(circle1, new Text("1"));
+            position1 = new Point(4, 0);
+            walls1 = 5;
+            
+            circle2 = new Circle(20.0, Color.DARKGREEN);
+            player2 = new StackPane(circle2, new Text("2"));
+            position2 = new Point(4, 8);
+            walls2 = 5;
+        
             circle3 = new Circle(20.0, Color.YELLOW);
             player3 = new StackPane(circle3, new Text("3"));
             position3 = new Point(0, 4);
+            walls3 = 5;
             
             circle4 = new Circle(20.0, Color.DARKORANGE);
             player4 = new StackPane(circle4, new Text("4"));
             position4 = new Point(8, 4);
+            walls4 = 5;
+        } else {
+            circle1 = new Circle(20.0, Color.BLUE);
+            player1 = new StackPane(circle1, new Text("1"));
+            position1 = new Point(4, 0);
+            walls1 = 10;
+            
+            circle2 = new Circle(20.0, Color.DARKGREEN);
+            player2 = new StackPane(circle2, new Text("2"));
+            position2 = new Point(4, 8);
+            walls2 = 10;
+            
         }
         
     }
