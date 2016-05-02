@@ -212,7 +212,7 @@ public class GUI extends Application implements GUIInterface {
                 System.out.println(Arrays.toString(playerNames));
                 for(int i = 1; i <= playerNames.length; i++) {
                     output.appendText("Player " + i + ": " + playerNames[i-1] + "\n" + 
-                            " Walls Remaining: " + player.getWalls(i) + "\n");
+                            "Walls Remaining: " + player.getWalls(i) + "\n");
                 }
                 output.appendText("-----------------\n");
                 
@@ -240,9 +240,9 @@ public class GUI extends Application implements GUIInterface {
                 grid.add(player.getPlayerNode(turn), c, r);
                 output.appendText("-----------------\n");
                 output.appendText("Number of moves: " + numberOfMoves++ + "\n");
-                for(int i = 1; i <= player.getPlayerCount(); i++) {
-                    output.appendText("Player " + i + ": " + playerNames[i-1] + 
-                            " Walls Remaining: " + player.getWalls(i) + "\n");
+                for(int i = 1; i <= playerNames.length; i++) {
+                    output.appendText("Player " + i + ": " + playerNames[i-1] + "\n" + 
+                            "Walls Remaining: " + player.getWalls(i) + "\n");
                 }
                 output.appendText("-----------------\n");
                 player.setPlayerTurn();
