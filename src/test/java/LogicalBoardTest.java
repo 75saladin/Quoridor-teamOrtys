@@ -481,21 +481,21 @@ public class LogicalBoardTest {
     @Test
     public void checkValidsAcceptsValidMoves() throws Exception {
 	//Moves in a circle, testing each direction
-        assertTrue(boardTwo.getVertexByCoord(4,0).isPlayerHere());
+        assertTrue(boardTwo.getVertexByCoord(4,0).isHere());
         Player one = boardTwo.getPlayer(1);
         assertEquals(boardTwo.getPlayerNum(one),1);
-        assertTrue(boardTwo.getVertexByCoord(4,8).isPlayerHere());
+        assertTrue(boardTwo.getVertexByCoord(4,8).isHere());
 	assertTrue(boardTwo.checkValid(1, "4 1"));  
         assertEquals(boardTwo.getPlayer(1).getR(),1);
         assertEquals(boardTwo.getPlayer(1).getC(),4);
-        assertFalse(boardTwo.getVertexByCoord(4,0).isPlayerHere());
+        assertFalse(boardTwo.getVertexByCoord(4,0).isHere());
 	assertTrue(boardTwo.checkValid(1, "3 1"));
         assertEquals(boardTwo.getPlayer(1).getR(),1);
         assertEquals(boardTwo.getPlayer(1).getC(),3);
 	assertTrue(boardTwo.checkValid(1, "4 1"));
         assertEquals(boardTwo.getPlayer(1).getR(),1);
         assertEquals(boardTwo.getPlayer(1).getC(),4);
-        assertFalse(boardTwo.getVertexByCoord(4,0).isPlayerHere());
+        assertFalse(boardTwo.getVertexByCoord(4,0).isHere());
 	assertTrue(boardTwo.checkValid(1, "4 0"));	
         assertEquals(boardTwo.getPlayer(1).getR(),0);
         assertEquals(boardTwo.getPlayer(1).getC(),4);

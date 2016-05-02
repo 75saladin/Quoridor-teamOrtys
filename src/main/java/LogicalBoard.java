@@ -1,6 +1,3 @@
-
-
-
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -14,21 +11,24 @@ import org.jgrapht.graph.ClassBasedVertexFactory;
 import org.jgrapht.graph.SimpleGraph;
 
 /**
- *
- * @author craig
+ * An object representing a board state. Contains a jgrapht.UndirectedGraph 
+ * with board squares represented by vertices and valid (ie, not blocked by a 
+ * wall) moves between them. Also contains the set of players in the game.
+ * 
  */
 public class LogicalBoard {
 
-    // the board as a 9X9 graph
+    /** The board represented as a graph. Vertices are board squares and edges 
+     *  connect vertices that have no wall between them. */
     public UndirectedGraph<Vertex, Edge> board = new SimpleGraph<Vertex, Edge>(Edge.class);
-    // the set of players in the game
+    
+    /** The set of players in the game, indexed by playerNumber-1 */
     public Player[] players;
-    // the set of edges in the game
 
     /**
      * Constructor
      *
-     * @param playerCount - number of players in this game
+     * @param playerCount Number of players in this game
      */
     public LogicalBoard(int playerCount) {
         GridGraphGenerator<Vertex, Edge> graphGenerator
@@ -66,10 +66,10 @@ public class LogicalBoard {
 
     //API methods; to be called by whoever instantiates a board
     /**
-     * hasWon - Checks whether or not the given player has won the game
+     * hasWon Checks whether or not the given player has won the game
      *
-     * @param playerNum - player to be determined winner
-     * @return - true or false if player has won
+     * @param playerNum Player # of the player to check
+     * @return Whether or not the player has won
      */
     public boolean hasWon(int playerNum) {
         Player p = players[playerNum - 1];
@@ -103,9 +103,9 @@ public class LogicalBoard {
     }
 
     /**
-     * kick - removes from the board the player with the given player number
+     * Removes from the board the player with the given player number
      *
-     * @param playerNum - player to kick
+     * @param playerNum Player to kick
      */
     public void kick(int playerNum) {
         Player p = getPlayer(playerNum);
@@ -116,10 +116,10 @@ public class LogicalBoard {
     }
 
     /**
-     * getShortestWinningPath - Gets the shortest win path for the given player
+     * Gets the shortest win path for the given player
      *
-     * @param playerNum - player to check
-     * @return - DijkstraShortestPath of player's shortest winning path
+     * @param playerNum Player to check
+     * @return DijkstraShortestPath of player's shortest winning path
      */
     public DijkstraShortestPath<Vertex, Edge> getShortestWinningPath(int playerNum,UndirectedGraph<Vertex,Edge> board) {
         if(getPlayer(playerNum)==null)
@@ -179,13 +179,13 @@ public class LogicalBoard {
     }
 
     /**
-     * checkValid - Checks whether or not the given player can make the given
+     * Checks whether or not the given player can make the given
      * move. If it's a valid move, returns true and automatically makes the
      * move.
      *
-     * @param playerNum - player to check
-     * @param move - A string representing the move in the parsed format
-     * @return - whether or not it's a valid move
+     * @param playerNum Player to check
+     * @param move A string representing the move in the parsed format
+     * @return Whether or not it's a valid move
      */
     public boolean checkValid(int playerNum, String move) {
         if (move.contains("Error")) {
@@ -212,12 +212,12 @@ public class LogicalBoard {
 
     //Helper methods; they get called under the hood of the API
     /**
-     * validMove - Checks whether or not the given player can make the given
+     * Checks whether or not the given player can make the given
      * move.
      *
-     * @param playerNum - player to check
-     * @param move - A string representing the move: "[c] [r]"
-     * @return whether or not it is a valid move
+     * @param playerNum  Player to check
+     * @param move A string representing the move: "[c] [r]"
+     * @return Whether or not it is a valid move
      */
     public boolean validMove(int playerNum, String move) {
         Scanner sc = new Scanner(move);
@@ -234,12 +234,12 @@ public class LogicalBoard {
     }
 
     /**
-     * makeMove - Puts a player in a given destination. This will make the move,
+     * Puts a player in a given destination. This will make the move,
      * always; the given player and move combo should be passed into validMove()
      * just before makeMove().
      *
-     * @param playerNum - The player to move
-     * @param move - The destination to move the player to
+     * @param playerNum The player to move
+     * @param move The destination to move the player to
      */
     public void makeMove(int playerNum, String move) {
         Player player = getPlayer(playerNum);
@@ -257,11 +257,11 @@ public class LogicalBoard {
     }
 
     /**
-     * validWall - checks whether or not a given player can place a given wall
+     * Checks whether or not a given player can place a given wall
      *
-     * @param playerNum - player placing wall
-     * @param wall - A string representing the wall: "[c] [r] [d]"
-     * @return - whether or not the wall placement is valid
+     * @param playerNum Player placing wall
+     * @param wall A string representing the wall: "[c] [r] [d]"
+     * @return Whether or not the wall placement is valid
      */
     public boolean validWall(int playerNum, String wall) {
         // cannot leave if one thing is true, must check all
@@ -315,8 +315,8 @@ public class LogicalBoard {
      * Places a wall. This wall must be validated by validWall() BEFORE being
      * placed.
      *
-     * @param playerNum - player that is placing the wall.
-     * @param wall - A string representing the wall: "[c] [r] [d]"
+     * @param playerNum Player that is placing the wall.
+     * @param wall A string representing the wall: "[c] [r] [d]"
      */
     public void placeWall(int playerNum, String wall) {
         Player player = getPlayer(playerNum);
@@ -332,10 +332,10 @@ public class LogicalBoard {
     }
 
     /**
-     * getValidMoves - Returns the set of vertices the given player can move to
+     * Returns the set of vertices the given player can move to
      *
-     * @param playerNum - the player to check
-     * @return - The set of vertices the player can move to this turn
+     * @param playerNum The player to check
+     * @return The set of vertices the player can move to this turn
      */
     public Set<Vertex> getValidMoves(int playerNum) {
         
@@ -346,10 +346,10 @@ public class LogicalBoard {
     }
 
     /**
-     * validMovesOf - returns the set of vertices a given player can move to.
+     * Returns the set of vertices a given player can move to.
      *
-     * @param p - the player to check
-     * @param ignoreJump - the set of players that p must not jump over. Moves
+     * @param p The player to check
+     * @param ignoreJump The set of players that p must not jump over. Moves
      * that are accessed by jumping are added through a recursive call, passing
      * in the adjacent player. If the player being jumped didn't ignore the
      * jumping player, there would be an infinite reursive call alternating
@@ -417,12 +417,12 @@ public class LogicalBoard {
 
     /**
      *
-     * pathBlocked - Checks whether or not the given wall blocks all of the
+     * Checks whether or not the given wall blocks all of the
      * given player's remaining win paths.
      *
-     * @param playerNum - the player to check
-     * @param edgeSet - the set of edges representing the wall to check
-     * @return - whether or not edgeSet blocks playerNum from winning
+     * @param playerNum The player to check
+     * @param edgeSet The set of edges representing the wall to check
+     * @return Whether or not edgeSet blocks playerNum from winning
      */
     public boolean pathBlocked(int playerNum, Set<Edge> edgeSet) {
         Player p = getPlayer(playerNum);
@@ -497,12 +497,12 @@ public class LogicalBoard {
     }
 
     /**
-     * hasEdge - returns whether or not the two vertices have an edge between
+     * Returns whether or not the two vertices have an edge between
      * them. ie, checks if there is not a wall between the two vertices.
      *
-     * @param destination - one vertex
-     * @param Source - the other vertex
-     * @return - if the path is clear
+     * @param destination One vertex
+     * @param Source The other vertex
+     * @return If the path is clear
      */
     private boolean hasEdge(Vertex destination, Vertex Source) {
         if (board.containsEdge(Source, destination)) {
@@ -512,9 +512,9 @@ public class LogicalBoard {
     }
 
     /**
-     * enoughPlayers - checks if the game has enough players to continue
+     * Checks if the game has enough players to continue
      *
-     * @return - whether or not there are enough players to continue playing
+     * @return Whether or not there are enough players to continue playing
      */
     public boolean enoughPlayers() {
         if (getPlayerCount() > 1) {
@@ -525,27 +525,27 @@ public class LogicalBoard {
 
     //Getters and Setters
     /**
-     * vertexSet - gets the set of vertices on the board
+     * Gets the set of vertices on the board
      *
-     * @return - the set of vertices on the board
+     * @return The set of vertices on the board
      */
     public Set<Vertex> vertexSet() {
         return board.vertexSet();
     }
 
     /**
-     * edgeSet - gets the set of edges on the board
+     * Gets the set of edges on the board
      *
-     * @return - the set of edges on the board
+     * @return The set of edges on the board
      */
     public Set<Edge> edgeSet() {
         return board.edgeSet();
     }
 
     /**
-     * getPlayer - given a player number, gets the associated Player object
+     * Given a player number, gets the associated Player object
      *
-     * @param playerNum - player number
+     * @param playerNum Player number
      * @return Player object
      */
     public Player getPlayer(int playerNum) {
@@ -555,10 +555,10 @@ public class LogicalBoard {
     }
 
     /**
-     * getPlayer - Given a vertex, returns the player on that vertex. If there
+     * Given a vertex, returns the player on that vertex. If there
      * is none, returns null.
      *
-     * @param v - vertex in question
+     * @param v Vertex in question
      * @return Player on that vertex (or null if none)
      */
     public Player getPlayer(Vertex v) {
@@ -572,8 +572,8 @@ public class LogicalBoard {
     /**
      * getPlayerNum - given a player object, returns their player number
      *
-     * @param p - the player
-     * @return - the player number
+     * @param p The player
+     * @return The player number
      */
     public int getPlayerNum(Player p) {
         if(p==null)
@@ -590,9 +590,9 @@ public class LogicalBoard {
     }
 
     /**
-     * getPlayerCount - returns the number of players still in the game.
+     * Returns the number of players still in the game.
      *
-     * @return - number of players
+     * @return Number of players
      */
     public int getPlayerCount() {
         int temp = 0;
@@ -605,11 +605,11 @@ public class LogicalBoard {
     }
 
     /**
-     * getVertexByCoord - returns Vertex object at that coordinate on the board
+     * Returns Vertex object at that coordinate on the board
      *
-     * @param c - Column of vertex
-     * @param r - Row of Vertex
-     * @return - Vertex object at that location on the board
+     * @param c Column of vertex
+     * @param r Row of Vertex
+     * @return Vertex object at that location on the board
      */
     public Vertex getVertexByCoord(int c, int r) {
         for (Vertex v : board.vertexSet()) {
@@ -621,12 +621,12 @@ public class LogicalBoard {
     }
 
     /**
-     * getVertexByCoord - returns Vertex object at that coordinate on the board
+     * Returns Vertex object at that coordinate on the board
      *
-     * @param c - Column of vertex
-     * @param r - Row of Vertex
-     * @param board - board to get edgset from not just the default board
-     * @return - Vertex object at that location on the board
+     * @param c Column of vertex
+     * @param r Row of Vertex
+     * @param board Board to get edgset from not just the default board
+     * @return Vertex object at that location on the board
      */
     public Vertex getVertexByCoord(int c, int r, UndirectedGraph<Vertex, Edge> board) {
         for (Vertex v : board.vertexSet()) {
@@ -638,10 +638,10 @@ public class LogicalBoard {
     }
 
     /**
-     * getEdgesToRemove - gets the edges to remove when placing a wall
+     * Gets the edges to remove when placing a wall
      *
-     * @param wall - The wall as a string: "[c] [r] [d]"
-     * @return - the set of edges to remove from the board to place that wall
+     * @param wall The wall as a string: "[c] [r] [d]"
+     * @return The set of edges to remove from the board to place that wall
      */
     public Set<Edge> getEdgesToRemove(String wall) {
         Scanner sc = new Scanner(wall);
@@ -684,9 +684,9 @@ public class LogicalBoard {
     }
 
     /**
-     * setWalls - Sets wall counts for all players depending on player count
+     * Sets wall counts for all players depending on player count
      *
-     * @param playerCount - number of players in the game
+     * @param playerCount Number of players in the game
      */
     private void setWalls(int playerCount) {
         if (playerCount == 2) {
@@ -701,10 +701,10 @@ public class LogicalBoard {
     }
 
     /**
-     * addPlayer - puts a player on the board, using the coordinates in the
+     * Puts a player on the board, using the coordinates in the
      * Player object.
      *
-     * @param player - the player to add
+     * @param player The player to add
      */
     private void addPlayer(Player player) {
         getVertexByCoord(player.getC(), player.getR()).placePlayer();
@@ -712,11 +712,11 @@ public class LogicalBoard {
 
     //Testing only methods
     /**
-     * removeWall - FOR TESTING PURPOSES ONLY. Removes a wall and increments the
+     * FOR TESTING PURPOSES ONLY. Removes a wall and increments the
      * player's wallcount. To be called just after placing a wall.
      *
-     * @param playerNum - player number whose wallcount needs to be reverted
-     * @param wall - the wall to remove
+     * @param playerNum Player number whose wallcount needs to be reverted
+     * @param wall The wall to remove
      */
     public void removeWall(int playerNum, String wall) {
         Player p = getPlayer(playerNum);
@@ -743,12 +743,12 @@ public class LogicalBoard {
 
     /**
      *
-     * pathLengthAfterWall - returns the length of the players path if a wall is placed
+     * Returns the length of the players path if a wall is placed
      *
      *
-     * @param playerNum - the player to check
-     * @param wall - wall to be place to see if it will be best
-     * @return - whether or not edgeSet blocks playerNum from winning
+     * @param playerNum The player to check
+     * @param wall Wall to be place to see if it will be best
+     * @return Whether or not edgeSet blocks playerNum from winning
      */
     public int pathLengthAfterWall(int playerNum, String wall){
         // Duplicate board SETUP
@@ -765,8 +765,7 @@ public class LogicalBoard {
      * Places a wall. This wall must be validated by validWall() BEFORE being
      * placed. ## Modified for pathLengthAfterWall
      *
-     * @param playerNum - player that is placing the wall.
-     * @param wall - A string representing the wall: "[c] [r] [d]"
+     * @param wall A string representing the wall: "[c] [r] [d]"
      */
     public void placeWall(String wall,UndirectedGraph<Vertex,Edge> boardCopy) {
         Set<Edge> edgesToRemove = getEdgesToRemove(wall,boardCopy);
@@ -775,10 +774,10 @@ public class LogicalBoard {
         }
     }
     /**
-     * getEdgesToRemove - gets the edges to remove when placing a wall
+     * Gets the edges to remove when placing a wall
      * ## Modified for pathLengthAfterWall
-     * @param wall - The wall as a string: "[c] [r] [d]"
-     * @return - the set of edges to remove from the board to place that wall
+     * @param wall The wall as a string: "[c] [r] [d]"
+     * @return The set of edges to remove from the board to place that wall
      */
     public Set<Edge> getEdgesToRemove(String wall,UndirectedGraph<Vertex,Edge> boardCopy) {
         Scanner sc = new Scanner(wall);

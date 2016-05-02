@@ -1,5 +1,9 @@
 
 
+/**
+ *
+ * @author jed_lechner
+ */
 public class Parser {
 
   /**
@@ -53,8 +57,8 @@ public class Parser {
   } 
 
   /** Strips brackets and commas from move-string.
-   * Ex. Pawn movement (0, 3) --> 0 3
-   *     Wall placement [(0, 3), h] --> 0 3 h
+   * Ex. Pawn movement (0, 3) to 0 3
+   *     Wall placement [(0, 3), h] to 0 3 h
    *
    * @param s The string to have the brackets stripped from.
    * @return a String with all of its brackets stripped.
