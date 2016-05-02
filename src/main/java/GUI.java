@@ -6,6 +6,7 @@
  * interaction, however this interaction needs to be set up through the client.
  * 
  */
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +33,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 
 
 
@@ -194,11 +196,11 @@ public class GUI extends Application implements GUIInterface {
     private void buildWall(int column, int row, String direction) {
         final int c = revert(column);
         final int r = revert(row);
-        
+        Toolkit.getDefaultToolkit().beep();
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                System.out.println("Building wall");
+                System.out.println("\007");
                 if(direction.equals("v")) {
                     grid.add(new Rectangle(7.0, 50, Color.WHITE), c + 1, r);
                     grid.add(new Rectangle(7.0, 50, Color.WHITE), c + 1, r + 2);
@@ -212,7 +214,7 @@ public class GUI extends Application implements GUIInterface {
                 System.out.println(Arrays.toString(playerNames));
                 for(int i = 1; i <= playerNames.length; i++) {
                     output.appendText("Player " + i + ": " + playerNames[i-1] + "\n" + 
-                            "Walls Remaining: " + player.getWalls(i) + "\n");
+                            " Walls Remaining: " + player.getWalls(i) + "\n");
                 }
                 output.appendText("-----------------\n");
                 
@@ -231,18 +233,19 @@ public class GUI extends Application implements GUIInterface {
     private void movePlayer(int col, int nrow) {
         final int c = revert(col);
         final int r = revert(nrow);
-        
+        Toolkit.getDefaultToolkit().beep();
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 int turn = player.getPlayerTurn();
                 grid.getChildren().remove(player.getPlayerNode(turn));
                 grid.add(player.getPlayerNode(turn), c, r);
+                System.out.println("\007");
                 output.appendText("-----------------\n");
                 output.appendText("Number of moves: " + numberOfMoves++ + "\n");
-                for(int i = 1; i <= playerNames.length; i++) {
-                    output.appendText("Player " + i + ": " + playerNames[i-1] + "\n" + 
-                            "Walls Remaining: " + player.getWalls(i) + "\n");
+                for(int i = 1; i <= player.getPlayerCount(); i++) {
+                    output.appendText("Player " + i + ": " + playerNames[i-1] + 
+                            " Walls Remaining: " + player.getWalls(i) + "\n");
                 }
                 output.appendText("-----------------\n");
                 player.setPlayerTurn();
