@@ -32,9 +32,10 @@ public interface GUIInterface {
     public abstract void stopApplication();
     
     /**
+     * @param The winner of the game.
      * Plays music if the player wins the game.
      */
-    public abstract void winGame();
+    public abstract void winGame(int winner);
     
     /**
      * @param The player number to remove.
