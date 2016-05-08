@@ -53,7 +53,7 @@ public class Parser {
     if(spirit.length == 2)
       return "(" + spirit[0] + ", " + spirit[1] + ")";
     else
-      return "[(" + spirit[0] + ", " + spirit[1] + "), " + spirit[2] + "]";
+	return "[(" + spirit[0] + ", " + spirit[1] + "), " + spirit[2].toLowerCase() + "]";
   } 
 
   /** Strips brackets and commas from move-string.
