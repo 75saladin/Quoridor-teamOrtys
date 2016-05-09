@@ -37,10 +37,10 @@ if [ "$ck" -ne 0 ]; then
 fi
 
 # Launch servers in own terminals
-gnome-terminal -e "./serverStart $p1" &
-gnome-terminal -e "./serverStart $p2" &
-gnome-terminal -e "./serverStart $p3" &
-gnome-terminal -e "./serverStart $p4" &
+xterm -e "./serverStart $p1" &
+xterm -e "./serverStart $p2" &
+xterm -e "./serverStart $p3" &
+xterm -e "./serverStart $p4" &
 
 # Wait for servers to start. (Thank you hivemind for the idea)
 sleep 1;
