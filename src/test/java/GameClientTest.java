@@ -13,7 +13,7 @@ import java.util.*;
 import java.io.*;
 
 public class GameClientTest{
-  
+
   GameServer server1;
   GameServer server2;
   LogicalBoard gameBoard;
@@ -42,7 +42,7 @@ public class GameClientTest{
 
     String[] testProcess = GameClient.processParams(testArgs);
 
-    String[] expectedArray = {"localhost","5555","localhost","5554"};
+    String[] expectedArray = {"localhost","5555","localhost","5554",null,null,null,null};
 
     assertNotNull("Array should contain values",testProcess);
 
@@ -54,7 +54,7 @@ public class GameClientTest{
   @Test
   public void GamClientSocketSetupTest() throws Exception{
 
-    Thread t = new Thread() { 
+    Thread t = new Thread() {
       public void handle() {
     	  server1.connect();
     	}
@@ -72,14 +72,14 @@ public class GameClientTest{
     };
     c1.setDaemon(true);
     c1.start();
-  
+
   }
 
   //test getting input stream for server
   @Test
   public void GameClientGetServerInputStreamTest() throws Exception{
 
-    Thread t = new Thread() { 
+    Thread t = new Thread() {
       public void handle() {
     	  server1.connect();
     	}
@@ -99,14 +99,14 @@ public class GameClientTest{
     };
     c.setDaemon(true);
     c.start();
-  
+
   }
 
   //test getting output stream for player
   @Test
   public void GameClientGetServerOutputStreamTest() throws Exception{
 
-    Thread t = new Thread() { 
+    Thread t = new Thread() {
       public void handle() {
     	  server1.connect();
     	}
@@ -126,13 +126,13 @@ public class GameClientTest{
     };
     c.setDaemon(true);
     c.start();
-  } 
+  }
 
   //test initial contact with servers
   @Test
   public void GameClientInitialServerContactTest() throws Exception{
 
-    Thread t = new Thread() { 
+    Thread t = new Thread() {
       public void handle() {
     	  server1.connect();
         server2.connect();
@@ -154,13 +154,13 @@ public class GameClientTest{
     };
     c.setDaemon(true);
     c.start();
-  } 
+  }
 
   //test starting of GUI
   @Test
   @Ignore
   public void GameClientStartGUITest() throws Exception{
-    
+
     int players = 2;
     String[] names = {"RICK","RICK"};
     GUI gui = GameClient.startGUI(names);
@@ -171,7 +171,7 @@ public class GameClientTest{
   @Test
   public void GameClientRequestMoveTest() throws Exception{
 
-    Thread t = new Thread() { 
+    Thread t = new Thread() {
       public void handle() {
     	  server1.connect();
         server2.connect();
@@ -179,7 +179,7 @@ public class GameClientTest{
     };
     t.setDaemon(true);
     t.start();
-    
+
     Thread c = new Thread() {
       public void handle() {
         try {
@@ -187,7 +187,7 @@ public class GameClientTest{
           Socket player2Socket = GameClient.socketSetup("localhost",2001);
           Socket[] players = {player1Socket,player2Socket};
           GameClient.contactServers(players);
-          
+
           String move = GameClient.requestMove(players[0]);
 
           assertNotNull("Player 1 should have made a move",move);
@@ -198,13 +198,13 @@ public class GameClientTest{
     };
     c.setDaemon(true);
     c.start();
-  } 
-  
+  }
+
   //test broadcasting a winner to players
   @Test
   public void GameClientBroadcastWinnerTest() throws Exception{
 
-    Thread t = new Thread() { 
+    Thread t = new Thread() {
       public void handle() {
     	  server1.connect();
         server2.connect();
@@ -212,7 +212,7 @@ public class GameClientTest{
     };
     t.setDaemon(true);
     t.start();
-    
+
     Thread c = new Thread() {
       public void handle() {
         try {
@@ -220,7 +220,7 @@ public class GameClientTest{
           Socket player2Socket = GameClient.socketSetup("localhost",2001);
           Socket[] players = {player1Socket,player2Socket};
           GameClient.contactServers(players);
-          
+
           GameClient.broadcastWinner(players,1);
 
           assertNull("Players should be closed",players[0]);
@@ -237,7 +237,7 @@ public class GameClientTest{
   @Test
   public void GameClientBroadcastMove() throws Exception{
 
-    Thread t = new Thread() { 
+    Thread t = new Thread() {
       public void handle() {
     	  server1.connect();
         server2.connect();
@@ -245,7 +245,7 @@ public class GameClientTest{
     };
     t.setDaemon(true);
     t.start();
-    
+
     Thread c = new Thread() {
       public void handle() {
         try {
@@ -253,7 +253,7 @@ public class GameClientTest{
           Socket player2Socket = GameClient.socketSetup("localhost",2001);
           Socket[] players = {player1Socket,player2Socket};
           GameClient.contactServers(players);
-          
+
           String move = Parser.parse(GameClient.requestMove(players[0]));
           GameClient.broadcastMove(players, 1, move);
 

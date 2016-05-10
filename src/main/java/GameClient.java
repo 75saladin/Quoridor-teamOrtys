@@ -1,11 +1,12 @@
 import java.net.*;
 import java.io.*;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.NoSuchElementException;
 
 /**
  * GameClient class controls game logic,
- * sets up server connections and sends updates to board. 
+ * sets up server connections and sends updates to board.
  *
  * @author Nicholas Marasco
  */
@@ -22,18 +23,19 @@ public class GameClient{
   private static final String PLAYER_WON = "KIKASHI";
   private static final String PLAYER_KICKED = "GOTE";
 
+  private static int DELAY = 0;
+
   /**
    * Start the game logic.
    * Goes through the initial contact, then executes turn order game.
    *
-   * @param players array of Socket open to servers 
+   * @param players array of Socket open to servers
    */
   public static void runGame(Socket[] players){
+    System.out.println("GAME DELAY: "  + DELAY);
     String[] playerNames = contactServers(players);
-    GUI gui = startGUI(playerNames); 
-    try{ Thread.sleep(200); }
-    catch(InterruptedException ie){}
-    LogicalBoard gameBoard = new LogicalBoard(players.length); 
+    GUI gui = startGUI(playerNames);
+    LogicalBoard gameBoard = new LogicalBoard(players.length);
     // Start asking for moves
     boolean running = true;
     int index = 0;
@@ -44,7 +46,7 @@ public class GameClient{
         if (players.length == 2) {
           index ^= 1;
           pNum = (pNum % 2) + 1;
-        } 
+        }
         else {
           index = (index + 1) % 4;
           pNum = updateNumber(pNum);
@@ -53,30 +55,36 @@ public class GameClient{
       }
       System.out.println("REQUESTING MOVE: Player " + (pNum));
       String move = null;
+      long startTime = System.currentTimeMillis();
       try{
         move = requestMove(players[index]);
-      } 
+      }
       catch(NoSuchElementException e){
         System.out.println("PLAYER " + pNum + " HAS CROAKED");
-        kickPlayer(players,pNum,index);
-        gameBoard.kick(pNum);
         gui.removePlayer(pNum);
+        gameBoard.kick(pNum);
+        kickPlayer(players,pNum,index);
         continue;
+      }
+      long moveTime = System.currentTimeMillis() - startTime;
+      long delayTime = DELAY - moveTime;
+      if(delayTime > 0L){
+        try{ Thread.sleep(delayTime); }
+        catch(Exception e){}
       }
       System.out.println("GOT MOVE: " + move);
       if(gameBoard.checkValid(pNum,move)){
-        broadcastMove(players,pNum,move);
         gui.update(move);
+        broadcastMove(players,pNum,move);
         try{ Thread.sleep(200); }
         catch(Exception e){}
       }
       else{
         //System.out.println("INDEX: " + index);
         System.out.println("CRAIG: THAT MOVE WAS INVALID");
-        kickPlayer(players,pNum,index);
-        gameBoard.kick(pNum);
         gui.removePlayer(pNum);
-
+        gameBoard.kick(pNum);
+        kickPlayer(players,pNum,index);
       }
       winner = checkWinner(gameBoard,players.length);
       if(winner != 0){
@@ -94,7 +102,7 @@ public class GameClient{
         pNum = updateNumber(pNum);
       }
     }
-    try{ Thread.sleep(5000); } 
+    try{ Thread.sleep(5000); }
     catch(InterruptedException ie){ ie.printStackTrace(); }
     gui.stopApplication();
   }
@@ -313,10 +321,10 @@ public class GameClient{
       playerNames[1] = p2Name;
       playerNames[2] = p3Name;
       playerNames[3] = p4Name;
-      p1out.println(GAME + " 1 " + p1Name + " " + p3Name + " " + p4Name + " " + p2Name); 
-      p2out.println(GAME + " 4 " + p1Name + " " + p3Name + " " + p4Name + " " + p2Name); 
-      p3out.println(GAME + " 2 " + p1Name + " " + p3Name + " " + p4Name + " " + p2Name); 
-      p4out.println(GAME + " 3 " + p1Name + " " + p3Name + " " + p4Name + " " + p2Name); 
+      p1out.println(GAME + " 1 " + p1Name + " " + p3Name + " " + p4Name + " " + p2Name);
+      p2out.println(GAME + " 4 " + p1Name + " " + p3Name + " " + p4Name + " " + p2Name);
+      p3out.println(GAME + " 2 " + p1Name + " " + p3Name + " " + p4Name + " " + p2Name);
+      p4out.println(GAME + " 3 " + p1Name + " " + p3Name + " " + p4Name + " " + p2Name);
     }
     return playerNames;
   }
@@ -377,14 +385,16 @@ public class GameClient{
       uhe.printStackTrace();
     } catch(IOException ioe) {
       System.out.println("IOException: " + ioe);
-      ioe.printStackTrace();
+      System.out.println("Failed to connect to: " + host + ":" + port);
+      System.out.println("You probably forgot to start the server.");
+      System.exit(1);
     }
     return null;
   }
 
   /**
    * Closes connections to all servers at end of game.
-   * 
+   *
    * @param players Socket array of connections to close
    */
   public static void closeConnection(Socket[] players){
@@ -453,28 +463,36 @@ public class GameClient{
    * @return String array of separated machine names and port numbers
    */
   public static String[] processParams(String[] args){
-    if(args.length != 2 && args.length != 4){
-      System.out.println(USAGE);
-      System.out.println("Error: Invalid number of players");
-      System.exit(1);
+    String[] pairs = new String[8];
+    int delay = 0;
+    for(int i = 1; i < args.length; i++){
+      if(args[i-1].equals("--delay")){
+        try{
+          delay = Integer.parseInt(args[i]);
+        }
+        catch(NumberFormatException nfe){
+          System.out.println("ERROR: Invalid delay number found, defaulting to 0");
+        }
+        break;
+      }
     }
-    int index = 0;
-    String[] data = new String[args.length * 2];
-    for(int i = 0; i < args.length; i++){
-      String[] pair = args[i].split(":");
-      data[index] = pair[0];
-      data[index+1] = pair[1];
-      index += 2;
-      //System.out.println(Arrays.toString(data)); 
+    DELAY = delay;
+    for(int i = 0, j = 0; i < args.length; i++){
+      String[] sp = args[i].split(":");
+      if(sp.length == 1) continue;
+      pairs[j] = sp[0];
+      pairs[j+1] = sp[1];
+      j+=2;
     }
-    return data;
+    return pairs;
   }
 
   public static void main(String[] args){
     String[] pairs = processParams(args);
-    if(pairs.length == 4)
+//     System.out.println(Arrays.toString(pairs));
+    if(pairs[pairs.length-1] == null)
       setup2Player(pairs);
     else
-      setup4Player(pairs); 
+      setup4Player(pairs);
   }
 }
