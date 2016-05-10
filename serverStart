@@ -15,7 +15,7 @@ fi
 
 # Keep port number in proper range
 if [ "$1" -le 1024 ]; then
-  echo "Error: Port number must be above 2000"
+  echo "Error: Port number must be above 1024"
   exit 1
 fi
 
