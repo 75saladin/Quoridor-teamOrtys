@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Give 4 port number on command line to run
-if [ "$#" -ne 4 ]; then
-  echo "usage: run2 <port1> <port2> <port3> <port4>"
+if [ "$#" -ne 4 ] && [ "$#" -ne 5 ]; then
+  echo "usage: run2 <port1> <port2> <port3> <port4> [<delay>]"
   exit 1
 fi
 
@@ -13,13 +13,21 @@ if ! [[ $1 =~ $re ]] || ! [[ $2 =~ $re ]] || ! [[ $3 =~ $re ]] || ! [[ $4 =~ $re
   exit 1
 fi
 
+# Check delay if exists
+if [ "$#" -eq 5 ]; then
+  if ! [[ $5 =~ $re ]]; then
+    echo "Error: invalid delay"
+    exit 1
+  fi
+fi
+
 # Keep port numbers in proper range
 if [ "$1" -le 1024 ] || [ "$2" -le 1024 ] || [ "$3" -le 1024 ] || [ "$4" -le 1024 ]; then
   echo "Error: Port numbers must be above 1024"
   exit 1
 fi
 
-p1=$1 p2=$2 p3=$3 p4=$4
+p1=$1 p2=$2 p3=$3 p4=$4 p5=$5
 
 # Check 4 ports
 ck=0
@@ -46,4 +54,8 @@ xterm -e "./serverStart $p4" &
 sleep 1;
 
 # Launch client
-./clientStart $p1 $p2 $p3 $p4
+if [ "$#" -eq 4 ]; then
+  ./clientStart $p1 $p2 $p3 $p4
+else
+  ./clientStart $p1 $p2 $p3 $p4 $p5
+fi
