@@ -61,7 +61,7 @@ public class GUI extends Application implements GUIInterface {
     
     private String[] playerNames;
     
-    private TextArea walls = null;
+    private TextArea walls = null; // text area 
     
     private int numberOfMoves = 0;
     
@@ -72,9 +72,10 @@ public class GUI extends Application implements GUIInterface {
     // instantiation of class, utilized for external use of appliations methods
     private static GUI gui = null;
     
+    /** audo clip for player and wall movement **/
     private static final AudioClip ALERT_AUDIOCLIP = new AudioClip(GUI.class.getResource("/boop.wav").toString());
     
-    
+    /** Audio clips for winning the game **/
     private static final AudioClip OH_YEA = new AudioClip("https://d2eopxgp627wep.cloudfront.net/ps/audios/000/000/547/original/Oooo_yeah__caaan_doo!.wav?1441333631");
     
     private static final AudioClip WRECKED = new AudioClip("https://d2eopxgp627wep.cloudfront.net/ps/audios/000/000/533/original/Riggity.wav?1441330423");
@@ -168,6 +169,13 @@ public class GUI extends Application implements GUIInterface {
 
         Scene scene = new Scene(root, 1000, 1000, Color.BLUE);
         stage.setTitle("QUORIDOR");
+        Screen screen = Screen.getPrimary();
+        Rectangle2D bounds = screen.getVisualBounds();
+
+        stage.setX(bounds.getMinX());
+        stage.setY(bounds.getMinY());
+        stage.setWidth(bounds.getWidth());
+        stage.setHeight(bounds.getHeight());
         
         stage.setScene(scene);
         stage.show();
