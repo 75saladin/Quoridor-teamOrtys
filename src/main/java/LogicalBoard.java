@@ -290,6 +290,8 @@ public class LogicalBoard {
         }
 
         // if 0 edges to remove for opposite wall, this wall is a crisscross
+        //                                                                              \
+        //FIXME - cannot place a wall in between to walls when we are supposed to!!!! --\--
         if (direction.equals("V")
                 && getEdgesToRemove(sourceC + " " + sourceR + " H").size() == 0) {
             return false;
