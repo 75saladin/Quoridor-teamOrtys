@@ -81,14 +81,14 @@ public class GameClient{
       }
       else{
         //System.out.println("INDEX: " + index);
-        System.out.println("CRAIG: THAT MOVE WAS INVALID");
+        //System.out.println("CRAIG: THAT MOVE WAS INVALID");
         gui.removePlayer(pNum);
         gameBoard.kick(pNum);
         kickPlayer(players,pNum,index);
       }
       winner = checkWinner(gameBoard,players.length);
       if(winner != 0){
-        System.out.println("WINNER: " + winner);
+        //System.out.println("WINNER: " + winner);
         gui.winGame(winner);
         broadcastWinner(players,winner);
         running = false;
@@ -102,9 +102,9 @@ public class GameClient{
         pNum = updateNumber(pNum);
       }
     }
-    try{ Thread.sleep(5000); }
+    try{ Thread.sleep(60000); }
     catch(InterruptedException ie){ ie.printStackTrace(); }
-    gui.stopApplication();
+    //gui.stopApplication();
   }
 
   /**

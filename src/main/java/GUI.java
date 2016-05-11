@@ -105,7 +105,7 @@ public class GUI extends Application implements GUIInterface {
         try {
             latch.await();
         } catch(InterruptedException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return gui;
 
@@ -139,7 +139,7 @@ public class GUI extends Application implements GUIInterface {
         try {
             Platform.exit(); 
         } catch(Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
        
     }
