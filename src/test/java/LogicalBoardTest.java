@@ -231,7 +231,7 @@ public class LogicalBoardTest {
     }
     
     @Test
-    public void checkValidAcceptsValidWalls() throws Exception {
+    public void checkValidAcceptsValidWallsAndAddsThemToPlacedWalls() throws Exception {
         Random rand = new Random();
         String direction;
         String wallString;
@@ -242,7 +242,9 @@ public class LogicalBoardTest {
                 direction = "v";  
             wallString = ""+rand.nextInt(8)+" "+rand.nextInt(8)+" "+direction;
             assertTrue("Wall "+wallString+" was judged invalid on iteration "+i, boardTwo.checkValid(1,wallString));
+            assertTrue(boardTwo.wallExists(wallString));
 	    boardTwo.removeWall(1,wallString);
+	    assertFalse(boardTwo.wallExists(wallString));
         }
         
         //testing filling board with horizontal walls (except rightmost column)
@@ -253,7 +255,9 @@ public class LogicalBoardTest {
             for (int r=0; r<8; r++) {
                 wallString = ""+c+" "+r+" "+"h";
                 assertTrue("Wall "+wallString+" was judged invalid I: ", boardTwo.checkValid(1,wallString));
+                assertTrue(boardTwo.wallExists(wallString));
                 boardTwo.removeWall(1, wallString);
+                assertFalse(boardTwo.wallExists(wallString));
             }
         }
         
@@ -264,7 +268,9 @@ public class LogicalBoardTest {
             for (int c=0; c<8; c++) {
                 wallString = ""+c+" "+r+" "+"v";
                 assertTrue("Wall "+wallString+" was judged invalid", boardTwo.checkValid(1,wallString));
+                assertTrue(boardTwo.wallExists(wallString));
                 boardTwo.removeWall(1, wallString);
+                assertFalse(boardTwo.wallExists(wallString));
             }
         }
     }
@@ -442,6 +448,13 @@ public class LogicalBoardTest {
             boardTwo.removeWall(1, wall);
             boardTwo.removeWall(1, tWall);
         }    
+    }
+    
+    @Test
+    public void checkValidShouldAcceptCrisscrossSandwich() throws Exception {
+        assertTrue(boardTwo.checkValid(1, "0 0 h"));
+        assertTrue(boardTwo.checkValid(1, "2 0 h"));
+        assertTrue(boardTwo.checkValid(1, "1 0 v"));
     }
     
     @Test 

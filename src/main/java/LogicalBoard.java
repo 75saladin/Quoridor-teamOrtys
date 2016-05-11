@@ -24,6 +24,11 @@ public class LogicalBoard {
     
     /** The set of players in the game, indexed by playerNumber-1 */
     public Player[] players;
+    
+    /** The set of walls placed on the board. Only needed for checking if a 
+     * crisscross wall is a true crisscross or if it's validly wedged between 
+     * two walls. In protocol format with uppercase direction. */
+    public Set<String> placedWalls;
 
     /**
      * Constructor
@@ -62,6 +67,7 @@ public class LogicalBoard {
             }
         }
         setWalls(playerCount);
+        placedWalls = new HashSet<String>();
     }
 
     //API methods; to be called by whoever instantiates a board
@@ -289,17 +295,15 @@ public class LogicalBoard {
             return false;
         }
 
-        // if 0 edges to remove for opposite wall, this wall is a crisscross
-        //                                                                              \
-        //FIXME - cannot place a wall in between to walls when we are supposed to!!!! --\--
-        if (direction.equals("V")
-                && getEdgesToRemove(sourceC + " " + sourceR + " H").size() == 0) {
+        String opDir;
+        if (direction.equals("V"))
+            opDir = "H";
+        else
+            opDir = "V";
+            
+        if (wallExists(sourceC, sourceR, opDir))
             return false;
-        } else if (direction.equals("H")
-                && getEdgesToRemove(sourceC + " " + sourceR + " v").size() == 0) {
-            return false;
-        }
-
+        
 
         // Starting logic to test if winners path is blocked......
         for (Player p : players) {
@@ -332,6 +336,8 @@ public class LogicalBoard {
         if (player != null) {
             player.decrementWall();
         }
+        
+        placedWalls.add(wall.toUpperCase());
     }
 
     /**
@@ -498,6 +504,32 @@ public class LogicalBoard {
         // returning verdict of whether or not path is blocked
         return blocked==9;
     }
+    
+    /**
+     * Returns whether or not the given wall is on the board.
+     * 
+     * @param c Column number of wall
+     * @param r Row number of wall
+     * @param dir Direction of wall
+     * @return If the wall is already on the board
+     */
+     public boolean wallExists(int c, int r, String dir) {
+         if (placedWalls.contains(c + " " + r + " " + dir.toUpperCase()))
+             return true;
+         return false;
+     }
+     
+     /**
+     * Returns whether or not the given wall is on the board.
+     * 
+     * @param wall The wall in protocol format
+     * @return If the wall is already on the board
+     */
+     public boolean wallExists(String wall) {
+         if (placedWalls.contains(wall.toUpperCase()))
+             return true;
+         return false;
+     }
 
     /**
      * Returns whether or not the two vertices have an edge between
@@ -738,6 +770,7 @@ public class LogicalBoard {
             board.addEdge(rightV, belowRV);
         }
         p.incrementWall();
+        placedWalls.remove(wall.toUpperCase());
     }
 
     /**
