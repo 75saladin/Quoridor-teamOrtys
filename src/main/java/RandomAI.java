@@ -98,8 +98,8 @@ public class RandomAI {
         
         // Changing any of these numbers will change the way the AI plays
         // each one is for that particular AI
-        int one = 4;
-        int two = 4;
+        int one = 5;
+        int two = 5;
         int three = 4;
         int four = 4;
         
@@ -108,14 +108,14 @@ public class RandomAI {
         if (playerCount == 2) {
             // if this players path is shorter, move player position to here
             if (this.playerNum == 1) {
-                if (playerTwoPathLength <= one && P1hasWalls){ 
+                if (playerTwoPathLength <= playerOnePathLength && P1hasWalls){ 
                     wall = getBestWall(1);
                     if (MyPathIsSame(1, wall)) 
                         return wall;
                 }
                 return p1BestMove.c + " " + p1BestMove.r;
             } else {
-                if (playerOnePathLength <= two && P2hasWalls) {
+                if (playerOnePathLength <= playerTwoPathLength && P2hasWalls) {
                     wall = getBestWall(2);
                     if (MyPathIsSame(2, wall)) 
                         return wall;
@@ -186,8 +186,6 @@ public class RandomAI {
      * Gets the best wall for a player to place whether it is 2 or 4 player game
      */
     private String getBestWall(int player) {
-        if(Math.random()>.7)
-          return "";
         String bestWall = "";
         String tempWallH = "";
         String tempWallV = "";
@@ -207,76 +205,108 @@ public class RandomAI {
                 currentPathLengthP4 = (int) board.getShortestWinningPath(4, board.board).getPathLength();
         }
         
-        if(currentPathLengthP1<2 && playerNum!=1 && board.getPlayer(1) != null){
+        if(currentPathLengthP1<=2 && playerNum!=1 && board.getPlayer(1) != null){
           Vertex temp = board.getVertexByCoord(board.getPlayer(1).getC(),board.getPlayer(1).getR());
-          if(board.validWall(1,temp.c + " " + (temp.r) + " H"))
-            return temp.c + " " + (temp.r) + " H";
+          if(board.validWall(1,temp.c + " " + (temp.r) + " h"))
+            return temp.c + " " + (temp.r) + " h";
         }
-        if(currentPathLengthP2<2 && playerNum!=2 && board.getPlayer(2) != null){
+        if(currentPathLengthP2<=2 && playerNum!=2 && board.getPlayer(2) != null){
           Vertex temp = board.getVertexByCoord(board.getPlayer(2).getC(),board.getPlayer(2).getR());
-          if(board.validWall(2,temp.c + " " + temp.r+1 + " H"))
-            return temp.c + " " + temp.r+1 + " H";
+          if(board.validWall(2,temp.c + " " + temp.r+1 + " h"))
+            return temp.c + " " + temp.r+1 + " h";
         }
-        if(currentPathLengthP3<2 && playerNum!=3 && board.getPlayer(3) != null){
+        if(currentPathLengthP3<=2 && playerNum!=3 && board.getPlayer(3) != null){
           Vertex temp = board.getVertexByCoord(board.getPlayer(3).getC(),board.getPlayer(3).getR());
-          if(board.validWall(3,temp.c + " " + temp.r + " V"))
-            return temp.c + " " + temp.r + " V";
+          if(board.validWall(3,temp.c + " " + temp.r + " v"))
+            return temp.c + " " + temp.r + " v";
         }
-        if(currentPathLengthP4<2 && playerNum!=4 && board.getPlayer(4) != null){
+        if(currentPathLengthP4<=2 && playerNum!=4 && board.getPlayer(4) != null){
           Vertex temp = board.getVertexByCoord(board.getPlayer(4).getC(),board.getPlayer(4).getR());
-          if(board.validWall(4,(temp.c-1) + " " + temp.r + " V"))
-            return (temp.c-1) + " " + temp.r + " V";
+          if(board.validWall(4,(temp.c-1) + " " + temp.r + " v"))
+            return (temp.c-1) + " " + temp.r + " v";
         }
         
         
         int temp = 0;
-        int temp3 = 100;
+        int tempH = 0;
+        int tempV = 0;
+        int temp2 = 0; 
+        int temp3 = 0;
         // Current Column
         for (int c = 0; c < 8; c++) {
             // Current Row
             for (int r = 0; r < 8; r++) {
-                tempWallH = c + " " + r + " H";
-                tempWallV = c + " " + r + " V";
+                tempWallH = c + " " + r + " h";
+                tempWallV = c + " " + r + " v";
                 //Player 1
                 if (player != 1 && board.getPlayer(1)!=null) {
                     // if it is a valid wall continue
                     if (board.validWall(player, tempWallH)) {
                         // Length of p1's path after the wall placement
-                        temp = board.pathLengthAfterWall(1, tempWallH);
+                        tempH = board.pathLengthAfterWall(1, tempWallH);
                         // will i benefit from placing this wall?
-                        if (currentPathLengthP1 < temp) // is this player the most important one?
-                            if(temp<temp3){
+                        if (currentPathLengthP1 < tempH) // is this player the most important one?
+                            if(tempH>temp3){
                                 bestWall = tempWallH;
-                                temp3 = temp;
+                                temp3 = tempH;
                             }
                     }
-                    if (board.validWall(player, tempWallV)) {
-                        temp = board.pathLengthAfterWall(1, tempWallV);
-                        if (currentPathLengthP1 < temp)
-                            if(temp<temp3){
+                    if(board.validWall(player, tempWallV)) {
+                        tempV = board.pathLengthAfterWall(1, tempWallV);
+                        // will i benefit from placing this wall?
+                        if (currentPathLengthP1 < tempV) // is this player the most important one?
+                            if(tempV > temp3){
                                 bestWall = tempWallV;
-                                temp3 = temp;
+                                temp3 = tempV;
                             }
+                    }
+                    if (board.validWall(player, tempWallV) && board.validWall(player, tempWallH)) {
+                        
+                        if (tempH > tempV && tempH > temp3) {
+                            bestWall = tempWallH;
+                            temp3 = tempH;
+                        } else if (tempV > tempH && tempV > temp3) {
+                            bestWall = tempWallV;
+                            temp3 = tempV;
+                        }
+                            
                     }
                     // Player 2
                 }
+                //player 2
                 if (player != 2 && board.getPlayer(2)!=null) {
+                    // if it is a valid wall continue
                     if (board.validWall(player, tempWallH)) {
-                        temp = board.pathLengthAfterWall(2, tempWallH);
-                        if (currentPathLengthP2 < temp)
-                            if(temp<temp3){
+                        // Length of p1's path after the wall placement
+                        tempH = board.pathLengthAfterWall(2, tempWallH);
+                        // will i benefit from placing this wall?
+                        if (currentPathLengthP1 < tempH) // is this player the most important one?
+                            if(tempH>temp3){
                                 bestWall = tempWallH;
-                                temp3 = temp;
+                                temp3 = tempH;
                             }
                     }
-                    if (board.validWall(player, tempWallV)) {
-                        temp = board.pathLengthAfterWall(2, tempWallV);
-                        if (currentPathLengthP2 < temp)
-                            if(temp<temp3){
+                    if(board.validWall(player, tempWallV)) {
+                        tempV = board.pathLengthAfterWall(2, tempWallV);
+                        // will i benefit from placing this wall?
+                        if (currentPathLengthP1 < tempV) // is this player the most important one?
+                            if(tempV > temp3){
                                 bestWall = tempWallV;
-                                temp3 = temp;
+                                temp3 = tempV;
                             }
                     }
+                    if (board.validWall(player, tempWallV) && board.validWall(player, tempWallH)) {
+                        
+                        if (tempH > tempV && tempH > temp3) {
+                            bestWall = tempWallH;
+                            temp3 = tempH;
+                        } else if (tempV > tempH && tempV > temp3) {
+                            bestWall = tempWallV;
+                            temp3 = tempV;
+                        }
+                            
+                    }
+                    // Player 2
                 }
                 // Fpur Players
                 if (this.playerCount > 2) {
@@ -307,8 +337,7 @@ public class RandomAI {
                                     bestWall = tempWallH;
                                     temp3 = temp;
                                 }
-                        }
-                        if (board.validWall(player, tempWallV)) {
+                        }if (board.validWall(player, tempWallV)) {
                             temp = board.pathLengthAfterWall(4, tempWallV);
                             if (currentPathLengthP4 < temp)
                                 if(temp<=temp3){
@@ -320,7 +349,7 @@ public class RandomAI {
                 }
             }
         }
-        if(Math.random() <= .7)
+        if(Math.random() <= .8)
           return bestWall;
         return "";
     }
