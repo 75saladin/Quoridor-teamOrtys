@@ -291,12 +291,13 @@ public class LogicalBoard {
 
         // if 0 edges to remove for opposite wall, this wall is a crisscross
         if (direction.equals("V")
-                && getEdgesToRemove(sourceC + " " + sourceR + " H").size() == 0) {
+                && getEdgesToRemove(sourceC + " " + sourceR + " H").size() < 2) {
             return false;
         } else if (direction.equals("H")
-                && getEdgesToRemove(sourceC + " " + sourceR + " v").size() == 0) {
+                && getEdgesToRemove(sourceC + " " + sourceR + " v").size() < 2) {
             return false;
         }
+
 
         // Starting logic to test if winners path is blocked......
         for (Player p : players) {
@@ -667,17 +668,17 @@ public class LogicalBoard {
         // adding edges to the set to be removed based on wall placement direction
         if (d.equals("V")) {
             if (s2r != null) {
-                remove.add(board.getEdge(s, r));
+                remove.add(s2r);
             }
             if (b2br != null) {
-                remove.add(board.getEdge(b, br));
+                remove.add(b2br);
             }
         } else {
             if (s2b != null) {
-                remove.add(board.getEdge(s, b));
+                remove.add(s2b);
             }
             if (r2br != null) {
-                remove.add(board.getEdge(r, br));
+                remove.add(r2br);
             }
         }
         return remove;
@@ -806,17 +807,17 @@ public class LogicalBoard {
         // adding edges to the set to be removed based on wall placement direction
         if (d.equals("V")) {
             if (s2r != null) {
-                remove.add(boardCopy.getEdge(s, r));
+                remove.add(s2r);
             }
             if (b2br != null) {
-                remove.add(boardCopy.getEdge(b, br));
+                remove.add(b2br);
             }
         } else {
             if (s2b != null) {
-                remove.add(boardCopy.getEdge(s, b));
+                remove.add(s2b);
             }
             if (r2br != null) {
-                remove.add(boardCopy.getEdge(r, br));
+                remove.add(r2br);
             }
         }
         return remove;
