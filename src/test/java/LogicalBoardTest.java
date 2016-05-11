@@ -754,6 +754,37 @@ public class LogicalBoardTest {
         assertTrue(boardFour.validMove(1, "4 5"));
         assertTrue(boardFour.validMove(1, "3 4"));
     }
+    
+    @Test
+    public void playerWithWinningDestinationWithAnotherPlayerOnItShouldBeFine() throws Exception {
+        boardTwo.makeMove(1, "8 0");
+        boardTwo.makeMove(2, "8 1");
+        assertFalse(boardTwo.validMove(2, "8 0"));
+        //assertTrue(boardTwo.validMove(2, "9 1"));
+        assertTrue(boardTwo.validMove(2, "7 1"));
+        assertTrue(boardTwo.validMove(2, "8 2"));
+        assertTrue(boardTwo.validMove(2, "7 0"));
+        //assertTrue(boardTwo.validMove(2, "9 0"));
+        
+        Set<Vertex> moves = boardTwo.getValidMoves(2);
+        assertTrue(moves.size()==3);
+        
+        
+        
+        assertTrue(boardTwo.checkValid(1, "6 0 h"));
+        assertTrue(boardTwo.checkValid(1, "7 1 v"));
+        
+        assertFalse(boardTwo.validMove(2, "8 0"));
+        //assertTrue(boardTwo.validMove(2, "9 1"));
+        assertFalse(boardTwo.validMove(2, "7 1"));
+        assertTrue(boardTwo.validMove(2, "8 2"));
+        assertTrue(boardTwo.validMove(2, "7 0"));
+        //assertTrue(boardTwo.validMove(2, "9 0"));
+        
+        moves = boardTwo.getValidMoves(2);
+        assertTrue(moves.size()==2);
+    }
+    
     @Test
     public void testKick() throws Exception{
         assertEquals(4,boardFour.getPlayerCount());
