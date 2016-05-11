@@ -115,11 +115,11 @@ public class GameServer extends Server {
     private void handleMyoushu(){
         String move = AI.getMove();
         move = Parser.formatMove(move);
-        try {
-            Thread.sleep(250);
-        } catch(Exception e) {
-            System.out.println(e);
-        }
+        //try {
+            //Thread.sleep(250);
+        //} catch(Exception e) {
+            //System.out.println(e);
+        //}
         out.println("TESUJI " + move);
     }
     
@@ -146,8 +146,9 @@ public class GameServer extends Server {
             client.close();
             in.close();
             AI = null;
+            System.exit(0);
       }catch(IOException e) {
-        e.printStackTrace();
+        //e.printStackTrace();
       }
     }
     
@@ -165,9 +166,9 @@ public class GameServer extends Server {
                 out.close();
                 in.close();
                 AI = null;
-                //System.exit(0);
+                //
             }catch(IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
     }
