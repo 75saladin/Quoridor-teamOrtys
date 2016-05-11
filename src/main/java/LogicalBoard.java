@@ -291,10 +291,10 @@ public class LogicalBoard {
 
         // if 0 edges to remove for opposite wall, this wall is a crisscross
         if (direction.equals("V")
-                && getEdgesToRemove(sourceC + " " + sourceR + " H").size() < 2) {
+                && getEdgesToRemove(sourceC + " " + sourceR + " H").size() == 0) {
             return false;
         } else if (direction.equals("H")
-                && getEdgesToRemove(sourceC + " " + sourceR + " v").size() < 2) {
+                && getEdgesToRemove(sourceC + " " + sourceR + " v").size() == 0) {
             return false;
         }
 
@@ -667,19 +667,15 @@ public class LogicalBoard {
 
         // adding edges to the set to be removed based on wall placement direction
         if (d.equals("V")) {
-            if (s2r != null) {
+            if (s2r != null) 
                 remove.add(s2r);
-            }
-            if (b2br != null) {
+            if (b2br != null) 
                 remove.add(b2br);
-            }
         } else {
-            if (s2b != null) {
+            if (s2b != null) 
                 remove.add(s2b);
-            }
-            if (r2br != null) {
+            if (r2br != null) 
                 remove.add(r2br);
-            }
         }
         return remove;
     }
