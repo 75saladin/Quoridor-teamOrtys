@@ -508,7 +508,7 @@ public class GUI extends Application implements GUIInterface {
      * @return The bottom label of the game
      */
     private Region setBottomRegion() {
-        Label text = new Label("Team Our Tease");
+        Label text = new Label("Team Ortys");
         text.setFont(Font.font("Arial", FontWeight.BOLD, 40));
         StackPane stackPane = new StackPane();
         Insets inset = new Insets(20, 20, 20, 20);
