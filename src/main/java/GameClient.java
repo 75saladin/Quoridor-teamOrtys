@@ -35,6 +35,10 @@ public class GameClient{
     System.out.println("GAME DELAY: "  + DELAY);
     String[] playerNames = contactServers(players);
     GUI gui = startGUI(playerNames);
+    // wait for gui to launch
+    try {
+      Thread.sleep(2000);
+    }catch(Exception e) {}
     LogicalBoard gameBoard = new LogicalBoard(players.length);
     // Start asking for moves
     boolean running = true;

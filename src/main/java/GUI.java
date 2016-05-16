@@ -317,15 +317,14 @@ public class GUI extends Application implements GUIInterface {
                     grid.add(new Rectangle(40, 7.0, Color.WHITE), c+2, r +1);
                 }
                 GUI.ALERT_AUDIOCLIP.play();
-                output.appendText("-----------------\n");
-                output.appendText("Number of moves: " + numberOfMoves++ + "\n");
+                String s = "\n\n" + 
+                           "Number of moves: " + numberOfMoves++ + "\n";
                 player.setWalls(player.getPlayerTurn()); // decrements this players walls
-                System.out.println(Arrays.toString(playerNames));
                 for(int i = 1; i <= playerNames.length; i++) {
-                    output.appendText("Player " + i + ": " + playerNames[i-1] + "\n" + 
-                            " Walls Remaining: " + player.getWalls(i) + "\n");
+                    s += "Player " + i + ": " + playerNames[i-1] + "\n" + 
+                         "Walls Remaining: " + player.getWalls(i) + "\n";
                 }
-                output.appendText("-----------------\n");
+                output.setText(s);
                 
                 player.setPlayerTurn();
             }
@@ -349,13 +348,13 @@ public class GUI extends Application implements GUIInterface {
                 grid.getChildren().remove(player.getPlayerNode(turn));
                 grid.add(player.getPlayerNode(turn), c, r);
                 GUI.ALERT_AUDIOCLIP.play();
-                output.appendText("-----------------\n");
-                output.appendText("Number of moves: " + numberOfMoves++ + "\n");
-                for(int i = 1; i <= player.getPlayerCount(); i++) {
-                    output.appendText("Player " + i + ": " + playerNames[i-1] + "\n" + 
-                            "Walls Remaining: " + player.getWalls(i) + "\n");
+                String s = "\n\n" + 
+                           "Number of moves: " + numberOfMoves++ + "\n";
+                for(int i = 1; i <= playerNames.length; i++) {
+                    s += "Player " + i + ": " + playerNames[i-1] + "\n" + 
+                         "Walls Remaining: " + player.getWalls(i) + "\n";
                 }
-                output.appendText("-----------------\n");
+                output.setText(s);
                 player.setPlayerTurn();
             }
         });
@@ -494,7 +493,7 @@ public class GUI extends Application implements GUIInterface {
         output = new TextArea();
         output.setWrapText(true);
         output.setPrefWidth(200);
-        output.setPrefHeight(100);
+        output.setPrefHeight(200);
         
         vb.getChildren().addAll(label, output);
         vb.getStylesheets().addAll(this.getClass().getResource("Layout.css").toExternalForm());
