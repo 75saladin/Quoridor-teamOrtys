@@ -1,14 +1,14 @@
 #board {
     -fx-background-color: white;  
     -fx-border-color: blue;
-    -fx-border-insets: 50;
+    -fx-border-insets: 10;
     -fx-border-width: 20;
     -fx-border-radius: 5;
 }
 
 #description {
 	 -fx-background-image: url(leftside.jpeg);
-    -fx-effect: dropshadow(three-pass-box, black, 20, 0.5, 0.5, 0);
+    -fx-effect: dropshadow(three-pass-box, black, 10, 0.5, 0.5, 0);
     -fx-border-insets: 0;
     -fx-border-color: yellow;
     -fx-border-radius: 5;
@@ -24,11 +24,11 @@
 #title {
 	-fx-background-image: url(title.jpg);
 	-fx-background-position: center;
-   -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0.5, 0);
+   -fx-effect: dropshadow(three-pass-box, black, 10, 0.5, 0.5, 0);
 }
 	
 #bottom {
 	-fx-background-image: url(bottom.png);
 	-fx-background-position: center;
-	-fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0.5, 0);
+	-fx-effect: dropshadow(three-pass-box, black, 10, 0.5, 0.5, 0);
 }

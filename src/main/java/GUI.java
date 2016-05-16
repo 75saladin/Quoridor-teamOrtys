@@ -174,10 +174,10 @@ public class GUI extends Application implements GUIInterface {
         Screen screen = Screen.getPrimary();
         Rectangle2D bounds = screen.getVisualBounds();
 
-        //stage.setX(bounds.getMinX());
-        //stage.setY(bounds.getMinY());
-        //stage.setWidth(bounds.getWidth());
-        //stage.setHeight(bounds.getHeight());
+        stage.setX(bounds.getMinX());
+        stage.setY(bounds.getMinY());
+        stage.setWidth(bounds.getWidth());
+        stage.setHeight(bounds.getHeight());
         
         stage.setScene(scene);
         stage.show();
@@ -310,11 +310,11 @@ public class GUI extends Application implements GUIInterface {
             @Override
             public void run() {
                 if(direction.equals("v")) {
-                    grid.add(new Rectangle(7.0, 50, Color.WHITE), c + 1, r);
-                    grid.add(new Rectangle(7.0, 50, Color.WHITE), c + 1, r + 2);
+                    grid.add(new Rectangle(7.0, 40, Color.WHITE), c + 1, r);
+                    grid.add(new Rectangle(7.0, 40, Color.WHITE), c + 1, r + 2);
                 } else {
-                    grid.add(new Rectangle(50, 7.0, Color.WHITE), c, r + 1);
-                    grid.add(new Rectangle(50, 7.0, Color.WHITE), c+2, r +1);
+                    grid.add(new Rectangle(40, 7.0, Color.WHITE), c, r + 1);
+                    grid.add(new Rectangle(40, 7.0, Color.WHITE), c+2, r +1);
                 }
                 GUI.ALERT_AUDIOCLIP.play();
                 output.appendText("-----------------\n");
@@ -414,12 +414,12 @@ public class GUI extends Application implements GUIInterface {
             for(int j = 0; j < 17; j++) {
                 if(i % 2 == 0 && j%2==0) {
                     
-                    gp.add(new Rectangle(50, 50, Color.BROWN), i , j);
+                    gp.add(new Rectangle(40, 40, Color.BROWN), i , j);
                     //gp.add(new Text("(" + i + ", " + j + ")"), i, j);
                 } else if(i % 2 != 0 && j % 2 == 0) { // vertical rectangles
-                    gp.add(new Rectangle(7.0, 50, Color.BLACK), i, j);
+                    gp.add(new Rectangle(7.0, 40, Color.BLACK), i, j);
                 }else if(i % 2 == 0 && j % 2 != 0) { // horizontal rectangles
-                    gp.add(new Rectangle(50, 7.0, Color.BLACK), i, j);
+                    gp.add(new Rectangle(40, 7.0, Color.BLACK), i, j);
                 } 
                 
             }
@@ -466,13 +466,13 @@ public class GUI extends Application implements GUIInterface {
         text.setFont(Font.font("Arial", FontWeight.BOLD, 50));
         
         StackPane stackPane = new StackPane();
-        Insets inset = new Insets(20, 20, 20, 20);
+        Insets inset = new Insets(10, 10, 10, 10);
         stackPane.setPadding(inset);
         
         stackPane.setAlignment(Pos.CENTER);
         stackPane.getChildren().add(text);
         // set the max width 
-        stackPane.setMinHeight(135);
+        stackPane.setMinHeight(80);
         stackPane.getStylesheets().addAll(this.getClass().getResource("Layout.css").toExternalForm());
         stackPane.setId("title");
         return stackPane;
@@ -486,7 +486,7 @@ public class GUI extends Application implements GUIInterface {
     private Region setDescriptionRegion() {
         VBox vb = new VBox();
         
-        vb.setPadding(new Insets(20,20,20,20));
+        vb.setPadding(new Insets(10,10,10,10));
         vb.setAlignment(Pos.CENTER);
         
         Label label = new Label("    Move     ");
@@ -494,7 +494,7 @@ public class GUI extends Application implements GUIInterface {
         output = new TextArea();
         output.setWrapText(true);
         output.setPrefWidth(200);
-        output.setPrefHeight(400);
+        output.setPrefHeight(100);
         
         vb.getChildren().addAll(label, output);
         vb.getStylesheets().addAll(this.getClass().getResource("Layout.css").toExternalForm());
@@ -511,7 +511,7 @@ public class GUI extends Application implements GUIInterface {
         Label text = new Label("Team Ortys");
         text.setFont(Font.font("Arial", FontWeight.BOLD, 40));
         StackPane stackPane = new StackPane();
-        Insets inset = new Insets(20, 20, 20, 20);
+        Insets inset = new Insets(10, 10, 10, 10);
         stackPane.setPadding(inset);
         
         stackPane.setAlignment(Pos.CENTER);
@@ -519,7 +519,7 @@ public class GUI extends Application implements GUIInterface {
         stackPane.setId("bottom");
         stackPane.getChildren().add(text);
         // set the max width 
-        stackPane.setMinHeight(200);
+        stackPane.setMinHeight(100);
         return stackPane;
     } 
     
