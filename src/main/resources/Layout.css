@@ -23,12 +23,12 @@
 
 #title {
 	-fx-background-image: url(title.jpg);
-	-fx-background-position: 75% 55%;
+	-fx-background-position: center;
    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0.5, 0);
 }
 	
 #bottom {
 	-fx-background-image: url(bottom.png);
-	-fx-background-position: 50% 57%;
+	-fx-background-position: center;
 	-fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0.5, 0);
 }

@@ -169,15 +169,15 @@ public class GUI extends Application implements GUIInterface {
     @Override
     public void start(Stage stage) {
 
-        Scene scene = new Scene(root, 1000, 1000, Color.BLUE);
+        Scene scene = new Scene(root, Color.BLUE);
         stage.setTitle("QUORIDOR");
         Screen screen = Screen.getPrimary();
         Rectangle2D bounds = screen.getVisualBounds();
 
-        stage.setX(bounds.getMinX());
-        stage.setY(bounds.getMinY());
-        stage.setWidth(bounds.getWidth());
-        stage.setHeight(bounds.getHeight());
+        //stage.setX(bounds.getMinX());
+        //stage.setY(bounds.getMinY());
+        //stage.setWidth(bounds.getWidth());
+        //stage.setHeight(bounds.getHeight());
         
         stage.setScene(scene);
         stage.show();

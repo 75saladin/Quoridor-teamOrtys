@@ -98,10 +98,10 @@ public class RandomAI {
         
         // Changing any of these numbers will change the way the AI plays
         // each one is for that particular AI
-        int one = 5;
-        int two = 5;
-        int three = 4;
-        int four = 4;
+        int one = 6;
+        int two = 6;
+        int three = 6;
+        int four = 6;
         
                
         String wall = "";
@@ -227,10 +227,8 @@ public class RandomAI {
         }
         
         
-        int temp = 0;
         int tempH = 0;
         int tempV = 0;
-        int temp2 = 0; 
         int temp3 = 0;
         // Current Column
         for (int c = 0; c < 8; c++) {
@@ -250,8 +248,7 @@ public class RandomAI {
                                 bestWall = tempWallH;
                                 temp3 = tempH;
                             }
-                    }
-                    if(board.validWall(player, tempWallV)) {
+                    }if(board.validWall(player, tempWallV)) {
                         tempV = board.pathLengthAfterWall(1, tempWallV);
                         // will i benefit from placing this wall?
                         if (currentPathLengthP1 < tempV) // is this player the most important one?
@@ -312,44 +309,72 @@ public class RandomAI {
                 if (this.playerCount > 2) {
                     //Player 3
                     if (player != 3 && board.getPlayer(3)!=null) {
+                        // if it is a valid wall continue
                         if (board.validWall(player, tempWallH)) {
-                            temp = board.pathLengthAfterWall(3, tempWallH);
-                            if (currentPathLengthP3 < temp)
-                                if(temp<=temp3){
+                            // Length of p1's path after the wall placement
+                            tempH = board.pathLengthAfterWall(3, tempWallH);
+                            // will i benefit from placing this wall?
+                            if (currentPathLengthP3 < tempH) // is this player the most important one?
+                                if(tempH>temp3){
                                     bestWall = tempWallH;
-                                    temp3 = temp;
+                                    temp3 = tempH;
                                 }
-                        }if (board.validWall(player, tempWallV)) {
-                            temp = board.pathLengthAfterWall(3, tempWallV);
-                            if (currentPathLengthP3 < temp) 
-                                if(temp<=temp3){
+                        }if(board.validWall(player, tempWallV)) {
+                            tempV = board.pathLengthAfterWall(3, tempWallV);
+                            // will i benefit from placing this wall?
+                            if (currentPathLengthP3 < tempV) // is this player the most important one?
+                                if(tempV > temp3){
                                     bestWall = tempWallV;
-                                    temp3 = temp;
+                                    temp3 = tempV;
                                 }
+                        }
+                        if (board.validWall(player, tempWallV) && board.validWall(player, tempWallH)) {
+                            
+                            if (tempH > tempV && tempH > temp3) {
+                                bestWall = tempWallH;
+                                temp3 = tempH;
+                            } else if (tempV > tempH && tempV > temp3) {
+                                bestWall = tempWallV;
+                                temp3 = tempV;
+                            }
+                                
                         }
                     }
                     // Player Four
-                    if (player != 4  && board.getPlayer(4)!=null) {
+                    if (player != 4 && board.getPlayer(4)!=null) {
+                        // if it is a valid wall continue
                         if (board.validWall(player, tempWallH)) {
-                            temp = board.pathLengthAfterWall(4, tempWallH);
-                            if (currentPathLengthP4 < temp)
-                                if(temp<=temp3){
+                            // Length of p1's path after the wall placement
+                            tempH = board.pathLengthAfterWall(4, tempWallH);
+                            // will i benefit from placing this wall?
+                            if (currentPathLengthP4 < tempH) // is this player the most important one?
+                                if(tempH>temp3){
                                     bestWall = tempWallH;
-                                    temp3 = temp;
+                                    temp3 = tempH;
                                 }
-                        }if (board.validWall(player, tempWallV)) {
-                            temp = board.pathLengthAfterWall(4, tempWallV);
-                            if (currentPathLengthP4 < temp)
-                                if(temp<=temp3){
+                        }if(board.validWall(player, tempWallV)) {
+                            tempV = board.pathLengthAfterWall(4, tempWallV);
+                            // will i benefit from placing this wall?
+                            if (currentPathLengthP4 < tempV) // is this player the most important one?
+                                if(tempV > temp3){
                                     bestWall = tempWallV;
-                                    temp3 = temp;
-                                }
-                        }
+                                    temp3 = tempV;
+                            }
+                        }if (board.validWall(player, tempWallV) && board.validWall(player, tempWallH)) {
+                            if (tempH > tempV && tempH > temp3) {
+                                bestWall = tempWallH;
+                                temp3 = tempH;
+                            } else if (tempV > tempH && tempV > temp3) {
+                                bestWall = tempWallV;
+                                temp3 = tempV;
+                            }
+                                
+                        }                    
                     }
                 }
             }
         }
-        if(Math.random() <= .75)
+        if(Math.random() <= .8)
           return bestWall;
         return "";
     }
