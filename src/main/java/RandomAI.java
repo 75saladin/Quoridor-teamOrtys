@@ -374,7 +374,7 @@ public class RandomAI {
                 }
             }
         }
-        if(Math.random() <= .8)
+        if(Math.random() <= .75)
           return bestWall;
         return "";
     }
