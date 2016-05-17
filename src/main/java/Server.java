@@ -36,7 +36,7 @@ public abstract class Server {
 				client.close();
 			}
 		} catch(IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 
