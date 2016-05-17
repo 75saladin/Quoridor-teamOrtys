@@ -106,9 +106,13 @@ public class GameClient{
         pNum = updateNumber(pNum);
       }
     }
-    try{ Thread.sleep(60000); }
-    catch(InterruptedException ie){ ie.printStackTrace(); }
-    //gui.stopApplication();
+    try{ 
+        Thread.sleep(60000); 
+        gui.stopApplication();
+    }catch(InterruptedException ie){ 
+        ie.printStackTrace(); 
+    }
+    
   }
 
   /**
