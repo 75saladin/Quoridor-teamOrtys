@@ -15,7 +15,7 @@ public class GameServer extends Server {
 
     private int playerNum; // player Number given to this server by the client
     private RandomAI AI; // The AI to get a move from.
-    private String name = "otr:morty"; // The name of the player. 
+    private String name = "ort:morty"; // The name of the player. 
     private static String usage = "java GameServer --port <port number> [--name <ai name>]";
     private PrintWriter out;
     private BufferedReader in;
@@ -52,7 +52,7 @@ public class GameServer extends Server {
                 System.exit(0);
             msg = in.readLine();
             
-            System.out.println("Message from client " + msg);
+            //System.out.println("Message from client " + msg);
             handleMessage(msg);
         }
   }
@@ -178,7 +178,7 @@ public class GameServer extends Server {
      * @param args
      */
     public static void main(String[] args) {
-    System.out.println(usage);
+    //System.out.println(usage);
     int port = 6969;
     String name = "RICK";
 
